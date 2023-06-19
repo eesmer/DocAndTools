@@ -13,3 +13,27 @@ https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/ma
 - yum list installed | xargs -n3 | column -t
 			     
 - apt list --upgradable
+
+---
+
+Unattended Upgrade Management Ubuntu&Debian
+https://www.cyberciti.biz/faq/how-to-keep-debian-linux-patched-with-latest-security-updates-automatically/
+Unattended-Upgrade::Package-Blacklist
+			     
+
+Repositoy Controls
+
+grep security /etc/apt/sources.list > /tmp/security.list
+Security Report List
+cat /tmp/security.list | grep -v "#"
+
+yum repolist
+yum repolist enabled > /tmp/repoinfo.txt
+
+yum repolist enabled > /tmp/repoinfo.txt
+cat /tmp/repoinfo.txt | grep "base:" | cut -d ":" -f2 | xargs
+#-----------------------------------------------------------------#
+yum -v repolist enabled > /tmp/repoinfo.txt
+yum -v repolist
+yum -v repolist > /tmp/repoinfo.txt
+cat /tmp/repoinfo.txt | grep "Repo-baseurl"
