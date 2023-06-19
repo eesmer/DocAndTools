@@ -1,0 +1,15 @@
+https://unix.stackexchange.com/questions/394438/linux-display-or-upgrade-security-updates-only-using-apt
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_and_monitoring_security_updates/identifying-security-updates_managing-and-monitoring-security-updates#displaying-available-security-updates_identifying-security-updates
+
+- yum updateinfo list installed > /tmp/updatecheck.txt
+
+- yum updateinfo
+- yum updateinfo list updates security
+- yum updateinfo list updates security --installed
+- yum updateinfo | grep "Important Security"
+	  	         | grep "Important Security"
+			     | grep "Important Security"
+- yum check-update
+- yum list installed | xargs -n3 | column -t
+			     
+- apt list --upgradable
