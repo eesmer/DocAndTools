@@ -48,7 +48,8 @@ if ! zplug check --verbose; then
         echo; zplug install
     fi
 fi
-zplug load --verbose
+# zplug load --verbose #Shows zplug plugin load messages every time terminal is started
+zplug load
 
 # Aliases
 alias ls='ls $LS_OPTIONS'
