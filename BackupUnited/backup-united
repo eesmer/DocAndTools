@@ -1,5 +1,8 @@
 #!/bin/bash
 
+WDIR=/usr/local/backup-united
+BACKUP_SCRIPTS=$WDIR/backup-scripts
+
 function pause(){
 local message="$@"
 [ -z $message ] && message="Press [Enter] to continue ..."
@@ -13,13 +16,15 @@ tput setaf 5
 echo "     BACKUP UNITED                                "
 tput sgr0
 echo "   |---------------------------------------------|"
+echo "   | SMB Share Backup                            |"
+echo "   |---------------------------------------------|"
 echo "   | 1.Add    Backup Job  | 11.Backup List       |"
 echo "   | 2.Remove Backup Job  | 12.Restore Backup    |"
 echo "   | -------------------- | 13.Clean Backup      |"
 echo "   | 3.Backup Job List    |                      |"
 echo "   |---------------------------------------------|"
 echo "   | 10.Backup Now        | 20. Set Job Schedule |"
-echo "   |                      | 20. Schedule Jobs    |"
+echo "   |                      | 21. Schedule Jobs    |"
 echo "   |---------------------------------------------|"
 tput setaf 5
 echo "     Mail Notification Settings                   "
@@ -88,26 +93,26 @@ BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the De
 BACKUPUSR=$(whiptail --title "Username" --inputbox "Please Enter Username for Access" 10 60  3>&1 1>&2 2>&3)
 BACKUPPWD=$(whiptail --title "Password" --inputbox "Please Enter Password for Access" 10 60  3>&1 1>&2 2>&3)
 
-cat > /usr/local/backup-united/backup-scripts/$BACKUPNAME <<EOF
+cat > $BACKUP_SCRIPTS/$BACKUPNAME <<EOF
 #!/bin/bash
 if [ -d "/tmp/$BACKUPNAME" ]; then
 rm -rf /tmp/$BACKUPNAME
 fi
-if [ -e "/tmp/mountok" ]; then
-rm -rf /tmp/mountok
+if [ -e "/tmp/$BACKUPNAME-mountok" ]; then
+rm -rf /tmp/$BACKUPNAME-mountok
 fi
-if [ ! -d "/usr/local/backup-united/backup/$BACKUPNAME" ]; then
-mkdir /usr/local/backup-united/backup/$BACKUPNAME
+if [ ! -d "/usr/local/backup-united/backups/$BACKUPNAME" ]; then
+mkdir /usr/local/backup-united/backups/$BACKUPNAME
 fi
-
 mkdir /tmp/$BACKUPNAME
-mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username=$BACKUPUSR,password=$BACKUPPWD && touch /tmp/mountok
-if [ -e "/tmp/mountok" ]
+mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username=$BACKUPUSR,password=$BACKUPPWD && touch /tmp/$BACKUPNAME-mountok
+if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
-rdiff-backup /tmp/$BACKUPNAME/ /usr/local/backup-united/backup/$BACKUPNAME
+rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
+tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
 echo "SUCCESS $BACKUPNAME" >> /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
-rm -rf /tmp/mountok
+rm -rf /tmp/$BACKUPNAME-mountok
 else
 echo "FAILURE $BACKUPNAME" >> /usr/local/backup-united/mail-message
 fi
@@ -118,12 +123,13 @@ EOF
 esac
 pause
 }
+#rdiff-backup /tmp/$BACKUPNAME/ /usr/local/backup-united/backups/$BACKUPNAME
 
 function del_backup(){
 BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Deleted" 10 60  3>&1 1>&2 2>&3)
-if [ -e "/usr/local/backup-united/scripts/$BACKUPNAME" ]
+if [ -e "$BACKUP_SCRIPTS/$BACKUPNAME" ]
 then
-rm -rf /usr/local/backup-united/backup-scripts/$BACKUPNAME
+rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
 else
 whiptail --msgbox "Backup Not Found!!" 20 20
 fi
@@ -190,16 +196,31 @@ vim /usr/local/backup-united/notification/mail-recipients
 pause
 }
 
+function backup_now(){
+	chmod +x $BACKUP_SCRIPTS/*
+	run-parts $BACKUP_SCRIPTS
+	pause
+}
+
+function backup_job_list(){
+	tput setaf 8
+	echo "Backup Job List"
+	echo "---------------"
+	tput sgr0
+	ls $BACKUP_SCRIPTS
+	echo -e
+	pause
+}
+
 function read_input(){
 local c
 read -p "Please choose from Menu numbers " c
 case $c in
-1)	backup_list;;
-2)	add_backup;;
-3)	del_backup;;
-4)	added_backups;;
+1)	add_backup;;
+2)	del_backup;;
+3)	backup_job_list;;
 5)      clean_backup;;
-7)	backup_now;;
+10)	backup_now;;
 8)	mail_settings;;
 9)	add_recipients;;
 99)	exit 0 ;;
