@@ -94,6 +94,7 @@ BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the De
 BACKUPUSR=$(whiptail --title "Username" --inputbox "Please Enter Username for Access" 10 60  3>&1 1>&2 2>&3)
 BACKUPPWD=$(whiptail --title "Password" --inputbox "Please Enter Password for Access" 10 60  3>&1 1>&2 2>&3)
 
+JOCKER=$
 cat > $BACKUP_SCRIPTS/$BACKUPNAME <<EOF
 #!/bin/bash
 if [ -d "/tmp/$BACKUPNAME" ]; then
@@ -110,7 +111,7 @@ mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username=$BACKUPUSR,password=$BACK
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
 rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
-tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
+tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
 echo "SUCCESS $BACKUPNAME" >> /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
