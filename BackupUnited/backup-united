@@ -52,49 +52,32 @@ tput sgr0
 echo -e
 }
 
-function backup_list(){
-ls /usr/local/backup-united/backup/ > /tmp/folderlist
-numfolder=$(cat /tmp/folderlist | wc -l)
-i=1
-while [ "$i" -le $numfolder ]; do
-folder=$(ls -l | sed -n $i{p} /tmp/folderlist)
-cd /usr/local/backup-united/backup/$folder
-pwd
-rdiff-backup -l /usr/local/backup-united/backup/$folder
-i=$(( i + 1 ))
-done
-rm -rf /tmp/folderlist
-pause
-}
-
 function add_backup(){
+JOCKER=$
 choice=$(whiptail --title "types of backup" --radiolist "Choose:"     30 40 20 \
-	"local-folder_Backup" "" off \
-	"cifs-share_Backup" "" off 3>&1 1>&2 2>&3)
+	"Local_Folder_Backup" "" off \
+	"SMB_Share_Backup" "" off 3>&1 1>&2 2>&3)
 case $choice in
 local-folder_Backup)
 BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Defined" 10 60  3>&1 1>&2 2>&3)
 BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the Destination of the Backup Area (/mnt/backup1,/var/www)" 10 60  3>&1 1>&2 2>&3)
 cat > /usr/local/backup-united/backup-scripts/$BACKUPNAME <<EOF
-#!/bin/bash
-BCKDATE='"$(date)"'
-BCKSTATE=1
-rdiff-backup /mnt/backup-1 /usr/local/backup-united/backup/Backup1 > /dev/null && BCKSTATE=0 && \
-	echo "Backup1     Successfully    " '"$BCKDATE"' >> /usr/local/backup-united/notification/mail-message
-if [ '"$BCKSTATE"' = 1 ]
-then
-echo "Backup1     FAILED          " '"$BCKDATE"' >> /usr/local/backup-united/notification/mail-message
+if [ -d "$BACKUPPATH" ]; then
+rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
+tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
+echo "SUCCESS $BACKUPNAME" >> /usr/local/backup-united/mail-message
+else
+echo "FAILURE $BACKUPNAME" >> /usr/local/backup-united/mail-message
 fi
 EOF
 ;;
-cifs-share_Backup)
-echo "cifs-share Backup"
+SMB_Share_Backup)
+echo "SMB Share Backup Menu"
 BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Defined" 10 60  3>&1 1>&2 2>&3)
 BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the Destination of the Backup Area (//SERVER_IP/SHARE)" 10 60  3>&1 1>&2 2>&3)
 BACKUPUSR=$(whiptail --title "Username" --inputbox "Please Enter Username for Access" 10 60  3>&1 1>&2 2>&3)
 BACKUPPWD=$(whiptail --title "Password" --inputbox "Please Enter Password for Access" 10 60  3>&1 1>&2 2>&3)
 
-JOCKER=$
 cat > $BACKUP_SCRIPTS/$BACKUPNAME <<EOF
 #!/bin/bash
 if [ -d "/tmp/$BACKUPNAME" ]; then
@@ -112,20 +95,20 @@ if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
 rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
 tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
-echo "SUCCESS $BACKUPNAME" >> /usr/local/backup-united/mail-message
+echo "$BACKUPNAME Backup Successfully taken" >> /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
-echo "FAILURE $BACKUPNAME" >> /usr/local/backup-united/mail-message
+echo "$BACKUPNAME Backup Failed" >> /usr/local/backup-united/mail-message
 fi
 EOF
+BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
 ;;
 *)
 ;;
 esac
 pause
 }
-#rdiff-backup /tmp/$BACKUPNAME/ /usr/local/backup-united/backups/$BACKUPNAME
 
 function del_backup(){
 BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Deleted" 10 60  3>&1 1>&2 2>&3)
@@ -135,14 +118,6 @@ rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
 else
 whiptail --msgbox "Backup Not Found!!" 20 20
 fi
-pause
-}
-
-function added_backups(){
-echo "*** Added Backup List ***"
-ls /usr/local/backup-united/backup-scripts  > /tmp/backuplist.txt
-cat /tmp/backuplist.txt
-rm -f /tmp/backuplist.txt
 pause
 }
 
@@ -158,13 +133,6 @@ rdiff-backup --remove-older-than 15D /usr/local/backup-united/backup/$folder
 i=$(( i + 1 ))
 done
 rm -rf /tmp/folderlist
-pause
-}
-
-function backup_now(){
-cp /usr/local/backup-united/notification/99-mail-sender /usr/local/backup-united/backup-scripts/
-chmod +x /usr/local/backup-united/backup-scripts/*
-run-parts /usr/local/backup-united/backup-scripts
 pause
 }
 
@@ -209,6 +177,7 @@ function backup_job_list(){
 }
 
 function backup_now(){
+	### cp /usr/local/backup-united/notification/99-mail-sender /usr/local/backup-united/backup-scripts/
 	chmod +x $BACKUP_SCRIPTS/*
 	run-parts $BACKUP_SCRIPTS
 	pause
