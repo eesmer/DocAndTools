@@ -2,6 +2,7 @@
 
 WDIR=/usr/local/backup-united
 BACKUP_SCRIPTS=$WDIR/backup-scripts
+BACKUPS=$WDIR/backups
 
 function pause(){
 local message="$@"
@@ -196,12 +197,6 @@ vim /usr/local/backup-united/notification/mail-recipients
 pause
 }
 
-function backup_now(){
-	chmod +x $BACKUP_SCRIPTS/*
-	run-parts $BACKUP_SCRIPTS
-	pause
-}
-
 function backup_job_list(){
 	tput setaf 8
 	echo "Backup Job List"
@@ -209,6 +204,21 @@ function backup_job_list(){
 	tput sgr0
 	ls $BACKUP_SCRIPTS
 	echo -e
+	pause
+}
+
+function backup_now(){
+	chmod +x $BACKUP_SCRIPTS/*
+	run-parts $BACKUP_SCRIPTS
+	pause
+}
+
+function backup_list(){
+	tput setaf 8
+	echo "Backups"
+	echo "---------------"
+	tput sgr0
+	tree $BACKUPS
 	pause
 }
 
@@ -221,6 +231,7 @@ case $c in
 3)	backup_job_list;;
 5)      clean_backup;;
 10)	backup_now;;
+11)	backup_list;;
 8)	mail_settings;;
 9)	add_recipients;;
 99)	exit 0 ;;
