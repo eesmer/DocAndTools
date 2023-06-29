@@ -7,4 +7,9 @@ apt-get -y install tree
 mkdir -p /usr/local/backup-united
 mkdir /usr/local/backup-united/backup-scripts
 mkdir /usr/local/backup-united/backups
-#mkdir /usr/local/backup-united/notification
+cat > /usr/local/backup-united/mail-message <<EOF
+-------------------------------------------
+| Backup-United Mail Notification         |
+-------------------------------------------
+
+EOF

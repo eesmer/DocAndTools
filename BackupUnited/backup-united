@@ -99,7 +99,7 @@ echo "$BACKUPNAME Backup Successfully taken" >> /usr/local/backup-united/mail-me
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
-echo "$BACKUPNAME Backup Failed" >> /usr/local/backup-united/mail-message
+echo "$JOCKER(date +%Y%m%d-%H%M) - $BACKUPNAME Backup Failed" >> /usr/local/backup-united/mail-message
 fi
 EOF
 BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
@@ -137,27 +137,26 @@ pause
 }
 
 function mail_settings(){
-MAILADDR=$(whiptail --title "Backup Name" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-SMTP=$(whiptail --title "Path of the Area" --inputbox "Please Enter SMTP Address-SMTP Port your Mailserver (smtp.gmail.com:587)" 10 60  3>&1 1>&2 2>&3)
-MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-MAILPASS=$(whiptail --title "Password" --inputbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (gmail.com,xyz.net etc)" 10 60  3>&1 1>&2 2>&3)
-cat /dev/null > /etc/ssmtp/ssmtp.conf
-cat > /etc/ssmtp/ssmtp.conf <<EOF
-root=$MAILADDR
-mailhub=$SMTP
-AuthUser=$MAILUSER
-AuthPass=$MAILPASS
-UseTLS=YES
-UseSTARTTLS=YES
-rewriteDomain=$MAILDOMAIN
-hostname=$HOSTNAME
-FromLineOverride=YES
+MAIL_ADDRESS=$(whiptail --title "Backup Name" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+SMTP_URL=$(whiptail --title "Path of the Area" --inputbox "Please Enter SMTP Address-SMTP Port your Mailserver (smtps://user1@newdomain.com@mail.newdomain.com:465/)" 10 60  3>&1 1>&2 2>&3)
+SMTP_PASS=$(whiptail --title "Password" --password "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+###cat /dev/null > /etc/ssmtp/ssmtp.conf
+#----------------------------------------------------------------------
+# smtp address for example;
+# set smtp_url = "smtps://$USERNAME@$DOMAIN@mail.$DOMAIN:465/"
+# set smtp_url = "smtps://user1@newdomain.com@mail.newdomain.com:465/"
+#----------------------------------------------------------------------
+cat > ~/.muttrc <<EOF
+set from = "$MAIL_ADDRESS"
+set realname = "Backup United"
+set smtp_url = "$SMTP_URL"
+set smtp_pass = "$SMTP_PASS"
+set ssl_force_tls = yes
+unset ssl_starttls
 EOF
-echo root:$MAILADDR:$SMTP
+###echo root:$MAILADDR:$SMTP
 chfn -f 'backup-united' root
-
-cp /usr/local/backup-united/notification/99-mail-sender /usr/local/backup-united/backup-scripts/
+###cp /usr/local/backup-united/notification/99-mail-sender /usr/local/backup-united/backup-scripts/
 pause
 }
 
