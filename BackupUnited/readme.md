@@ -23,6 +23,20 @@ Bu listeye bir ToDo list demesek de yapmak istediklerimiz veya yapmak istemeyi i
 
 **Sorular, Cevaplar ve Çalışma Notları**<br>
 **What is sync**<br>
+Önce backup işleminin tanımını yapalım;<br>
+**Backup:** Bir alandan başka bir alana (disk, paylaşım, bulut) dosyaların kopyalanarak çoğaltılmasıdır.<br>
+Genel olarak amaç; dosyaların birebir kopyasının farklı bir ortamda tutulması ve gerektiğinde bu ortamdan alınmasıdır.<br>
+**Sync:** Sync, senkronize anlamına gelir ve bir alandaki dataların başka bir alanda backup işlemi gibi tutulmasıdır.<br>
+Amaç; 2 ortamdaki dataların dosya sürümü, güncel değişiklik durumu gibi kulanım kaynaklı farklılıklarının olmamasıdır.<br>
+Yani yedek alınan veya sync edilen alandaki dosyaların kaynak alandaki dosyalarla güncel olmasıdır.<br>
+Buna göre; 2 alanda eşitleme ile dosya silme veya güncelleme işlemleri yapılarak ortamlar birbirinin aynısı olur.<br>
+<br>
+Backup veya sync kullanımı ihtiyaca göre belirlenmelidir.<br>
+Eğer en az 2 alanı eşitlemek istiyor ve gereksiz olduğu için silinen dataları saklama istemiyorsanız sync kullanabilirsiniz.<br>
+Eğer gerekli veya gereksiz silinen dosyaları saklamak istiyorsanız backup kullanmalısınız.<br>
+<br>
+Backup işlemi ile tekrar tekrar aynı dosyaları kopyalar ve her kopyladığı dosyanın saklanmasını garanti etmiş olursunuz.<br>
+Sync ile kaynak ve hedef alanlar sadece eşitlenir. Dosya saklanması sync işleminin amacı değildir.<br>
 
 ---
 
