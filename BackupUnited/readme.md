@@ -21,6 +21,10 @@ Bu listeye bir ToDo list demesek de yapmak istediklerimiz veya yapmak istemeyi i
 
 ---
 
+![alt text](images/BackupUnited-Menu-1.png "BackupUnited TUI")
+
+---
+
 ## Sorular, Cevaplar ve Çalışma Notları
 ### - What is sync / Backup vs Sync <br>
 Önce backup işleminin tanımını yapalım;<br>
