@@ -10,6 +10,11 @@ Gerekli paketlerin kurulumu ile uygulamanın kullanımını tek bir script dosya
 Bunlar için bir TUI sağlar. rsync, rdiff kullanır.<br>
 Bu çalışma, aynı zamanda bir ders çalışma fırsatıdır.<br>
 
+**Özellikler**
+- Ağ üzerindeki SMB paylaşım hedefinden yedekleme yapar.
+- Birden fazla yedekleme işini yönetir.
+- Yedekleme işlemi sonuçları için mail bildirim yapar.
+
 **Daha neler olabilir?**<br>
 Hayat bu, birçok şey olabilir. Savaşlar, depremler ve sürekli kandıran politikacı veya halklar..
 Konumuz Backup United 'da neler olabilir? (:
