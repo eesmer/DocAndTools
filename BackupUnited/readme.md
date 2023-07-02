@@ -1,16 +1,11 @@
-Backup-United readme
----
-https://rsync.samba.org/tech_report/ <br>
-https://rsync.samba.org/how-rsync-works.html
-
----
+## BackupUnited readme
 
 Backup United, başarılı yedekleme işlemleri yapmayı hedefler.<br>
-Gerekli paketlerin kurulumu ile uygulamanın kullanımını tek bir script dosyası ile yapar.<br>
-Bunlar için bir TUI sağlar. rsync, rdiff kullanır.<br>
-Bu çalışma, aynı zamanda bir ders çalışma fırsatıdır.<br>
+Gerekli paketlerin kurulumu ile uygulamanın kullanımını tek bir script dosyası ile yapar ve bunun için bir TUI sağlar.<br>
 
-**Özellikler**
+---
+
+## Özellikler
 - Ağ üzerindeki SMB paylaşım hedefinden yedekleme yapar.
 - Birden fazla yedekleme işini yönetir.
 - Yedekleme işlemi sonuçları için mail bildirim yapar.
@@ -26,14 +21,14 @@ Bu listeye bir ToDo list demesek de yapmak istediklerimiz veya yapmak istemeyi i
 
 ---
 
-**Sorular, cevaplar - detaylar ve teknolojiler**<br>
+**Sorular, Cevaplar ve Çalışma Notları**<br>
 **What is sync**<br>
 
 ---
 
-**rsync notları**<br>
-https://rsync.samba.org/ <br>
+### rsync notları
 https://rsync.samba.org/tech_report/ <br>
+https://rsync.samba.org/how-rsync-works.html
 
 <br>
 
@@ -71,6 +66,6 @@ Birçok kopyalama işlemi rsync' ye göre daha kontrollü ve sağlam olabilir.<b
 Fakat bu kontroller, işlemin performansını olumsuz etkiler.<br>
 rsync işlemi, bu kontroller yerine Dizin Listesi ve hedef-kaynak karşılaştırması ile kopyalama performansına odaklıdır.<br>
 Sorunsuz bir ağ trafiği ortamında performanslı ve problemsiz çalışır.<br>
-<br>
-**rdiff notları**<br>
+
+### rdiff notları
 
