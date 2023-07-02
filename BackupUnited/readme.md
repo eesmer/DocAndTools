@@ -24,3 +24,20 @@ Bu listeye bir ToDo list demesek de yapmak istediklerimiz veya yapmak istemeyi i
 **Sorular, cevaplar - detaylar ve teknolojiler**<br>
 **What is sync**<br>
 
+---
+
+**rsync**<br>
+https://rsync.samba.org/ <br>
+https://rsync.samba.org/tech_report/ <br>
+
+<br>
+
+rsync, uzak ve yerel ortamlardan dosya kopyalama aracıdır.<br>
+Kopyalama işlemini 1 kez yaptıktan sonra güncelleme davranışı ile çalışabilir ve eşitlenmiş dizinler oluşturur.<br>
+rsync, client-server ve sender-receiver işlem ve rollerini çalıştırarak dosya eşitlemesi (sync) yapar.<br>
+<br>
+**client:** Sync edilecek (eşitlenecek) dosya veya dizinleri temsil eder.<br>
+**server:** remote shell veya network socket bağlantısını başlatan ve kopyalama süreci yönetimini yapan taraftır.<br>
+**sender:** Eşitleme-kopyalama işlemi için kaynak dosya veya dizinlere erişim yapan işlemdir.<br>
+**receiver:** Eşitlenecek dosyaları alan ve diske yazan işlemdir.<br>
+**remote shell:** Client ve Server arasında bağlantı sağlayan işlemdir.<br>
