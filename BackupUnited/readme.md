@@ -31,7 +31,7 @@ Bu listeye bir ToDo list demesek de yapmak istediklerimiz veya yapmak istemeyi i
 
 ---
 
-**rsync**<br>
+**rsync notları**<br>
 https://rsync.samba.org/ <br>
 https://rsync.samba.org/tech_report/ <br>
 
@@ -71,3 +71,6 @@ Birçok kopyalama işlemi rsync' ye göre daha kontrollü ve sağlam olabilir.<b
 Fakat bu kontroller, işlemin performansını olumsuz etkiler.<br>
 rsync işlemi, bu kontroller yerine Dizin Listesi ve hedef-kaynak karşılaştırması ile kopyalama performansına odaklıdır.<br>
 Sorunsuz bir ağ trafiği ortamında performanslı ve problemsiz çalışır.<br>
+<br>
+**rdiff notları**<br>
+
