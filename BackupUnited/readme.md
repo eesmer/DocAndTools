@@ -21,8 +21,8 @@ Bu listeye bir ToDo list demesek de yapmak istediklerimiz veya yapmak istemeyi i
 
 ---
 
-**Sorular, Cevaplar ve Çalışma Notları**<br>
-**What is sync**<br>
+## Sorular, Cevaplar ve Çalışma Notları
+### - What is sync / Backup vs Sync <br>
 Önce backup işleminin tanımını yapalım;<br>
 **Backup:** Bir alandan başka bir alana (disk, paylaşım, bulut) dosyaların kopyalanarak çoğaltılmasıdır.<br>
 Genel olarak amaç; dosyaların birebir kopyasının farklı bir ortamda tutulması ve gerektiğinde bu ortamdan alınmasıdır.<br>
@@ -38,9 +38,7 @@ Eğer gerekli veya gereksiz silinen dosyaları saklamak istiyorsanız backup kul
 Backup işlemi ile tekrar tekrar aynı dosyaları kopyalar ve her kopyladığı dosyanın saklanmasını garanti etmiş olursunuz.<br>
 Sync ile kaynak ve hedef alanlar sadece eşitlenir. Dosya saklanması sync işleminin amacı değildir.<br>
 
----
-
-### rsync notları
+## rsync notları
 https://rsync.samba.org/tech_report/ <br>
 https://rsync.samba.org/how-rsync-works.html
 
