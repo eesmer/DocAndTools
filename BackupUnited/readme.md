@@ -21,7 +21,7 @@ Bu listeye bir ToDo list demesek de yapmak istediklerimiz veya yapmak istemeyi i
 
 ---
 
-![alt text](images/BackupUnited-Menu-1.png "BackupUnited TUI")
+![alt text](images/BackupUnited-Menu-2.png "BackupUnited TUI")
 
 ---
 
