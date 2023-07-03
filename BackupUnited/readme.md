@@ -33,12 +33,12 @@ Aim; It is the absence of usage-related differences such as file version, curren
 That is, the files in the backup or synced area are up-to-date with the files in the source area.<br>
 According to this; By synchronizing, deleting or updating files in 2 areas, the environments become the same.<br>
 <br>
-Backup veya sync kullanımı ihtiyaca göre belirlenmelidir.<br>
-Eğer en az 2 alanı eşitlemek istiyor ve gereksiz olduğu için silinen dataları saklama istemiyorsanız sync kullanabilirsiniz.<br>
-Eğer gerekli veya gereksiz silinen dosyaları saklamak istiyorsanız backup kullanmalısınız.<br>
+Backup or sync usage should be determined according to need.<br>
+If you want to synchronize at least 2 fields and do not want to keep the deleted data because it is unnecessary, you can use sync.<br>
+If you want to keep necessary or unnecessary deleted files, you should use backup.<br>
 <br>
-Backup işlemi ile tekrar tekrar aynı dosyaları kopyalar ve her kopyladığı dosyanın saklanmasını garanti etmiş olursunuz.<br>
-Sync ile kaynak ve hedef alanlar sadece eşitlenir. Dosya saklanması sync işleminin amacı değildir.<br>
+With the backup process, you copy the same files again and again and you guarantee that each copied file is kept.<br>
+With Sync, the source and destination fields are only synchronized. File storage is not the purpose of the sync operation.<br>
 
 ## rsync notları
 https://rsync.samba.org/tech_report/ <br>
