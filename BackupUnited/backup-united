@@ -114,38 +114,37 @@ pause
 }
 
 function del_backup(){
-BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Deleted" 10 60  3>&1 1>&2 2>&3)
-if [ -e "$BACKUP_SCRIPTS/$BACKUPNAME" ]
-then
-rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
-else
-whiptail --msgbox "Backup Not Found!!" 20 20
-fi
-pause
+	BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Deleted" 10 60  3>&1 1>&2 2>&3)
+	if [ -e "$BACKUP_SCRIPTS/$BACKUPNAME" ]; then
+		rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
+	else
+		whiptail --msgbox "Backup Not Found!!" 20 20
+	fi
+	pause
 }
 
 function clean_backup(){
-ls /usr/local/backup-united/backup/ > /tmp/folderlist
-numfolder=$(cat /tmp/folderlist | wc -l)
-i=1
-while [ "$i" -le $numfolder ]; do
-folder=$(ls -l | sed -n $i{p} /tmp/folderlist)
-cd /usr/local/backup-united/backup/$folder
-pwd
-rdiff-backup --remove-older-than 15D /usr/local/backup-united/backup/$folder
-i=$(( i + 1 ))
-done
-rm -rf /tmp/folderlist
-pause
+	ls /usr/local/backup-united/backup/ > /tmp/folderlist
+	numfolder=$(cat /tmp/folderlist | wc -l)
+	i=1
+	while [ "$i" -le $numfolder ]; do
+		folder=$(ls -l | sed -n $i{p} /tmp/folderlist)
+		cd /usr/local/backup-united/backup/$folder
+		pwd
+		rdiff-backup --remove-older-than 15D /usr/local/backup-united/backup/$folder
+		i=$(( i + 1 ))
+	done
+	rm -rf /tmp/folderlist
+	pause
 }
 
 function mail_settings(){
-MAILADDR=$(whiptail --title "Backup Name" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-SMTP=$(whiptail --title "Path of the Area" --inputbox "Please Enter SMTP Address-SMTP Port your Mailserver (smtp.gmail.com:587)" 10 60  3>&1 1>&2 2>&3)
-MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-MAILPASS=$(whiptail --title "Password" --inputbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (gmail.com,xyz.net etc)" 10 60  3>&1 1>&2 2>&3)
-cat /dev/null > /etc/ssmtp/ssmtp.conf
+	MAILADDR=$(whiptail --title "Backup Name" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	SMTP=$(whiptail --title "Path of the Area" --inputbox "Please Enter SMTP Address-SMTP Port your Mailserver (smtp.gmail.com:587)" 10 60  3>&1 1>&2 2>&3)
+	MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	MAILPASS=$(whiptail --title "Password" --inputbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (gmail.com,xyz.net etc)" 10 60  3>&1 1>&2 2>&3)
+	cat /dev/null > /etc/ssmtp/ssmtp.conf
 cat > /etc/ssmtp/ssmtp.conf <<EOF
 root=$MAILADDR
 mailhub=$SMTP
@@ -157,15 +156,11 @@ rewriteDomain=$MAILDOMAIN
 hostname=$HOSTNAME
 FromLineOverride=YES
 EOF
+
 echo root:$MAILADDR:$SMTP
 chfn -f 'backup-united' root
 
 cp /usr/local/backup-united/notification/99-mail-sender /usr/local/backup-united/backup-scripts/
-pause
-}
-
-function add_recipients(){
-vim /usr/local/backup-united/notification/mail-recipients
 pause
 }
 
@@ -184,8 +179,6 @@ function backup_job_list(){
 	ack "mount -t cifs" "$BACKUP_SCRIPTS" | cut -d " " -f4
 	echo -e
 	pause
-
-
 }
 
 function backup_now(){
@@ -212,7 +205,7 @@ function backup_list(){
 }
 
 function add_recipient(){
-	read -p "Email Adress : " EMAILADDRESS
+	read -p "E-Mail Address : " EMAILADDRESS
 	echo "$EMAILADDRESS" >> $MAILRECIPIENT
 	pause
 }
@@ -236,7 +229,7 @@ case $c in
 3)	backup_job_list;;
 10)	backup_now;;
 11)	backup_list;;
-30)	add_recipient;;
+31)	add_recipient;;
 33)	recipient_list;;
 99)	exit 0 ;;
 *)	
