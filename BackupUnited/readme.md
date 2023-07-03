@@ -73,11 +73,11 @@ In addition to these controls; The parameters in the rsync command also determin
 In rsync operation, it is the most processing role as it compares the File List in the Sender hand with the files in the Directory Tree on the Receiver side.<br>
 The Receiver becomes the party that writes to its locale based on the data list it receives from the Sender.<br>
 <br>
-Birçok kopyalama işlemi rsync' ye göre daha kontrollü ve sağlam olabilir.<br>
-Çünkü kopyalama esnasında ağ trafiği durumu ve kopyalama işlemini etkileyecek faktörleri kontrol edebilir.<br>
-Fakat bu kontroller, işlemin performansını olumsuz etkiler.<br>
-rsync işlemi, bu kontroller yerine Dizin Listesi ve hedef-kaynak karşılaştırması ile kopyalama performansına odaklıdır.<br>
-Sorunsuz bir ağ trafiği ortamında performanslı ve problemsiz çalışır.<br>
-
+Many copy operations can be more controlled and robust than rsync.<br>
+Because it can control the network traffic situation and the factors that will affect the copying process during copying.<br>
+However, these controls negatively affect the performance of the process.<br>
+The rsync process focuses on copy performance with Directory Listing and target-source comparison instead of these checks.<br>
+It works with performance and problem-free in a smooth network traffic environment.<br>
+<br>
 ### rdiff notları
 
