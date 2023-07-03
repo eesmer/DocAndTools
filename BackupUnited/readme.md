@@ -40,21 +40,21 @@ If you want to keep necessary or unnecessary deleted files, you should use backu
 With the backup process, you copy the same files again and again and you guarantee that each copied file is kept.<br>
 With Sync, the source and destination fields are only synchronized. File storage is not the purpose of the sync operation.<br>
 
-## rsync notları
+## rsync notes
 https://rsync.samba.org/tech_report/ <br>
 https://rsync.samba.org/how-rsync-works.html
 
 <br>
 
-rsync, uzak ve yerel ortamlardan dosya kopyalama aracıdır.<br>
-Kopyalama işlemini 1 kez yaptıktan sonra güncelleme davranışı ile çalışabilir ve eşitlenmiş dizinler oluşturur.<br>
-rsync, client-server ve sender-receiver işlem ve rollerini çalıştırarak dosya eşitlemesi (sync) yapar.<br>
+rsync is a tool for copying files from remote and local environments.<br>
+After copying once, it can work with update behavior and creates synchronized directories.<br>
+rsync performs file sync (sync) by running client-server and sender-receiver operations and roles.<br>
 <br>
-**client:** Sync edilecek (eşitlenecek) dosya veya dizinleri temsil eder.<br>
-**server:** remote shell veya network socket bağlantısını başlatan ve kopyalama süreci yönetimini yapan taraftır.<br>
-**sender:** Eşitleme-kopyalama işlemi için kaynak dosya veya dizinlere erişim yapan işlemdir.<br>
-**receiver:** Eşitlenecek dosyaları alan ve diske yazan işlemdir.<br>
-**remote shell:** Client ve Server arasında bağlantı sağlayan işlemdir.<br>
+**client:** Represents files or directories to be synced.<br>
+**server:** It is the party that initiates the remote shell or network socket connection and manages the copy process.<br>
+**sender:** The process that accesses the source files or directories for the sync-copy operation.<br>
+**receiver:** The process that receives the files to be synchronized and writes them to disk.<br>
+**remote shell:** It is the process that provides connection between Client and Server.<br>
 <br>
 **Kopyalama süreci başladığında;**<br>
 İlk olarak dosya listesi çıkarılır. Bu dosya listesinde; ownership, file/directory mode, permission, size bilgileri de yer alır.<br>
