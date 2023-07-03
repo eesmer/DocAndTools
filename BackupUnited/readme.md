@@ -79,5 +79,5 @@ However, these controls negatively affect the performance of the process.<br>
 The rsync process focuses on copy performance with Directory Listing and target-source comparison instead of these checks.<br>
 It works with performance and problem-free in a smooth network traffic environment.<br>
 <br>
-### rdiff notları
+### rdiff notes
 
