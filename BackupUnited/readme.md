@@ -56,6 +56,8 @@ rsync performs file sync (sync) by running client-server and sender-receiver ope
 **receiver:** The process that receives the files to be synchronized and writes them to disk.<br>
 **remote shell:** It is the process that provides connection between Client and Server.<br>
 <br>
+
+First, the file list is extracted. In this file list; Ownership, file/directory mode, permission, size information are also included.
 **Kopyalama süreci başladığında;**<br>
 İlk olarak dosya listesi çıkarılır. Bu dosya listesinde; ownership, file/directory mode, permission, size bilgileri de yer alır.<br>
 Yedekleme/Eşitleme işlemi için gönderici ve alıcı rolünde bir çift uç, remote shell bağlantısında rsync komutları çalışabilir halde bir ortam oluşmuş olur.<br>
