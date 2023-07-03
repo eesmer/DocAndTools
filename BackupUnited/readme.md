@@ -5,16 +5,14 @@ With the installation of the necessary packages, it makes the use of the applica
 
 ---
 
-## Özellikler
-- Ağ üzerindeki SMB paylaşım hedefinden yedekleme yapar.
-- Birden fazla yedekleme işini yönetir.
-- Yedekleme işlemi sonuçları için mail bildirim yapar.
+## Features
+- Makes backup from SMB share destination on the network.
+- Manages multiple backup jobs.
+- Provides e-mail notification for the results of the backup process.
 
-**Daha neler olabilir?**<br>
-Hayat bu, birçok şey olabilir. Savaşlar, depremler ve sürekli kandıran politikacı veya halklar..
-Konumuz Backup United 'da neler olabilir? (:
-Bu listeye bir ToDo list demesek de yapmak istediklerimiz veya yapmak istemeyi istediklerimiz diyebiliriz.
-- FTP erişiminden backup
+**What else could it be?**<br>
+Even though we don't call this list a ToDo list, we can say what we want to do.
+- Backup from FTP
 - DB Backup
 - Full Server Backup
 - VM Backup
