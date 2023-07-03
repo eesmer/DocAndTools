@@ -1,7 +1,7 @@
-## BackupUnited readme
+## BackupUnited
 
-Backup United, başarılı yedekleme işlemleri yapmayı hedefler.<br>
-Gerekli paketlerin kurulumu ile uygulamanın kullanımını tek bir script dosyası ile yapar ve bunun için bir TUI sağlar.<br>
+Backup United aims to make successful backups.<br>
+With the installation of the necessary packages, it makes the use of the application with a single script file and provides a TUI for it.<br>
 
 ---
 
