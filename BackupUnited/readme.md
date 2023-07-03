@@ -66,13 +66,12 @@ File List creation and file creation are managed according to the list differenc
 In the rsync command, if the --delete parameter is used, the sender first detects local files that are not on their side and deletes them from the receiver.<br>
 When copying is done after this process, both ends are synchronized.<br>
 <br>
-Alıcı, gönderici verisinden her dosya için okuma yapar.<br>
-Buna göre; kendi yerel ortamındaki dosya/dizin oluşturma-yazma işlemlerini yapar.<br>
-Kopyalama ile işletilen sync işlemi, kopyalama başlamadan önce oluşturulan Dizin Listesi ve bu Dizin Listesinin Gönderici ve Alıcı yerel ortamlarındaki<br>
-karşılaştırmaları esasına göre yapılır.<br>
-Bu kontrollere ek olarak; rsync komutundaki parametreler de sync işleminin nasıl tamamlanacağını belirler.<br>
-rsync işleminde, Gönderici elindeki Dosya Listesi ile Alıcı taraftaki Dizin Ağacındaki dosyaları karşılaştırdığı için en yoğun işlem yapan roldür.<br>
-Alıcı, Gönderici'den aldığı veri listesine göre kendi yereline yazma işlemini yapan taraf olur.<br>
+The receiver reads for each file from the sender data.<br>
+According to this; it does file/directory creation-writing operations in its local environment.<br>
+A copy-operated sync operation consists of the Directory List created before the copy starts, and the contents of this Directory List in the Sender and Recipient locales.<br>
+In addition to these controls; The parameters in the rsync command also determine how the sync operation is completed.<br>
+In rsync operation, it is the most processing role as it compares the File List in the Sender hand with the files in the Directory Tree on the Receiver side.<br>
+The Receiver becomes the party that writes to its locale based on the data list it receives from the Sender.<br>
 <br>
 Birçok kopyalama işlemi rsync' ye göre daha kontrollü ve sağlam olabilir.<br>
 Çünkü kopyalama esnasında ağ trafiği durumu ve kopyalama işlemini etkileyecek faktörleri kontrol edebilir.<br>
