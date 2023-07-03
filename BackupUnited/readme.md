@@ -26,12 +26,12 @@ Even though we don't call this list a ToDo list, we can say what we want to do.
 ## Questions, Answers and Study Notes
 ### - What is sync / Backup vs Sync <br>
 First, let's define the backup process;<br>
-Backup: It is the duplication of files from one area to another (disk, share, cloud).<br>
+**Backup:** It is the duplication of files from one area to another (disk, share, cloud).<br>
 In general, the purpose is; The exact copy of the files is kept in a different environment and taken from this environment when necessary.<br>
-**Sync:** Sync, senkronize anlamına gelir ve bir alandaki dataların başka bir alanda backup işlemi gibi tutulmasıdır.<br>
-Amaç; 2 ortamdaki dataların dosya sürümü, güncel değişiklik durumu gibi kulanım kaynaklı farklılıklarının olmamasıdır.<br>
-Yani yedek alınan veya sync edilen alandaki dosyaların kaynak alandaki dosyalarla güncel olmasıdır.<br>
-Buna göre; 2 alanda eşitleme ile dosya silme veya güncelleme işlemleri yapılarak ortamlar birbirinin aynısı olur.<br>
+**Sync:** Sync means synchronized and it is keeping the data in one area like a backup in another area.<br>
+Aim; It is the absence of usage-related differences such as file version, current change status, etc. of the data in the 2 environments.<br>
+That is, the files in the backup or synced area are up-to-date with the files in the source area.<br>
+According to this; By synchronizing, deleting or updating files in 2 areas, the environments become the same.<br>
 <br>
 Backup veya sync kullanımı ihtiyaca göre belirlenmelidir.<br>
 Eğer en az 2 alanı eşitlemek istiyor ve gereksiz olduğu için silinen dataları saklama istemiyorsanız sync kullanabilirsiniz.<br>
