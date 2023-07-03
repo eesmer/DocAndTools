@@ -56,18 +56,15 @@ rsync performs file sync (sync) by running client-server and sender-receiver ope
 **receiver:** The process that receives the files to be synchronized and writes them to disk.<br>
 **remote shell:** It is the process that provides connection between Client and Server.<br>
 <br>
-
-First, the file list is extracted. In this file list; Ownership, file/directory mode, permission, size information are also included.
-**Kopyalama süreci başladığında;**<br>
-İlk olarak dosya listesi çıkarılır. Bu dosya listesinde; ownership, file/directory mode, permission, size bilgileri de yer alır.<br>
-Yedekleme/Eşitleme işlemi için gönderici ve alıcı rolünde bir çift uç, remote shell bağlantısında rsync komutları çalışabilir halde bir ortam oluşmuş olur.<br>
-Gönderici ve Alıcı rollerini alan uç makineler arası kopyalama işlemi birtakım kontrol ve sağlamalara tabidir.<br>
-Bu kontrol ve sağlamalar ile;<br>
-Dosya Listesi oluşturma ve Gönderici ile Alıcı arasındaki liste farkı veya rsync komutunda kullanılan parametrelere göre dosya oluşturma işlemleri yönetilir.<br>
-**Örnek:**
-Gönderici, Dosya Listesini alır.<br>
-rsync komutunda, --delete parametresi kullanılmışsa Gönderici, önce kendi tarafında olmayan yerel dosyaları belirler ve bunları alıcıdan siler.<br>
-Bu işlemin ardından kopyalama yapıldığında her iki uç eşitlenir.<br>
+**When the copying process begins;**<br>
+First, the file list is extracted. In this file list; Ownership, file/directory mode, permission, size information are also included.<br>
+For the Backup/Synchronization process, a double-end in the role of sender and receiver, and an environment in which rsync commands can run on the remote shell connection is created.<br>
+Copying between end machines taking the roles of Sender and Receiver is subject to certain checks.<br>
+With these checks;<br>
+File List creation and file creation are managed according to the list difference between Sender and Receiver or the parameters used in the rsync command.<br>
+**Example:** Sender receives File List.<br>
+In the rsync command, if the --delete parameter is used, the sender first detects local files that are not on their side and deletes them from the receiver.<br>
+When copying is done after this process, both ends are synchronized.<br>
 <br>
 Alıcı, gönderici verisinden her dosya için okuma yapar.<br>
 Buna göre; kendi yerel ortamındaki dosya/dizin oluşturma-yazma işlemlerini yapar.<br>
