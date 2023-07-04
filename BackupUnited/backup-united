@@ -216,6 +216,42 @@ function backup_list(){
 	pause
 }
 
+function set_schedule(){
+	BACKUPTIME=$(whiptail --title "Select Backup Time" --radiolist "Choose" 20 40 15 \
+		"Daily" "" OFF \
+		"Weekly" "" OFF \
+		"Monthly" "" OFF \
+		3>&1 1>&2 2>&3)
+			
+	if [ "$BACKUPTIME" = "Daily" ]; then
+		DAY=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+			"00:20" "" OFF \
+			"01:20" "" OFF \
+			"02:20" "" OFF \
+			"03:20" "" OFF \
+			"04:20" "" OFF \
+			"05:20" "" OFF \
+			"06:20" "" OFF \
+			"07:20" "" OFF \
+			3>&1 1>&2 2>&3)
+	elif
+		[ "$BACKUPTIME" = "Weekly" ]; then
+		DAY=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+			"Monday" "" OFF \
+			"Tuesday" "" OFF \
+			"Wednesday" "" OFF \
+			"Thursday" "" OFF \
+			"Friday" "" OFF \
+			"Saturday" "" OFF \
+			"Sunday" "" OFF \
+			3>&1 1>&2 2>&3)
+	fi
+	
+	pause
+}
+
+
+
 function add_recipient(){
 	read -p "E-Mail Address : " EMAILADDRESS
 	echo "$EMAILADDRESS" >> $MAILRECIPIENT
@@ -241,6 +277,7 @@ case $c in
 3)	backup_job_list;;
 10)	backup_now;;
 11)	backup_list;;
+20)	set_schedule;;
 31)	add_recipient;;
 33)	recipient_list;;
 99)	exit 0 ;;
