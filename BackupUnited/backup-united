@@ -58,15 +58,19 @@ echo -e
 function add_backup(){
 JOCKER=$
 choice=$(whiptail --title "types of backup" --radiolist "Choose:"     30 40 20 \
-	"Local_Folder_Backup" "" off \
+	"Local_Directory_Backup" "" off \
 	"SMB_Share_Backup" "" off 3>&1 1>&2 2>&3)
 case $choice in
-local-folder_Backup)
+Local_Directory_Backup)
 BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Defined" 10 60  3>&1 1>&2 2>&3)
 BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the Destination of the Backup Area (/mnt/backup1,/var/www)" 10 60  3>&1 1>&2 2>&3)
-cat > /usr/local/backup-united/backup-scripts/$BACKUPNAME <<EOF
+cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
+#!/bin/bash
+#BACKUPPATH=$BACKUPPATH
+#BACKUPNAME=$BACKUPNAME
+
 if [ -d "$BACKUPPATH" ]; then
-rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
+rsync -avz "$BACKUPPATH" "$BACKUPS/$BACKUPNAME"
 tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
 echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
 else
@@ -80,9 +84,11 @@ BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name
 BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the Destination of the Backup Area (//SERVER_IP/SHARE)" 10 60  3>&1 1>&2 2>&3)
 BACKUPUSR=$(whiptail --title "Username" --inputbox "Please Enter Username for Access" 10 60  3>&1 1>&2 2>&3)
 BACKUPPWD=$(whiptail --title "Password" --inputbox "Please Enter Password for Access" 10 60  3>&1 1>&2 2>&3)
-
-cat > $BACKUP_SCRIPTS/$BACKUPNAME <<EOF
+cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 #!/bin/bash
+#BACKUPPATH=$BACKUPPATH
+#BACKUPNAME=$BACKUPNAME
+
 if [ -d "/tmp/$BACKUPNAME" ]; then
 rm -rf /tmp/$BACKUPNAME
 fi
@@ -115,10 +121,14 @@ pause
 
 function del_backup(){
 	BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Deleted" 10 60  3>&1 1>&2 2>&3)
-	if [ -e "$BACKUP_SCRIPTS/$BACKUPNAME" ]; then
-		rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
+	if [ "$BACKUPNAME" = "" ]; then
+		whiptail --msgbox "BackupName is Empty" 10 60 3>&1 1>&2 2>&3
 	else
-		whiptail --msgbox "Backup Not Found!!" 20 20
+		if [ -e "$BACKUP_SCRIPTS/$BACKUPNAME" ]; then
+			rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
+		else
+			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
+		fi
 	fi
 	pause
 }
@@ -176,7 +186,9 @@ function backup_job_list(){
 	echo "Backup Paths"
 	echo "---------------"
 	tput sgr0
-	ack "mount -t cifs" "$BACKUP_SCRIPTS" | cut -d " " -f4
+	#ack "mount -t cifs" "$BACKUP_SCRIPTS" | cut -d " " -f4
+	#ack "BACKUPNAME=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
+	ack "BACKUPPATH=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
 	echo -e
 	pause
 }
