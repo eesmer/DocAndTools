@@ -57,10 +57,55 @@ echo -e
 
 function add_backup(){
 JOCKER=$
-choice=$(whiptail --title "types of backup" --radiolist "Choose:"     30 40 20 \
+
+BACKUPTIME=$(whiptail --title "Select Backup Time" --radiolist "Choose" 20 40 15 \
+                "Daily" "" OFF \
+                "Weekly" "" OFF \
+                "Monthly" "" OFF \
+                3>&1 1>&2 2>&3)
+		
+	if [ "$BACKUPTIME" = "Daily" ]; then
+		HOUR=$(whiptail --title "Select Hour" --radiolist "Choose" 20 40 15 \
+			"00:20" "" OFF \
+			"01:20" "" OFF \
+                        "02:20" "" OFF \
+                        "03:20" "" OFF \
+                        "04:20" "" OFF \
+                        "05:20" "" OFF \
+                        "06:20" "" OFF \
+                        "07:20" "" OFF \
+                        3>&1 1>&2 2>&3)
+	elif
+		[ "$BACKUPTIME" = "Weekly" ]; then
+		DAY=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+			"Monday" "" OFF \
+			"Tuesday" "" OFF \
+                        "Wednesday" "" OFF \
+                        "Thursday" "" OFF \
+                        "Friday" "" OFF \
+                        "Saturday" "" OFF \
+                        "Sunday" "" OFF \
+                        3>&1 1>&2 2>&3)
+	elif
+		[ "$BACKUPTIME" = "Monthly" ]; then
+		DAY=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+			"01" "" OFF \
+			"02" "" OFF \
+			"03" "" OFF \
+			"04" "" OFF \
+			"05" "" OFF \
+			"06" "" OFF \
+			"07" "" OFF \
+			"08" "" OFF \
+			"09" "" OFF \
+			"10" "" OFF \
+			3>&1 1>&2 2>&3)
+	fi
+
+BACKUPTYPE=$(whiptail --title "types of backup" --radiolist "Choose:"     30 40 20 \
 	"Local_Directory_Backup" "" off \
 	"SMB_Share_Backup" "" off 3>&1 1>&2 2>&3)
-case $choice in
+case $BACKUPTYPE in
 Local_Directory_Backup)
 BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Defined" 10 60  3>&1 1>&2 2>&3)
 BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the Destination of the Backup Area (/mnt/backup1,/var/www)" 10 60  3>&1 1>&2 2>&3)
