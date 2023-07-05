@@ -57,16 +57,15 @@ echo -e
 }
 
 function add_backup(){
-JOCKER=$
 
-BACKUPTIME=$(whiptail --title "Select Backup Time" --radiolist "Choose" 20 40 15 \
+BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15 \
                 "Daily" "" OFF \
                 "Weekly" "" OFF \
                 "Monthly" "" OFF \
                 3>&1 1>&2 2>&3)
 		
-	if [ "$BACKUPTIME" = "Daily" ]; then
-		HOUR=$(whiptail --title "Select Hour" --radiolist "Choose" 20 40 15 \
+	if [ "$BACKUPTYPE" = "Daily" ]; then
+		BACKUPTIME=$(whiptail --title "Select Hour" --radiolist "Choose" 20 40 15 \
 			"00:20" "" OFF \
 			"01:20" "" OFF \
                         "02:20" "" OFF \
@@ -77,8 +76,8 @@ BACKUPTIME=$(whiptail --title "Select Backup Time" --radiolist "Choose" 20 40 15
                         "07:20" "" OFF \
                         3>&1 1>&2 2>&3)
 	elif
-		[ "$BACKUPTIME" = "Weekly" ]; then
-		DAY=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+		[ "$BACKUPTYPE" = "Weekly" ]; then
+		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
 			"Monday" "" OFF \
 			"Tuesday" "" OFF \
                         "Wednesday" "" OFF \
@@ -88,25 +87,52 @@ BACKUPTIME=$(whiptail --title "Select Backup Time" --radiolist "Choose" 20 40 15
                         "Sunday" "" OFF \
                         3>&1 1>&2 2>&3)
 	elif
-		[ "$BACKUPTIME" = "Monthly" ]; then
-		DAY=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
-			"01" "" OFF \
-			"02" "" OFF \
-			"03" "" OFF \
-			"04" "" OFF \
-			"05" "" OFF \
-			"06" "" OFF \
-			"07" "" OFF \
-			"08" "" OFF \
-			"09" "" OFF \
-			"10" "" OFF \
+		[ "$BACKUPTYPE" = "Monthly" ]; then
+		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+			"1st  Day" "" OFF \
+			"2nd  Day" "" OFF \
+			"3rd  Day" "" OFF \
+			"4th  Day" "" OFF \
+			"5th  Day" "" OFF \
+			"6th  Day" "" OFF \
+			"7th  Day" "" OFF \
+			"8th  Day" "" OFF \
+			"9th  Day" "" OFF \
+			"10th Day" "" OFF \
+			"11th Day" "" OFF \
+			"12th Day" "" OFF \
+			"13th Day" "" OFF \
+			"14th Day" "" OFF \
+			"15th Day" "" OFF \
+			"16th Day" "" OFF \
+			"17th Day" "" OFF \
+			"18th Day" "" OFF \
+			"19th Day" "" OFF \
+			"20th Day" "" OFF \
+			"21st Day" "" OFF \
+			"22nd Day" "" OFF \
+			"23rd Day" "" OFF \
+			"24th Day" "" OFF \
+			"25th Day" "" OFF \
+			"26th Day" "" OFF \
+			"27th Day" "" OFF \
+			"28th Day" "" OFF \
 			3>&1 1>&2 2>&3)
 	fi
+	
+if [ "$BACKUPTYPE" = "" ] || [ "$BACKUPTIME" = "" ]; then
+	whiptail --title "Backup Name" --msgbox "Backup Type and Time is not null" 10 60  3>&1 1>&2 2>&3
+else
+	record_backup
+fi
+}
 
-BACKUPTYPE=$(whiptail --title "types of backup" --radiolist "Choose:"     30 40 20 \
+function record_backup(){
+JOCKER=$
+BACKUPFROM=$(whiptail --title "Backup From" --radiolist "Choose:"     30 40 20 \
 	"Local_Directory_Backup" "" off \
 	"SMB_Share_Backup" "" off 3>&1 1>&2 2>&3)
-case $BACKUPTYPE in
+case $BACKUPFROM in
 Local_Directory_Backup)
 BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Defined" 10 60  3>&1 1>&2 2>&3)
 BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the Destination of the Backup Area (/mnt/backup1,/var/www)" 10 60  3>&1 1>&2 2>&3)
