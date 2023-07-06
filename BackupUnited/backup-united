@@ -156,6 +156,10 @@ BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name
 BACKUPPATH=$(whiptail --title "Path of the Area" --inputbox "Please Enter the Destination of the Backup Area (//SERVER_IP/SHARE)" 10 60  3>&1 1>&2 2>&3)
 BACKUPUSR=$(whiptail --title "Username" --inputbox "Please Enter Username for Access" 10 60  3>&1 1>&2 2>&3)
 BACKUPPWD=$(whiptail --title "Password" --inputbox "Please Enter Password for Access" 10 60  3>&1 1>&2 2>&3)
+
+if [ "$BACKUPNAME" = "" ] || [ "$BACKUPPATH" = "" ] || [ "$BACKUPUSR" = "" ] || [ "$BACKUPPWD" = "" ]; then
+	whiptail --title "SMB BACKUP" --msgbox "Please Fill In All Fields" 10 60  3>&1 1>&2 2>&3
+else
 cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 #!/bin/bash
 #BACKUPPATH=$BACKUPPATH
@@ -176,7 +180,8 @@ if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
 rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
 tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
-echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
+BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
+echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
@@ -199,18 +204,24 @@ ExecStart=$BACKUP_SCRIPTS/$BACKUPNAME
 WantedBy=multi-user.target
 EOF
 
-#systemctl stop backupunited-$BACKUPNAME.service && systemctl disable backupunited-$BACKUPNAME.service
-#if [ -f "/etc/systemd/system/multi-user.target.wants/backupunited-$BACKUPNAME.service" ]; then
-#rm /etc/systemd/system/multi-user.target.wants/backupunited-$BACKUPNAME.service
-#fi
-#if [ -f "/etc/systemd/system/backupunited-$BACKUPNAME.service" ]; then
-#rm /etc/systemd/system/backupunited-$BACKUPNAME.service
-#fi
-#cp LastControl/install/machine/etc/systemd/backupunited-$BACKUPNAME.service /etc/systemd/system/
-#ln -s /etc/systemd/system/backupunited-$BACKUPNAME.service /etc/systemd/system/multi-user.target.wants/ (with systemctl enable)
-#systemctl disable lastcontrol.service
+if [ "$BACKUPTYPE" = "Daily" ]; then
+	ONCALENDAR="*-*-* $BACKUPTIME:00"
+fi
+
+cat > /etc/systemd/system/backupunited-$BACKUPNAME.timer <<EOF
+[Unit]
+Description=BackupUnited $BACKUPNAME Timer
+
+[Timer]
+OnCalendar=$ONCALENDAR
+Unit=backupunited-$BACKUPNAME.service
+
+[Install]
+WantedBy=timers.target
+EOF
 
 BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
+fi
 ;;
 *)
 ;;
