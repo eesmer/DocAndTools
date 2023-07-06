@@ -31,11 +31,11 @@ echo "   |---------------------------------------------|"
 echo "   | 21.Scheduled Jobs                           |"
 echo "   |---------------------------------------------|"
 tput setaf 5
-echo "     Mail Notification Settings                   "
+echo "                       Settings                   "
 tput sgr0
 echo "   |---------------------------------------------|"
-echo "   | 30.Mail Settings     |                      |"
-echo "   | 31.Add    Recipient  |                      |"
+echo "   | 30.Mail Sender Set.  |                      |"
+echo "   | 31.Add Recipient     |                      |"
 echo "   | 32.Remove Recipient  |                      |"
 echo "   | 33.Recipient List    |                      |"
 echo "   |---------------------------------------------|"
@@ -183,6 +183,19 @@ else
 echo "$BACKUPNAME Backup Failed" > /usr/local/backup-united/mail-message
 fi
 EOF
+
+# create service
+systemctl stop backupunited-$BACKUPNAME.service && systemctl disable backupunited-$BACKUPNAME.service
+if [ -f "/etc/systemd/system/multi-user.target.wants/backupunited-$BACKUPNAME.service" ]; then
+rm /etc/systemd/system/multi-user.target.wants/backupunited-$BACKUPNAME.service
+fi
+if [ -f "/etc/systemd/system/backupunited-$BACKUPNAME.service" ]; then
+rm /etc/systemd/system/backupunited-$BACKUPNAME.service
+fi
+cp LastControl/install/machine/etc/systemd/backupunited-$BACKUPNAME.service /etc/systemd/system/
+ln -s /etc/systemd/system/backupunited-$BACKUPNAME.service /etc/systemd/system/multi-user.target.wants/ (with systemctl enable)
+systemctl disable lastcontrol.service
+
 BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
 ;;
 *)
