@@ -356,6 +356,7 @@ function scheduled_jobs(){
 	i=1
 	while [ "$i" -le $BACKUPJOBCOUNT ]; do
 		BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
+		BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
 		BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
 		echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME"
 		i=$(( i + 1 ))
