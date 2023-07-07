@@ -83,9 +83,9 @@ BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15
                         "14:20" "" OFF \
                         "15:29" "" OFF \
                         "16:21" "" OFF \
-                        "17:21" "" OFF \
-                        "18:23" "" OFF \
-                        "19:23" "" OFF \
+                        "17:32" "" OFF \
+                        "17:36" "" OFF \
+                        "17:38" "" OFF \
                         "20:23" "" OFF \
                         "21:24" "" OFF \
                         "22:20" "" OFF \
@@ -221,12 +221,13 @@ WantedBy=multi-user.target
 EOF
 
 if [ "$BACKUPTYPE" = "Daily" ]; then
+	DESCRIPTION="BackupUnited $BACKUPNAME Daily Timer"
 	ONCALENDAR="*-*-* $BACKUPTIME:00"
 fi
 
 cat > /etc/systemd/system/backupunited-$BACKUPNAME.timer <<EOF
 [Unit]
-Description=BackupUnited $BACKUPNAME Timer
+Description=$DESCRIPTION
 
 [Timer]
 OnCalendar=$ONCALENDAR
@@ -345,6 +346,25 @@ function backup_list(){
 	pause
 }
 
+function scheduled_jobs(){
+	tput setaf 8
+	echo "Scheduled Backup Jobs"
+	echo "---------------------"
+	tput sgr0
+	ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
+	BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
+	i=1
+	while [ "$i" -le $BACKUPJOBCOUNT ]; do
+		BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
+		BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
+		echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME"
+		i=$(( i + 1 ))
+	done
+	echo -e
+	rm /tmp/backupjobname.txt
+	pause
+}
+
 function add_recipient(){
 	read -p "E-Mail Address : " EMAILADDRESS
 	echo "$EMAILADDRESS" >> $MAILRECIPIENT
@@ -370,6 +390,7 @@ case $c in
 3)	backup_job_list;;
 10)	backup_now;;
 11)	backup_list;;
+21)	scheduled_jobs;;
 31)	add_recipient;;
 33)	recipient_list;;
 99)	exit 0 ;;
