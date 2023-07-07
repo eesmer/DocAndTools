@@ -26,8 +26,6 @@ echo "   | 2.Remove Backup Job  | 12.Clean Backup      |"
 echo "   | -------------------- |                      |"
 echo "   | 3.Backup Job List    |                      |"
 echo "   |---------------------------------------------|"
-echo "   | 10.Backup Now                               |"
-echo "   |---------------------------------------------|"
 echo "   | 21.Scheduled Jobs                           |"
 echo "   |---------------------------------------------|"
 tput setaf 5
@@ -391,7 +389,6 @@ case $c in
 1)	add_backup;;
 2)	delete_backup;;
 3)	backup_job_list;;
-10)	backup_now;;
 11)	backup_list;;
 21)	scheduled_jobs;;
 31)	add_recipient;;
