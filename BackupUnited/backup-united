@@ -22,8 +22,8 @@ echo "   |---------------------------------------------|"
 echo "   | Backup Management Menu                      |"
 echo "   |---------------------------------------------|"
 echo "   | 1.Add    Backup Job  | 11.Backup List       |"
-echo "   | 2.Remove Backup Job  | 12.Restore Backup    |"
-echo "   | -------------------- | 13.Clean Backup      |"
+echo "   | 2.Remove Backup Job  | 12.Clean Backup      |"
+echo "   | -------------------- |                      |"
 echo "   | 3.Backup Job List    |                      |"
 echo "   |---------------------------------------------|"
 echo "   | 10.Backup Now                               |"
@@ -249,13 +249,15 @@ esac
 pause
 }
 
-function del_backup(){
+function delete_backup(){
 	BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Deleted" 10 60  3>&1 1>&2 2>&3)
 	if [ "$BACKUPNAME" = "" ]; then
 		whiptail --msgbox "BackupName is Empty" 10 60 3>&1 1>&2 2>&3
 	else
 		if [ -e "$BACKUP_SCRIPTS/$BACKUPNAME" ]; then
 			rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
+			rm /etc/systemd/system/backupunited-$BACKUPNAME.service
+			rm /etc/systemd/system/backupunited-$BACKUPNAME.timer
 		else
 			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
 		fi
@@ -387,7 +389,7 @@ local c
 read -p "Please choose from Menu numbers " c
 case $c in
 1)	add_backup;;
-2)	del_backup;;
+2)	delete_backup;;
 3)	backup_job_list;;
 10)	backup_now;;
 11)	backup_list;;
