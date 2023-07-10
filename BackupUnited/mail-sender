@@ -1,9 +1,0 @@
-#!/bin/bash
-cd /usr/local/backup-united/backup-scripts
-numrecipient=$(cat /usr/local/backup-united/notification/mail-recipients | wc -l)
-i=12
-while [ "$i" -le $numrecipient ]; do
-recipient=$(ls -l | sed -n $i{p} /usr/local/backup-united/notification/mail-recipients)
-cat /usr/local/backup-united/notification/mail-message | mutt -s "Backup United Notification" $recipient
-i=$(( i + 1 ))
-done
