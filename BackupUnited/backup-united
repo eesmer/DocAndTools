@@ -1,10 +1,41 @@
 #!/bin/bash
 
+#-----------------------------------------------
+# installation
+#-----------------------------------------------
+# apt-get -y install rdiff-backup rsync ssmtp mutt
+# apt-get -y install cifst-utils smbclient
+# apt-get -y install tree
+# mkdir -p /usr/local/backup-united/backup
+# mkdir -p /usr/local/backup-united/backup-scripts
+# mkdir -p /usr/local/backup-united/backups
+# cp mail-sender.sh /usr/local/backup-united/
+#
+#-----------------------------------------------
+# /usr/local/backup-united/mail-sender.sh
+#-----------------------------------------------
+# #!/bin/bash
+#WDIR=/usr/local/backup-united
+#BACKUP_SCRIPTS=$WDIR/backup-scripts
+#BACKUPS=$WDIR/backups
+#MAILRECIPIENT=$WDIR/mail-recipient
+#MAILMESSAGE=$WDIR/mail-message
+#
+#NUMRECIPIENT=$(cat "$MAILRECIPIENT" | wc -l)
+#i=1
+#while [ "$i" -le $NUMRECIPIENT ]; do
+#        RECIPIENT=$(ls -l | sed -n $i{p} "$MAILRECIPIENT")
+#        cat $MAILMESSAGE | mutt -s "Backup United Notification" $RECIPIENT
+#        i=$(( i + 1 ))
+#done
+#-----------------------------------------------
+
 WDIR=/usr/local/backup-united
 BACKUP_SCRIPTS=$WDIR/backup-scripts
 BACKUPS=$WDIR/backups
 MAILRECIPIENT=$WDIR/mail-recipient
 MAILMESSAGE=$WDIR/mail-message
+MAILSENDER=$WDIR/mail-sender.sh
 
 function pause(){
 local message="$@"
@@ -79,13 +110,13 @@ BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15
                         "12:27" "" OFF \
                         "13:28" "" OFF \
                         "14:20" "" OFF \
-                        "15:29" "" OFF \
-                        "16:21" "" OFF \
+                        "15:18" "" OFF \
+                        "16:14" "" OFF \
                         "17:32" "" OFF \
-                        "17:36" "" OFF \
-                        "17:38" "" OFF \
-                        "20:23" "" OFF \
-                        "21:24" "" OFF \
+                        "18:16" "" OFF \
+                        "19:11" "" OFF \
+                        "20:22" "" OFF \
+                        "21:18" "" OFF \
                         "22:20" "" OFF \
                         "23:25" "" OFF \
                         3>&1 1>&2 2>&3)
@@ -201,6 +232,8 @@ rm -rf /tmp/$BACKUPNAME-mountok
 else
 echo "$BACKUPNAME Backup Failed" > /usr/local/backup-united/mail-message
 fi
+
+bash $MAILSENDER
 EOF
 
 # create service
