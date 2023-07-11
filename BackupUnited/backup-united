@@ -226,7 +226,7 @@ then
 rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
 tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
-echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backup-united/mail-message
+echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
@@ -289,6 +289,7 @@ function delete_backup(){
 			rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.service
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.timer
+			systemctl daemon-reload
 			systemctl reset-failed
 		else
 			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
