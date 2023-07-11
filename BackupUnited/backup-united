@@ -4,8 +4,8 @@
 # installation
 #-----------------------------------------------
 # apt-get -y install rdiff-backup rsync ssmtp mutt
-# apt-get -y install cifst-utils smbclient
-# apt-get -y install tree
+# apt-get -y install cifs-utils smbclient
+# apt-get -y install tree ack
 # mkdir -p /usr/local/backup-united/backup
 # mkdir -p /usr/local/backup-united/backup-scripts
 # mkdir -p /usr/local/backup-united/backups
