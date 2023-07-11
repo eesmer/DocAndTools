@@ -289,6 +289,7 @@ function delete_backup(){
 			rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.service
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.timer
+			systemctl reset-failed
 		else
 			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
 		fi
