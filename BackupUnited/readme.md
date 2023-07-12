@@ -11,15 +11,10 @@ With the installation of the necessary packages, it makes the use of the applica
 - Provides e-mail notification for the results of the backup process.
 
 **What else could it be?**<br>
-Even though we don't call this list a ToDo list, we can say what we want to do.
 - Backup from FTP
 - DB Backup
 - Full Server Backup
 - VM Backup
-
----
-
-![alt text](images/BackupUnited-Menu-2.png "BackupUnited TUI")
 
 ---
 
