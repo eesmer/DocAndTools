@@ -1,8 +1,0 @@
-
-xrandr --listmonitors
-xrandr --output HDMI-1 --same-as eDP-1 --mode 1366x768
-xrandr --output HDMI-1 --left-of eDP-1 --mode 1366x768
-xrandr --output HDMI-1 --same-as eDP-1 --mode 1920x1080
-
-alias homescreen='xrandr --output HDMI-1 --same-as eDP-1 --mode 1366x768 && xrandr --output eDP-1 --off'
-alias workscreen='xrandr --output HDMI-1 --same-as eDP-1 --mode 1920x1080 && xrandr --output eDP-1 --off'
