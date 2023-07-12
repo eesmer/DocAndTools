@@ -43,6 +43,24 @@ local message="$@"
 read -p "$message" readEnterKey
 }
 
+#tput setaf 8
+#echo "Scheduled Backup Jobs"
+#echo "---------------------"
+#tput sgr0
+rm /tmp/scheduledbackups.txt
+ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
+BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
+i=1
+while [ "$i" -le $BACKUPJOBCOUNT ]; do
+	BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
+	BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
+	BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
+	echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME" >> /tmp/scheduledbackups.txt
+	i=$(( i + 1 ))
+done
+#echo -e
+rm /tmp/backupjobname.txt
+
 function show_menu(){
 date
 echo -e
@@ -77,13 +95,15 @@ tput sgr0
 echo "     $BOARDMSG                                    "
 echo "   -----------------------------------------------"
 tput setaf 9
-echo ""
+echo -e
+tput setaf 9
 echo "    -----------"
 echo "    | 99.Exit |"
 echo "    -----------"
 tput sgr0
 echo -e
 }
+
 
 function add_backup(){
 
@@ -188,7 +208,7 @@ cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 
 if [ -d "$BACKUPPATH" ]; then
 rsync -avz "$BACKUPPATH" "$BACKUPS/$BACKUPNAME"
-tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
+tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
 echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
 else
 echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
@@ -224,9 +244,9 @@ mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username=$BACKUPUSR,password=$BACK
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
 rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
-tar -czf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
+tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
-echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
+echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
@@ -290,7 +310,8 @@ function delete_backup(){
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.service
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.timer
 			systemctl daemon-reload
-			systemctl reset-failed
+                        systemctl reset-failed
+			BOARDMSG="$BACKUPNAME Backup Job Successfully Removed"
 		else
 			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
 		fi
