@@ -28,22 +28,10 @@ if ! [ -x "$(command -v rsync)" ] \
 		mkdir -p /usr/local/backup-united/backup
 		mkdir -p /usr/local/backup-united/backup-scripts
 		mkdir -p /usr/local/backup-united/backups
+
+		wget https://raw.githubusercontent.com/eesmer/DocAndTools/main/BackupUnited/mail-sender.sh /usr/local/backup-united/
+		chmod +x /usr/local/backup-united/mail-sender.sh
 fi
-
-cat > "$WDIR/mail-sender.sh" <<EOF
-#!/bin/bash
-MAILRECIPIENT=$WDIR/mail-recipient
-MAILMESSAGE=$WDIR/mail-message
-
-NUMRECIPIENT=$(cat "$MAILRECIPIENT" | wc -l)
-i=1
-while [ "$i" -le $NUMRECIPIENT ]; do
-        RECIPIENT=$(ls -l | sed -n $i{p} "$MAILRECIPIENT")
-        cat $MAILMESSAGE | mutt -s "Backup United Notification" $RECIPIENT
-        i=$(( i + 1 ))
-done
-EOF
-chmod +x $WDIR/mail-sender.sh
 
 function pause(){
 local message="$@"
@@ -158,7 +146,7 @@ BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15
                         "Friday" "" OFF \
                         "Saturday" "" OFF \
                         "Sunday" "" OFF \
-                        3>&1 1>&2 2>&3)
+                        3>&1 1>&2 2>&3)gg
 	elif
 		[ "$BACKUPTYPE" = "Monthly" ]; then
 		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
