@@ -1,8 +1,5 @@
 #!/bin/bash
 
-WDIR=/usr/local/backup-united
-BACKUP_SCRIPTS=$WDIR/backup-scripts
-BACKUPS=$WDIR/backups
 MAILRECIPIENT=$WDIR/mail-recipient
 MAILMESSAGE=$WDIR/mail-message
 
