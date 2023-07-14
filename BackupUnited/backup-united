@@ -110,32 +110,48 @@ BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15
                 3>&1 1>&2 2>&3)
 		
 	if [ "$BACKUPTYPE" = "Daily" ]; then
-		BACKUPTIME=$(whiptail --title "Select Hour" --radiolist "Choose" 20 40 15 \
-			"00:20" "" OFF \
-			"01:25" "" OFF \
-                        "02:27" "" OFF \
-                        "03:28" "" OFF \
-                        "04:21" "" OFF \
-                        "05:22" "" OFF \
-                        "06:29" "" OFF \
-                        "07:24" "" OFF \
-                        "08:20" "" OFF \
-                        "09:26" "" OFF \
-                        "10:27" "" OFF \
-                        "11:27" "" OFF \
-                        "12:27" "" OFF \
-                        "13:28" "" OFF \
-                        "14:20" "" OFF \
-                        "15:18" "" OFF \
-                        "16:14" "" OFF \
-                        "17:32" "" OFF \
-                        "18:16" "" OFF \
-                        "19:11" "" OFF \
-                        "20:22" "" OFF \
-                        "21:18" "" OFF \
-                        "22:20" "" OFF \
-                        "23:25" "" OFF \
-                        3>&1 1>&2 2>&3)
+		BACKUPHOUR=$(whiptail --title "Backup Hour" --inputbox "At What Hour - For Example 10" 10 60  3>&1 1>&2 2>&3)
+		BACKUPMIN=$(whiptail --title "Backup Minute" --inputbox "At What Minute - For Example 18" 10 60  3>&1 1>&2 2>&3)
+		
+		if [[ "$BACKUPHOUR" =~ ^[0-9]+$ ]] && [[ "$BACKUPMIN" =~ ^[0-9]+$ ]]; then
+			if [ "$BACKUPHOUR" -gt 23 ] || [ "$BACKUPMIN" -gt 59 ]; then
+				#echo "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59"
+				whiptail --title "At What Hour" --msgbox "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59" 10 60  3>&1 1>&2 2>&3
+				add_backup
+			fi
+		else
+			#echo "Backup Hour and Minute must a numbers"
+			whiptail --title "At What Hour" --msgbox "Backup Hour and Minute must a numbers" 10 60  3>&1 1>&2 2>&3
+			add_backup
+		fi
+		BACKUPTIME=$BACKUPHOUR:$BACKUPMIN
+
+		#BACKUPTIME=$(whiptail --title "Select Hour" --radiolist "Choose" 20 40 15 \
+	#		"00:20" "" OFF \
+	#		"01:25" "" OFF \
+        #                "02:27" "" OFF \
+        #                "03:28" "" OFF \
+        #                "04:21" "" OFF \
+        #                "05:22" "" OFF \
+        #                "06:29" "" OFF \
+        #                "07:24" "" OFF \
+        #                "08:20" "" OFF \
+        #                "09:26" "" OFF \
+        #                "10:27" "" OFF \
+        #                "11:27" "" OFF \
+        #                "12:27" "" OFF \
+        #                "13:28" "" OFF \
+        #                "14:20" "" OFF \
+        #                "15:18" "" OFF \
+        #                "16:14" "" OFF \
+        #                "17:32" "" OFF \
+        #                "18:16" "" OFF \
+        #                "19:11" "" OFF \
+        #                "20:22" "" OFF \
+        #                "21:18" "" OFF \
+        #                "22:20" "" OFF \
+        #                "23:25" "" OFF \
+        #                3>&1 1>&2 2>&3)
 	elif
 		[ "$BACKUPTYPE" = "Weekly" ]; then
 		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
