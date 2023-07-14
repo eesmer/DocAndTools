@@ -77,7 +77,7 @@ tput setaf 5
 echo "                       Settings                   "
 tput sgr0
 echo "   |---------------------------------------------|"
-echo "   | 30.Mail Sender Set.  |                      |"
+echo "   | 30.Mail Settings     |                      |"
 echo "   | 31.Add Recipient     |                      |"
 echo "   | 32.Remove Recipient  |                      |"
 echo "   | 33.Recipient List    |                      |"
@@ -319,28 +319,23 @@ function clean_backup(){
 }
 
 function mail_settings(){
-	MAILADDR=$(whiptail --title "Backup Name" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-	SMTP=$(whiptail --title "Path of the Area" --inputbox "Please Enter SMTP Address-SMTP Port your Mailserver (smtp.gmail.com:587)" 10 60  3>&1 1>&2 2>&3)
+	MAILADDR=$(whiptail --title "Email Address" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	SMTP=$(whiptail --title "SMTP Address" --inputbox "Please Enter SMTP Address - SMTP Port (For Example: smtps://example@domain.com@mail.domain.com:465/)" 10 60  3>&1 1>&2 2>&3)
 	MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
 	MAILPASS=$(whiptail --title "Password" --inputbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-	MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (gmail.com,xyz.net etc)" 10 60  3>&1 1>&2 2>&3)
+	#MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (For Example: domain.com,example.net)" 10 60  3>&1 1>&2 2>&3)
 	cat /dev/null > /etc/ssmtp/ssmtp.conf
-cat > /etc/ssmtp/ssmtp.conf <<EOF
-root=$MAILADDR
-mailhub=$SMTP
-AuthUser=$MAILUSER
-AuthPass=$MAILPASS
-UseTLS=YES
-UseSTARTTLS=YES
-rewriteDomain=$MAILDOMAIN
-hostname=$HOSTNAME
-FromLineOverride=YES
+cat > ~/.muttrc <<EOF
+# SMTP
+set from = "$MAILADDR"
+set realname = "Backup United"
+set smtp_url = "$SMTP"
+set smtp_pass = "$MAILPASS"
+set ssl_force_tls = yes
+unset ssl_starttls
 EOF
-
-echo root:$MAILADDR:$SMTP
-chfn -f 'backup-united' root
-
-cp /usr/local/backup-united/notification/99-mail-sender /usr/local/backup-united/backup-scripts/
+#echo root:$MAILADDR:$SMTP
+#chfn -f 'backup-united' root
 pause
 }
 
@@ -431,6 +426,7 @@ case $c in
 3)	backup_job_list;;
 11)	backup_list;;
 21)	scheduled_jobs;;
+30)	mail_settings;;
 31)	add_recipient;;
 33)	recipient_list;;
 99)	exit 0 ;;
