@@ -134,7 +134,7 @@ BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15
                         "Friday" "" OFF \
                         "Saturday" "" OFF \
                         "Sunday" "" OFF \
-                        3>&1 1>&2 2>&3)gg
+                        3>&1 1>&2 2>&3)
 	elif
 		[ "$BACKUPTYPE" = "Monthly" ]; then
 		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
