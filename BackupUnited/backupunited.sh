@@ -286,6 +286,7 @@ WantedBy=timers.target
 EOF
 chmod +x $BACKUP_SCRIPTS/$BACKUPNAME
 systemctl start backupunited-$BACKUPNAME.timer
+systemctl enable backupunited-$BACKUPNAME.timer
 systemctl daemon-reload
 
 BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
