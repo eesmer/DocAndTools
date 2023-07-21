@@ -7,6 +7,8 @@ MAILRECIPIENT=$WDIR/mail-recipient
 MAILMESSAGE=$WDIR/mail-message
 MAILSENDER=$WDIR/mail-sender.sh
 
+clear
+
 #-----------------------------------------------
 # check & install required packages
 #-----------------------------------------------
@@ -17,10 +19,6 @@ if ! [ -x "$(command -v rsync)" ] \
 	|| ! [ -x "$(command -v smbclient)" ] \
 	|| ! [ -x "$(command -v tree)" ] \
 	|| ! [ -x "$(command -v ack)" ]; then
-		echo "-------------------------------"
-		echo "installing missing packages..  "
-		echo "-------------------------------"
-		echo -e
 		apt-get -y install rsync rdiff-backup ssmtp mutt
 		apt-get -y install cifs-utils smbclient
 		apt-get -y install tree ack
@@ -29,8 +27,10 @@ if ! [ -x "$(command -v rsync)" ] \
 		mkdir -p /usr/local/backup-united/backup-scripts
 		mkdir -p /usr/local/backup-united/backups
 
-		wget https://raw.githubusercontent.com/eesmer/DocAndTools/main/BackupUnited/mail-sender.sh /usr/local/backup-united/
-		chmod +x /usr/local/backup-united/mail-sender.sh
+		if [ ! -f $MAILSENDER ]; then
+			wget https://raw.githubusercontent.com/eesmer/DocAndTools/main/BackupUnited/mail-sender.sh /usr/local/backup-united/
+			chmod +x /usr/local/backup-united/mail-sender.sh
+		fi
 fi
 
 function main_menu(){
