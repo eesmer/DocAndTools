@@ -68,6 +68,8 @@ elif [ "$MENUCHOOSE" = "Mail Settings" ]; then
 	mail_settings
 elif [ "$MENUCHOOSE" = "Add Recipient" ]; then
 	add_recipient
+elif [ "$MENUCHOOSE" = "Remove Recipient" ]; then
+	remove_recipient
 elif [ "$MENUCHOOSE" = "Recipient List" ]; then
 	recipient_list
 fi
@@ -337,6 +339,20 @@ function add_recipient(){
 	if [ "$?" = "1" ]; then main_menu; fi
 	echo "$EMAILADDRESS" >> $MAILRECIPIENT && whiptail --title "Add Recipient" --msgbox "Email Address added to Recipient List" 10 60  3>&1 1>&2 2>&3 
 	main_menu
+}
+
+function remove_recipient(){
+        EMAILADDRESS=$(whiptail --title "Email Address" --inputbox "Please enter a E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+        EXIST=FALSE && ack "$EMAILADDRESS" $MAILRECIPIENT >/dev/null && EXIST=TRUE
+        if [ "$EXIST" = TRUE ]; then
+                sed -i '/'$EMAILADDRESS'/d' $MAILRECIPIENT
+                sed -i '/^$/d' $MAILRECIPIENT
+                whiptail --title "Remove Recipient" --msgbox "Email Address removed in Recipient List" 10 60  3>&1 1>&2 2>&3
+        else
+                whiptail --title "Remove Recipient" --msgbox "Email Address Not Found in Recipient List" 10 60  3>&1 1>&2 2>&3
+                main_menu
+        fi
+        main_menu      
 }
 
 function recipient_list(){
