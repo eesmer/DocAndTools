@@ -77,10 +77,25 @@ fi
 }
 
 function add_backup(){
-BACKUPTYPE=$(whiptail --backtitle "Backup United" --title "Select Backup Type" --radiolist "Choose" 20 40 15 \
-                "Daily" "" OFF \
-                "Weekly" "" OFF \
-                "Monthly" "" OFF \
+
+BACKUPMETHOD=$(whiptail --backtitle "Backup United" --title "Select Backup Method" --radiolist "Choose" 40 100 15 \
+	"Sync" "sync remote directory with rsync" OFF \
+	"Sync and Backup" "sync with rsync and each sync is stored as a .tar file" OFF \
+	"Current and Incremental" "sync and incremental backup with rdiff-backup" OFF \
+	"Sync and Keep in GIT Repo" "The directory is synced with rsync and kept in the GIT repo." OFF \
+	"Create .iso file" "Backup directory in .iso format" OFF \
+	3>&1 1>&2 2>&3)
+
+# create .iso file from dir
+#mkisofs -o test.iso /tmp/testbackup
+#osirrox -indev test.iso -extract / /tmp
+#echo $BACKUPMETHOD
+#exit 1
+
+BACKUPTYPE=$(whiptail --backtitle "Backup United" --title "Select Backup Type" --radiolist "Choose" 40 80 15 \
+                "Daily" "Run backup job at set hour every day" OFF \
+                "Weekly" "Runs backup job per week on the specified day" OFF \
+                "Monthly" "The backup job runs on the selected day in the month" OFF \
                 3>&1 1>&2 2>&3)
 		
 	if [ "$BACKUPTYPE" = "Daily" ]; then
