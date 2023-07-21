@@ -82,6 +82,15 @@ elif [ "$MENUCHOOSE" = "Exit" ]; then
         exit 1
 elif [ "$MENUCHOOSE" = "Add Backup Job" ]; then
         add_backup
+elif [ "$MENUCHOOSE" = "Remove Backup Job" ]; then
+	delete_backup
+elif [ "$MENUCHOOSE" = "Backup Job List" ]; then
+	backup_job_list
+elif [ "$MENUCHOOSE" = "Backup List" ]; then
+	backup_list
+
+elif [ "$MENUCHOOSE" = "Mail Settings" ]; then
+	mail_settings
 fi
 
 }
@@ -332,7 +341,7 @@ function clean_backup(){
 
 function mail_settings(){
 	MAILADDR=$(whiptail --title "Email Address" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-	SMTP=$(whiptail --title "SMTP Address" --inputbox "Please Enter SMTP Address - SMTP Port (For Example: smtps://example@domain.com@mail.domain.com:465/)" 10 60  3>&1 1>&2 2>&3)
+	SMTP=$(whiptail --title "SMTP Address" --inputbox "Please Enter SMTP Address - SMTP Port\n\nExample:\nsmtps://example@domain.com@mail.domain.com:465/" 10 60  3>&1 1>&2 2>&3)
 	MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
 	MAILPASS=$(whiptail --title "Password" --passwordbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
 	#MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (For Example: domain.com,example.net)" 10 60  3>&1 1>&2 2>&3)
