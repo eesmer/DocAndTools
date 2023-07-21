@@ -57,6 +57,35 @@ done
 #echo -e
 rm /tmp/backupjobname.txt
 
+function main_menu(){
+MENUCHOOSE=$(whiptail --nocancel --backtitle "Backup United" --title "Main Menu" --menu "Choose an option" 25 78 16 \
+"Add Backup Job" "" \
+"Remove Backup Job" "" \
+"Backup Job List" "" \
+"" "" \
+"Backup List" "" \
+"Clean Backup" "" \
+"" "" \
+"Mail Settings" "" \
+"Add Recipient" "" \
+"Remove Recipient" "" \
+"Recipient List" "" \
+"" "" \
+"Exit" "" \
+3>&1 1>&2 2>&3)
+
+if [ "$MENUCHOOSE" = "" ]; then
+        clear
+        main_menu
+elif [ "$MENUCHOOSE" = "Exit" ]; then
+	echo "See you.."
+        exit 1
+elif [ "$MENUCHOOSE" = "Add Backup Job" ]; then
+        add_backup
+fi
+
+}
+
 function show_menu(){
 date
 echo -e
@@ -307,7 +336,11 @@ function mail_settings(){
 	MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
 	MAILPASS=$(whiptail --title "Password" --passwordbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
 	#MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (For Example: domain.com,example.net)" 10 60  3>&1 1>&2 2>&3)
-	cat /dev/null > /etc/ssmtp/ssmtp.conf
+	#cat /dev/null > /etc/ssmtp/ssmtp.conf
+	if [ "$MAILADDR" = "" ] || [ "$SMTP" = "" ] || [ "$MAILUSER" = "" ] || [ "$MAILPASS" = "" ]; then
+		whiptail --title "Mail Settings" --msgbox "Please fill in all fields" 10 60  3>&1 1>&2 2>&3
+		mail_settings
+	fi
 cat > ~/.muttrc <<EOF
 # SMTP
 set from = "$MAILADDR"
@@ -425,6 +458,7 @@ trap '' SIGINT SIGQUIT SIGTSTP
 while true
 do
 clear
+main_menu
 show_menu
 read_input
 done
