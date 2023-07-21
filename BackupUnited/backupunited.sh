@@ -334,6 +334,7 @@ function backup_list(){
 
 function add_recipient(){
 	EMAILADDRESS=$(whiptail --title "Email Address" --inputbox "Please enter a E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	if [ "$?" = "1" ]; then main_menu; fi
 	echo "$EMAILADDRESS" >> $MAILRECIPIENT && whiptail --title "Add Recipient" --msgbox "Email Address added to Recipient List" 10 60  3>&1 1>&2 2>&3 
 	main_menu
 }
