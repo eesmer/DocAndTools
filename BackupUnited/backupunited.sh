@@ -318,16 +318,10 @@ pause
 }
 
 function backup_job_list(){
-	#echo "Backup Job List" > /tmp/backup_job_list.txt
-	#echo "---------------" >> /tmp/backup_job_list.txt
-	#ls $BACKUP_SCRIPTS >> /tmp/backup_job_list.txt
-	#echo -e >> /tmp/backup_job_list.txt	
 	echo "Backup Job List" > /tmp/backup_job_list.txt
 	echo "--------------------------------------------" >> /tmp/backup_job_list.txt
-	BACKUPJOBPATH=$(ack "BACKUPPATH=" "$BACKUP_SCRIPTS" | cut -d "=" -f2) #>> /tmp/backup_job_list.txt)
-	#echo -e >> /tmp/backup_job_list.txt
+	###BACKUPJOBPATH=$(ack "BACKUPPATH=" "$BACKUP_SCRIPTS" | cut -d "=" -f2)
 	
-	#rm /tmp/scheduledbackups.txt
 	ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
 	BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
 	i=1
@@ -335,7 +329,7 @@ function backup_job_list(){
 		BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
 		BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
 		BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
-		#echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME" >> /tmp/scheduledbackups.txt
+		BACKUPJOBPATH=$(ack "BACKUPPATH=" "$BACKUP_SCRIPTS/$BACKUPJOBNAME" | cut -d "=" -f2)
 		echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME - $BACKUPJOBPATH" >> /tmp/backup_job_list.txt
 		i=$(( i + 1 ))
 	done
