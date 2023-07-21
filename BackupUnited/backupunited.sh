@@ -341,9 +341,13 @@ function clean_backup(){
 
 function mail_settings(){
 	MAILADDR=$(whiptail --title "Email Address" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	if [ "$?" = "1" ]; then main_menu; fi
 	SMTP=$(whiptail --title "SMTP Address" --inputbox "Please Enter SMTP Address - SMTP Port\n\nExample:\nsmtps://example@domain.com@mail.domain.com:465/" 10 60  3>&1 1>&2 2>&3)
+	if [ "$?" = "1" ]; then main_menu; fi
 	MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	if [ "$?" = "1" ]; then main_menu; fi
 	MAILPASS=$(whiptail --title "Password" --passwordbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	if [ "$?" = "1" ]; then main_menu; fi
 	#MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (For Example: domain.com,example.net)" 10 60  3>&1 1>&2 2>&3)
 	#cat /dev/null > /etc/ssmtp/ssmtp.conf
 	if [ "$MAILADDR" = "" ] || [ "$SMTP" = "" ] || [ "$MAILUSER" = "" ] || [ "$MAILPASS" = "" ]; then
