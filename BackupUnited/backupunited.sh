@@ -33,29 +33,19 @@ if ! [ -x "$(command -v rsync)" ] \
 		chmod +x /usr/local/backup-united/mail-sender.sh
 fi
 
-function pause(){
-local message="$@"
-[ -z $message ] && message="Press [Enter] to continue ..."
-read -p "$message" readEnterKey
-}
-
-#tput setaf 8
-#echo "Scheduled Backup Jobs"
-#echo "---------------------"
-#tput sgr0
-rm /tmp/scheduledbackups.txt
-ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
-BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
-i=1
-while [ "$i" -le $BACKUPJOBCOUNT ]; do
-	BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
-	BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
-	BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
-	echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME" >> /tmp/scheduledbackups.txt
-	i=$(( i + 1 ))
-done
+#rm /tmp/scheduledbackups.txt
+#ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
+#BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
+#i=1
+#while [ "$i" -le $BACKUPJOBCOUNT ]; do
+#	BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
+#	BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
+#	BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
+#	echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME" >> /tmp/scheduledbackups.txt
+#	i=$(( i + 1 ))
+#done
 #echo -e
-rm /tmp/backupjobname.txt
+#rm /tmp/backupjobname.txt
 
 function main_menu(){
 MENUCHOOSE=$(whiptail --nocancel --backtitle "Backup United" --title "Main Menu" --menu "Choose an option" 25 78 16 \
@@ -94,50 +84,6 @@ elif [ "$MENUCHOOSE" = "Mail Settings" ]; then
 fi
 
 }
-
-function show_menu(){
-date
-echo -e
-tput setaf 5
-echo "     BackupUnited                                 "
-tput sgr0
-echo "   |---------------------------------------------|"
-echo "   | Backup Management Menu                      |"
-echo "   |---------------------------------------------|"
-echo "   | 1.Add    Backup Job  | 11.Backup List       |"
-echo "   | 2.Remove Backup Job  | 12.Clean Backup      |"
-echo "   | -------------------- |                      |"
-echo "   | 3.Backup Job List    |                      |"
-echo "   |---------------------------------------------|"
-echo "   | 21.Scheduled Jobs                           |"
-echo "   |---------------------------------------------|"
-tput setaf 5
-echo "                       Settings                   "
-tput sgr0
-echo "   |---------------------------------------------|"
-echo "   | 30.Mail Settings     |                      |"
-echo "   | 31.Add Recipient     |                      |"
-echo "   | 32.Remove Recipient  |                      |"
-echo "   | 33.Recipient List    |                      |"
-echo "   |---------------------------------------------|"
-tput setaf 9
-echo "                     -----------                  "
-echo "                     ** BOARD **                  "
-echo "                     -----------                  "
-tput setaf 1
-tput sgr0
-echo "     $BOARDMSG                                    "
-echo "   -----------------------------------------------"
-tput setaf 9
-echo -e
-tput setaf 9
-echo "    -----------"
-echo "    | 99.Exit |"
-echo "    -----------"
-tput sgr0
-echo -e
-}
-
 
 function add_backup(){
 
@@ -302,7 +248,8 @@ fi
 *)
 ;;
 esac
-pause
+#pause
+main_menu
 }
 
 function delete_backup(){
@@ -321,7 +268,8 @@ function delete_backup(){
 			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
 		fi
 	fi
-	pause
+	#pause
+	main_menu
 }
 
 function clean_backup(){
@@ -336,7 +284,8 @@ function clean_backup(){
 		i=$(( i + 1 ))
 	done
 	rm -rf /tmp/folderlist
-	pause
+	#pause
+	main_menu
 }
 
 function mail_settings(){
@@ -369,52 +318,16 @@ pause
 }
 
 function backup_job_list(){
-	tput setaf 8
-	echo "Backup Job List"
-	echo "---------------"
-	tput sgr0
-	ls $BACKUP_SCRIPTS
-	echo -e
+	#echo "Backup Job List" > /tmp/backup_job_list.txt
+	#echo "---------------" >> /tmp/backup_job_list.txt
+	#ls $BACKUP_SCRIPTS >> /tmp/backup_job_list.txt
+	#echo -e >> /tmp/backup_job_list.txt	
+	echo "Backup Job List" > /tmp/backup_job_list.txt
+	echo "--------------------------------------------" >> /tmp/backup_job_list.txt
+	BACKUPJOBPATH=$(ack "BACKUPPATH=" "$BACKUP_SCRIPTS" | cut -d "=" -f2) #>> /tmp/backup_job_list.txt)
+	#echo -e >> /tmp/backup_job_list.txt
 	
-	tput setaf 8	
-	echo "Backup Paths"
-	echo "---------------"
-	tput sgr0
-	#ack "mount -t cifs" "$BACKUP_SCRIPTS" | cut -d " " -f4
-	#ack "BACKUPNAME=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
-	ack "BACKUPPATH=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
-	echo -e
-	pause
-}
-
-function backup_now(){
-	chmod +x $BACKUP_SCRIPTS/*
-	run-parts $BACKUP_SCRIPTS
-
-	NUMRECIPIENT=$(cat "$MAILRECIPIENT" | wc -l)
-	i=0
-	while [ "$i" -le $NUMRECIPIENT ]; do
-		RECIPIENT=$(ls -l | sed -n $i{p} "$MAILRECIPIENT")
-		cat $MAILMESSAGE | mutt -s "Backup United Notification" $RECIPIENT
-		i=$(( i + 1 ))
-	done
-	pause
-}
-
-function backup_list(){
-	tput setaf 8
-	echo "Backups"
-	echo "---------------"
-	tput sgr0
-	tree $BACKUPS
-	pause
-}
-
-function scheduled_jobs(){
-	tput setaf 8
-	echo "Scheduled Backup Jobs"
-	echo "---------------------"
-	tput sgr0
+	#rm /tmp/scheduledbackups.txt
 	ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
 	BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
 	i=1
@@ -422,18 +335,51 @@ function scheduled_jobs(){
 		BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
 		BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
 		BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
-		echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME"
+		#echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME" >> /tmp/scheduledbackups.txt
+		echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME - $BACKUPJOBPATH" >> /tmp/backup_job_list.txt
 		i=$(( i + 1 ))
 	done
-	echo -e
-	rm /tmp/backupjobname.txt
-	pause
+	
+	whiptail --backtitle "Backup United" --title "Backup Job List" --textbox --scrolltext "/tmp/backup_job_list.txt"  40 80  3>&1 1>&2 2>&3
+	rm /tmp/backup_job_list.txt
+	
+	main_menu
 }
+
+function backup_list(){
+	echo "Backups" > /tmp/backup_dir.txt
+	echo "--------------------------------------------" >> /tmp/backup_dir.txt
+	tree $BACKUPS >> /tmp/backup_dir.txt
+	whiptail --backtitle "Backup United" --title "Backup Directory" --textbox --scrolltext "/tmp/backup_dir.txt"  40 80  3>&1 1>&2 2>&3
+	main_menu
+}
+
+#function scheduled_jobs(){
+#	tput setaf 8
+#	echo "Scheduled Backup Jobs"
+#	echo "---------------------"
+#	tput sgr0
+#	ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
+#	BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
+#	i=1
+#	while [ "$i" -le $BACKUPJOBCOUNT ]; do
+#		BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
+#		BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
+#		BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
+#		echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME"
+#		i=$(( i + 1 ))
+#	done
+#	echo -e
+#	rm /tmp/backupjobname.txt
+#	#pause
+#	main_menu
+#}
 
 function add_recipient(){
 	read -p "E-Mail Address : " EMAILADDRESS
 	echo "$EMAILADDRESS" >> $MAILRECIPIENT
-	pause
+	#pause
+	main_menu
 }
 
 function recipient_list(){
@@ -443,35 +389,11 @@ function recipient_list(){
 	tput sgr0
 	cat $MAILRECIPIENT
 	echo -e
-	pause
-}
-
-function read_input(){
-local c
-read -p "Please choose from Menu numbers " c
-case $c in
-1)	add_backup;;
-2)	delete_backup;;
-3)	backup_job_list;;
-11)	backup_list;;
-21)	scheduled_jobs;;
-30)	mail_settings;;
-31)	add_recipient;;
-33)	recipient_list;;
-99)	exit 0 ;;
-*)	
-echo "Please choose from Menu numbers"
-pause
-esac
+	#pause
+	main_menu
 }
 
 # CTRL+C, CTRL+Z
 trap '' SIGINT SIGQUIT SIGTSTP
 
-while true
-do
-clear
 main_menu
-show_menu
-read_input
-done
