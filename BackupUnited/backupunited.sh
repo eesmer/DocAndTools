@@ -80,17 +80,62 @@ function add_backup(){
 
 BACKUPMETHOD=$(whiptail --backtitle "Backup United" --title "Select Backup Method" --radiolist "Choose" 40 100 15 \
 	"Sync" "sync remote directory with rsync" OFF \
-	"Sync and Backup" "sync with rsync and each sync is stored as a .tar file" OFF \
-	"Current and Incremental" "sync and incremental backup with rdiff-backup" OFF \
-	"Sync and Keep in GIT Repo" "The directory is synced with rsync and kept in the GIT repo." OFF \
+	"Sync and .tar Backup" "sync with rsync and each sync is stored as a .tar file" OFF \
+	"Sync and Incremental Backup" "sync and incremental backup with rdiff-backup" OFF \
+	"Keep in GIT Repo" "The directory is synced with rsync and kept in the GIT repo." OFF \
 	"Create .iso file" "Backup directory in .iso format" OFF \
 	3>&1 1>&2 2>&3)
+	
+	if [ "$BACKUPMETHOD" = "" ]; then
+		whiptail --title "Backup Method" --msgbox "Backup Method is not null" 10 60  3>&1 1>&2 2>&3
+		main_menu
+	fi
+
+echo $BACKUPMETHOD
+
+if [ "$BACKUPMETHOD" = "Sync" ]; then
+	echo "Sync selected."
+	BACKUPCOMMAND="rsync -az"
+	CREATETAR="FALSE"
+	GITCOMMIT="FALSE"
+	CREATEISO="FALSE"
+fi
+
+if [ "$BACKUPMETHOD" = "Sync and .tar Backup" ]; then
+	echo "Sync and .tar Backup selected."
+	BACKUPCOMMAND="rsync -az"
+	CREATETAR="TRUE"
+	GITCOMMIT="FALSE"
+	CREATEISO="FALSE"
+fi
+if [ "$BACKUPMETHOD" = "Sync and Incremental Backup" ]; then
+	echo "Sync and Incremental Backup selected."
+	BACKUPCOMMAND="rsync -az"
+	CREATETAR="FALSE"
+	GITCOMMIT="FALSE"
+	CREATEISO="FALSE"
+
+fi
+if [ "$BACKUPMETHOD" = "Keep in GIT Repo" ]; then
+	echo "Keep in GIT Repo selected."
+	BACKUPCOMMAND="rsync -az"
+	CREATETAR="FALSE"
+	GITCOMMIT="TRUE"
+	CREATEISO="FALSE"
+
+fi
+if [ "$BACKUPMETHOD" = "Create .iso file" ]; then
+	echo "Create .iso file selected."
+	BACKUPCOMMAND="rsync -az"
+	CREATETAR="FALSE"
+	GITCOMMIT="FALSE"
+	CREATEISO="TRUE"
+fi
 
 # create .iso file from dir
 #mkisofs -o test.iso /tmp/testbackup
 #osirrox -indev test.iso -extract / /tmp
 #echo $BACKUPMETHOD
-#exit 1
 
 BACKUPTYPE=$(whiptail --backtitle "Backup United" --title "Select Backup Type" --radiolist "Choose" 40 80 15 \
                 "Daily" "Run backup job at set hour every day" OFF \
@@ -199,10 +244,8 @@ mkdir /tmp/$BACKUPNAME
 mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username=$BACKUPUSR,password=$BACKUPPWD && touch /tmp/$BACKUPNAME-mountok
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
-rsync -avz /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
-tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
-BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
-echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backup-united/mail-message
+rsync -az /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
+echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
