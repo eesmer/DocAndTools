@@ -112,7 +112,7 @@ if [ "$BACKUPMETHOD" = "Sync and Incremental Backup" ]; then
 	echo "Sync and Incremental Backup selected."
 	BACKUPCOMMAND="rsync -az"
 	CREATETAR="FALSE"
-	INCREMENTAL="FALSE"
+	INCREMENTAL="TRUE"
 	GITCOMMIT="FALSE"
 	CREATEISO="FALSE"
 
