@@ -91,8 +91,6 @@ BACKUPMETHOD=$(whiptail --backtitle "Backup United" --title "Select Backup Metho
 		main_menu
 	fi
 
-echo $BACKUPMETHOD
-
 if [ "$BACKUPMETHOD" = "Sync" ]; then
 	echo "Sync selected."
 	BACKUPCOMMAND="rsync -az"
