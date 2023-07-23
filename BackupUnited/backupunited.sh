@@ -139,6 +139,8 @@ fi
 #mkisofs -o test.iso /tmp/testbackup
 #osirrox -indev test.iso -extract / /tmp
 #echo $BACKUPMETHOD
+#for CreateTar
+#tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
 
 BACKUPTYPE=$(whiptail --backtitle "Backup United" --title "Select Backup Type" --radiolist "Choose" 40 80 15 \
                 "Daily" "Run backup job at set hour every day" OFF \
