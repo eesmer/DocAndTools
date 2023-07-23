@@ -95,6 +95,7 @@ if [ "$BACKUPMETHOD" = "Sync" ]; then
 	echo "Sync selected."
 	BACKUPCOMMAND="rsync -az"
 	CREATETAR="FALSE"
+	INCREMENTAL="FALSE"
 	GITCOMMIT="FALSE"
 	CREATEISO="FALSE"
 fi
@@ -103,6 +104,7 @@ if [ "$BACKUPMETHOD" = "Sync and .tar Backup" ]; then
 	echo "Sync and .tar Backup selected."
 	BACKUPCOMMAND="rsync -az"
 	CREATETAR="TRUE"
+	INCREMENTAL="FALSE"
 	GITCOMMIT="FALSE"
 	CREATEISO="FALSE"
 fi
@@ -110,6 +112,7 @@ if [ "$BACKUPMETHOD" = "Sync and Incremental Backup" ]; then
 	echo "Sync and Incremental Backup selected."
 	BACKUPCOMMAND="rsync -az"
 	CREATETAR="FALSE"
+	INCREMENTAL="FALSE"
 	GITCOMMIT="FALSE"
 	CREATEISO="FALSE"
 
@@ -118,6 +121,7 @@ if [ "$BACKUPMETHOD" = "Keep in GIT Repo" ]; then
 	echo "Keep in GIT Repo selected."
 	BACKUPCOMMAND="rsync -az"
 	CREATETAR="FALSE"
+	INCREMENTAL="FALSE"
 	GITCOMMIT="TRUE"
 	CREATEISO="FALSE"
 
@@ -126,6 +130,7 @@ if [ "$BACKUPMETHOD" = "Create .iso file" ]; then
 	echo "Create .iso file selected."
 	BACKUPCOMMAND="rsync -az"
 	CREATETAR="FALSE"
+	INCREMENTAL="FALSE"
 	GITCOMMIT="FALSE"
 	CREATEISO="TRUE"
 fi
