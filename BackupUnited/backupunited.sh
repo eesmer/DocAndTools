@@ -31,6 +31,11 @@ if ! [ -x "$(command -v rsync)" ] \
 			wget https://raw.githubusercontent.com/eesmer/DocAndTools/main/BackupUnited/mail-sender.sh /usr/local/backup-united/
 			chmod +x /usr/local/backup-united/mail-sender.sh
 		fi
+
+        mkdir -p $BACKUPS/createtar
+        mkdir -p $BACKUPS/incremental
+        mkdir -p $BACKUPS/sync
+        mkdir -p $WDIR/scripts
 fi
 
 function main_menu(){
