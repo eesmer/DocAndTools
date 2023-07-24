@@ -7,8 +7,6 @@ MAILRECIPIENT=$WDIR/mail-recipient
 MAILMESSAGE=$WDIR/mail-message
 MAILSENDER=$WDIR/mail-sender.sh
 
-clear
-
 #-----------------------------------------------
 # check & install required packages
 #-----------------------------------------------
@@ -19,6 +17,10 @@ if ! [ -x "$(command -v rsync)" ] \
 	|| ! [ -x "$(command -v smbclient)" ] \
 	|| ! [ -x "$(command -v tree)" ] \
 	|| ! [ -x "$(command -v ack)" ]; then
+		echo "-------------------------------"
+		echo "installing missing packages..  "
+		echo "-------------------------------"
+		echo -e
 		apt-get -y install rsync rdiff-backup ssmtp mutt
 		apt-get -y install cifs-utils smbclient
 		apt-get -y install tree ack
@@ -27,130 +29,89 @@ if ! [ -x "$(command -v rsync)" ] \
 		mkdir -p /usr/local/backup-united/backup-scripts
 		mkdir -p /usr/local/backup-united/backups
 
-		if [ ! -f $MAILSENDER ]; then
-			wget https://raw.githubusercontent.com/eesmer/DocAndTools/main/BackupUnited/mail-sender.sh /usr/local/backup-united/
-			chmod +x /usr/local/backup-united/mail-sender.sh
-		fi
+		wget https://raw.githubusercontent.com/eesmer/DocAndTools/main/BackupUnited/mail-sender.sh /usr/local/backup-united/
+		chmod +x /usr/local/backup-united/mail-sender.sh
 
-        mkdir -p $BACKUPS/createtar
-        mkdir -p $BACKUPS/incremental
-        mkdir -p $BACKUPS/sync
-        mkdir -p $WDIR/scripts
+		mkdir -p $BACKUPS/createtar
+		mkdir -p $BACKUPS/incremental
+		mkdir -p $BACKUPS/sync
+		mkdir -p $WDIR/scripts
 fi
 
-function main_menu(){
-MENUCHOOSE=$(whiptail --nocancel --backtitle "Backup United" --title "Main Menu" --menu "Choose an option" 25 78 16 \
-"Add Backup Job" "" \
-"Remove Backup Job" "" \
-"Backup Job List" "" \
-"" "" \
-"Backup List" "" \
-"" "" \
-"Mail Settings" "" \
-"Add Recipient" "" \
-"Remove Recipient" "" \
-"Recipient List" "" \
-"" "" \
-"Exit" "" \
-3>&1 1>&2 2>&3)
-
-if [ "$MENUCHOOSE" = "" ]; then
-        clear
-        main_menu
-elif [ "$MENUCHOOSE" = "Exit" ]; then
-	echo "See you.."
-        exit 1
-elif [ "$MENUCHOOSE" = "Add Backup Job" ]; then
-        add_backup
-elif [ "$MENUCHOOSE" = "Remove Backup Job" ]; then
-	delete_backup
-elif [ "$MENUCHOOSE" = "Backup Job List" ]; then
-	backup_job_list
-elif [ "$MENUCHOOSE" = "Backup List" ]; then
-	backup_list
-
-elif [ "$MENUCHOOSE" = "Mail Settings" ]; then
-	mail_settings
-elif [ "$MENUCHOOSE" = "Add Recipient" ]; then
-	add_recipient
-elif [ "$MENUCHOOSE" = "Remove Recipient" ]; then
-	remove_recipient
-elif [ "$MENUCHOOSE" = "Recipient List" ]; then
-	recipient_list
-fi
-
+function pause(){
+local message="$@"
+[ -z $message ] && message="Press [Enter] to continue ..."
+read -p "$message" readEnterKey
 }
+
+#tput setaf 8
+#echo "Scheduled Backup Jobs"
+#echo "---------------------"
+#tput sgr0
+rm /tmp/scheduledbackups.txt
+ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
+BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
+i=1
+while [ "$i" -le $BACKUPJOBCOUNT ]; do
+	BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
+	BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
+	BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
+	echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME" >> /tmp/scheduledbackups.txt
+	i=$(( i + 1 ))
+done
+#echo -e
+rm /tmp/backupjobname.txt
+
+function show_menu(){
+date
+echo -e
+tput setaf 5
+echo "     BackupUnited                                 "
+tput sgr0
+echo "   |---------------------------------------------|"
+echo "   | Backup Management Menu                      |"
+echo "   |---------------------------------------------|"
+echo "   | 1.Add    Backup Job  | 11.Backup List       |"
+echo "   | 2.Remove Backup Job  | 12.Clean Backup      |"
+echo "   | -------------------- |                      |"
+echo "   | 3.Backup Job List    |                      |"
+echo "   |---------------------------------------------|"
+echo "   | 21.Scheduled Jobs                           |"
+echo "   |---------------------------------------------|"
+tput setaf 5
+echo "                       Settings                   "
+tput sgr0
+echo "   |---------------------------------------------|"
+echo "   | 30.Mail Sender Set.  |                      |"
+echo "   | 31.Add Recipient     |                      |"
+echo "   | 32.Remove Recipient  |                      |"
+echo "   | 33.Recipient List    |                      |"
+echo "   |---------------------------------------------|"
+tput setaf 9
+echo "                     -----------                  "
+echo "                     ** BOARD **                  "
+echo "                     -----------                  "
+tput setaf 1
+tput sgr0
+echo "     $BOARDMSG                                    "
+echo "   -----------------------------------------------"
+tput setaf 9
+echo -e
+tput setaf 9
+echo "    -----------"
+echo "    | 99.Exit |"
+echo "    -----------"
+tput sgr0
+echo -e
+}
+
 
 function add_backup(){
 
-BACKUPMETHOD=$(whiptail --backtitle "Backup United" --title "Select Backup Method" --radiolist "Choose" 40 100 15 \
-	"Sync" "sync remote directory with rsync" OFF \
-	"Sync and .tar Backup" "sync with rsync and each sync is stored as a .tar file" OFF \
-	"Sync and Incremental Backup" "sync and incremental backup with rdiff-backup" OFF \
-	"Keep in GIT Repo" "The directory is synced with rsync and kept in the GIT repo." OFF \
-	"Create .iso file" "Backup directory in .iso format" OFF \
-	3>&1 1>&2 2>&3)
-	
-	if [ "$BACKUPMETHOD" = "" ]; then
-		whiptail --title "Backup Method" --msgbox "Backup Method is not null" 10 60  3>&1 1>&2 2>&3
-		main_menu
-	fi
-
-if [ "$BACKUPMETHOD" = "Sync" ]; then
-	echo "Sync selected."
-	BACKUPCOMMAND="rsync -az"
-	CREATETAR="FALSE"
-	INCREMENTAL="FALSE"
-	GITCOMMIT="FALSE"
-	CREATEISO="FALSE"
-fi
-
-if [ "$BACKUPMETHOD" = "Sync and .tar Backup" ]; then
-	echo "Sync and .tar Backup selected."
-	BACKUPCOMMAND="rsync -az"
-	CREATETAR="TRUE"
-	INCREMENTAL="FALSE"
-	GITCOMMIT="FALSE"
-	CREATEISO="FALSE"
-fi
-if [ "$BACKUPMETHOD" = "Sync and Incremental Backup" ]; then
-	echo "Sync and Incremental Backup selected."
-	BACKUPCOMMAND="rsync -az"
-	CREATETAR="FALSE"
-	INCREMENTAL="TRUE"
-	GITCOMMIT="FALSE"
-	CREATEISO="FALSE"
-
-fi
-if [ "$BACKUPMETHOD" = "Keep in GIT Repo" ]; then
-	echo "Keep in GIT Repo selected."
-	BACKUPCOMMAND="rsync -az"
-	CREATETAR="FALSE"
-	INCREMENTAL="FALSE"
-	GITCOMMIT="TRUE"
-	CREATEISO="FALSE"
-
-fi
-if [ "$BACKUPMETHOD" = "Create .iso file" ]; then
-	echo "Create .iso file selected."
-	BACKUPCOMMAND="rsync -az"
-	CREATETAR="FALSE"
-	INCREMENTAL="FALSE"
-	GITCOMMIT="FALSE"
-	CREATEISO="TRUE"
-fi
-
-# create .iso file from dir
-#mkisofs -o test.iso /tmp/testbackup
-#osirrox -indev test.iso -extract / /tmp
-#echo $BACKUPMETHOD
-#for CreateTar
-#tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
-
-BACKUPTYPE=$(whiptail --backtitle "Backup United" --title "Select Backup Type" --radiolist "Choose" 40 80 15 \
-                "Daily" "Run backup job at set hour every day" OFF \
-                "Weekly" "Runs backup job per week on the specified day" OFF \
-                "Monthly" "The backup job runs on the selected day in the month" OFF \
+BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15 \
+                "Daily" "" OFF \
+                "Weekly" "" OFF \
+                "Monthly" "" OFF \
                 3>&1 1>&2 2>&3)
 		
 	if [ "$BACKUPTYPE" = "Daily" ]; then
@@ -178,34 +139,56 @@ BACKUPTYPE=$(whiptail --backtitle "Backup United" --title "Select Backup Type" -
                         "Friday" "" OFF \
                         "Saturday" "" OFF \
                         "Sunday" "" OFF \
-                        3>&1 1>&2 2>&3)
+                        3>&1 1>&2 2>&3)gg
 	elif
 		[ "$BACKUPTYPE" = "Monthly" ]; then
-		BACKUPDAY=$(whiptail --title "Backup Day" --inputbox "Which day of the month? \n Please enter numbers between 1-28 for The Backup Day" 10 60  3>&1 1>&2 2>&3)
-		if [[ "$BACKUPDAY" =~ ^[0-9]+$ ]]; then
-			if [ "$BACKUPDAY" -gt 28 ] || [ "$BACKUPDAY" -lt 1 ]; then
-				whiptail --title "" --msgbox "Please enter a number from 1-28 for the backup day definition" 10 60  3>&1 1>&2 2>&3
-				add_backup
-			else
-				BACKUPTIME=$BACKUPDAY
-			fi
-		else
-			whiptail --title "" --msgbox "The backup day should be defined by the number 1-28" 10 60  3>&1 1>&2 2>&3
-			add_backup
-		fi
-fi
+		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+			"1st  Day" "" OFF \
+			"2nd  Day" "" OFF \
+			"3rd  Day" "" OFF \
+			"4th  Day" "" OFF \
+			"5th  Day" "" OFF \
+			"6th  Day" "" OFF \
+			"7th  Day" "" OFF \
+			"8th  Day" "" OFF \
+			"9th  Day" "" OFF \
+			"10th Day" "" OFF \
+			"11th Day" "" OFF \
+			"12th Day" "" OFF \
+			"13th Day" "" OFF \
+			"14th Day" "" OFF \
+			"15th Day" "" OFF \
+			"16th Day" "" OFF \
+			"17th Day" "" OFF \
+			"18th Day" "" OFF \
+			"19th Day" "" OFF \
+			"20th Day" "" OFF \
+			"21st Day" "" OFF \
+			"22nd Day" "" OFF \
+			"23rd Day" "" OFF \
+			"24th Day" "" OFF \
+			"25th Day" "" OFF \
+			"26th Day" "" OFF \
+			"27th Day" "" OFF \
+			"28th Day" "" OFF \
+			3>&1 1>&2 2>&3)
+	fi
 	
 if [ "$BACKUPTYPE" = "" ] || [ "$BACKUPTIME" = "" ]; then
 	whiptail --title "Backup Name" --msgbox "Backup Type and Time is not null" 10 60  3>&1 1>&2 2>&3
 else
 	record_backup
 fi
-main_menu
 }
+
+#---------------------------------------------------------
+# backup commands
+# tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
+#---------------------------------------------------------
 
 function record_backup(){
 JOCKER=$
-BACKUPFROM=$(whiptail --backtit "Backup United" --title "Backup From" --radiolist "Choose:"     30 40 20 \
+BACKUPFROM=$(whiptail --title "Backup From" --radiolist "Choose:"     30 40 20 \
 	"Local_Directory_Backup" "" off \
 	"SMB_Share_Backup" "" off 3>&1 1>&2 2>&3)
 case $BACKUPFROM in
@@ -219,7 +202,6 @@ cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 
 if [ -d "$BACKUPPATH" ]; then
 rsync -avz "$BACKUPPATH" "$BACKUPS/$BACKUPNAME"
-tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
 echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
 else
 echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
@@ -255,7 +237,8 @@ mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username=$BACKUPUSR,password=$BACK
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
 rsync -az /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
-echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
+BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
+echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
@@ -263,6 +246,8 @@ echo "$BACKUPNAME Backup Failed" > /usr/local/backup-united/mail-message
 fi
 
 bash $MAILSENDER
+bash /usr/local/backup-united/scripts/createtar.sh $BACKUPNAME
+bash /usr/local/backup-united/scripts/incremental.sh $BACKUPNAME
 EOF
 
 # create service
@@ -298,20 +283,19 @@ WantedBy=timers.target
 EOF
 chmod +x $BACKUP_SCRIPTS/$BACKUPNAME
 systemctl start backupunited-$BACKUPNAME.timer
-systemctl enable backupunited-$BACKUPNAME.timer
 systemctl daemon-reload
 
-#BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
+BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
 fi
 ;;
 *)
 ;;
 esac
-main_menu
+pause
 }
 
 function delete_backup(){
-	BACKUPNAME=$(whiptail --backtitle "Backup United" --title "Backup Name" --inputbox "Please Enter Backup Name to be Deleted" 10 60  3>&1 1>&2 2>&3)
+	BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name to be Deleted" 10 60  3>&1 1>&2 2>&3)
 	if [ "$BACKUPNAME" = "" ]; then
 		whiptail --msgbox "BackupName is Empty" 10 60 3>&1 1>&2 2>&3
 	else
@@ -326,7 +310,7 @@ function delete_backup(){
 			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
 		fi
 	fi
-	main_menu
+	pause
 }
 
 function clean_backup(){
@@ -341,42 +325,82 @@ function clean_backup(){
 		i=$(( i + 1 ))
 	done
 	rm -rf /tmp/folderlist
-	main_menu
+	pause
 }
 
 function mail_settings(){
-	MAILADDR=$(whiptail --backtitle "Backup United" --title "Email Address" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-	if [ "$?" = "1" ]; then main_menu; fi
-	SMTP=$(whiptail --title "SMTP Address" --inputbox "Please Enter SMTP Address - SMTP Port\n\nExample:\nsmtps://example@domain.com@mail.domain.com:465/" 10 60  3>&1 1>&2 2>&3)
-	if [ "$?" = "1" ]; then main_menu; fi
-	MAILUSER=$(whiptail --backtitle "Backup United" --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-	if [ "$?" = "1" ]; then main_menu; fi
-	MAILPASS=$(whiptail --backtitle "Backup United" --title "Password" --passwordbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-	if [ "$?" = "1" ]; then main_menu; fi
-	#MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (For Example: domain.com,example.net)" 10 60  3>&1 1>&2 2>&3)
-	#cat /dev/null > /etc/ssmtp/ssmtp.conf
-	if [ "$MAILADDR" = "" ] || [ "$SMTP" = "" ] || [ "$MAILUSER" = "" ] || [ "$MAILPASS" = "" ]; then
-		whiptail --backtitle "Backup United" --title "Mail Settings" --msgbox "Please fill in all fields" 10 60  3>&1 1>&2 2>&3
-		mail_settings
-	fi
-cat > ~/.muttrc <<EOF
-# SMTP
-set from = "$MAILADDR"
-set realname = "Backup United"
-set smtp_url = "$SMTP"
-set smtp_pass = "$MAILPASS"
-set ssl_force_tls = yes
-unset ssl_starttls
+	MAILADDR=$(whiptail --title "Backup Name" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	SMTP=$(whiptail --title "Path of the Area" --inputbox "Please Enter SMTP Address-SMTP Port your Mailserver (smtp.gmail.com:587)" 10 60  3>&1 1>&2 2>&3)
+	MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	MAILPASS=$(whiptail --title "Password" --inputbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (gmail.com,xyz.net etc)" 10 60  3>&1 1>&2 2>&3)
+	cat /dev/null > /etc/ssmtp/ssmtp.conf
+cat > /etc/ssmtp/ssmtp.conf <<EOF
+root=$MAILADDR
+mailhub=$SMTP
+AuthUser=$MAILUSER
+AuthPass=$MAILPASS
+UseTLS=YES
+UseSTARTTLS=YES
+rewriteDomain=$MAILDOMAIN
+hostname=$HOSTNAME
+FromLineOverride=YES
 EOF
-#echo root:$MAILADDR:$SMTP
-#chfn -f 'backup-united' root
+
+echo root:$MAILADDR:$SMTP
+chfn -f 'backup-united' root
+
+cp /usr/local/backup-united/notification/99-mail-sender /usr/local/backup-united/backup-scripts/
 pause
 }
 
 function backup_job_list(){
-	echo "Backup Job List" > /tmp/backup_job_list.txt
-	echo "--------------------------------------------" >> /tmp/backup_job_list.txt
+	tput setaf 8
+	echo "Backup Job List"
+	echo "---------------"
+	tput sgr0
+	ls $BACKUP_SCRIPTS
+	echo -e
 	
+	tput setaf 8	
+	echo "Backup Paths"
+	echo "---------------"
+	tput sgr0
+	#ack "mount -t cifs" "$BACKUP_SCRIPTS" | cut -d " " -f4
+	#ack "BACKUPNAME=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
+	ack "BACKUPPATH=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
+	echo -e
+	pause
+}
+
+function backup_now(){
+	chmod +x $BACKUP_SCRIPTS/*
+	run-parts $BACKUP_SCRIPTS
+
+	NUMRECIPIENT=$(cat "$MAILRECIPIENT" | wc -l)
+	i=0
+	while [ "$i" -le $NUMRECIPIENT ]; do
+		RECIPIENT=$(ls -l | sed -n $i{p} "$MAILRECIPIENT")
+		cat $MAILMESSAGE | mutt -s "Backup United Notification" $RECIPIENT
+		i=$(( i + 1 ))
+	done
+	pause
+}
+
+function backup_list(){
+	tput setaf 8
+	echo "Backups"
+	echo "---------------"
+	tput sgr0
+	tree $BACKUPS
+	pause
+}
+
+function scheduled_jobs(){
+	tput setaf 8
+	echo "Scheduled Backup Jobs"
+	echo "---------------------"
+	tput sgr0
 	ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
 	BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
 	i=1
@@ -384,55 +408,54 @@ function backup_job_list(){
 		BACKUPJOBNAME=$(ls | sed -n $i{p} "/tmp/backupjobname.txt")
 		BACKUPJOBTYPE=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "Description" | cut -d " " -f3)
 		BACKUPJOBTIME=$(cat /etc/systemd/system/*"$BACKUPJOBNAME".timer | grep "OnCalendar=" | cut -d " " -f2)
-		BACKUPJOBPATH=$(ack "BACKUPPATH=" "$BACKUP_SCRIPTS/$BACKUPJOBNAME" | cut -d "=" -f2)
-		echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME - $BACKUPJOBPATH" >> /tmp/backup_job_list.txt
+		echo "$BACKUPJOBNAME : $BACKUPJOBTYPE : $BACKUPJOBTIME"
 		i=$(( i + 1 ))
 	done
-	
-	whiptail --backtitle "Backup United" --title "Backup Job List" --textbox --scrolltext "/tmp/backup_job_list.txt"  40 80  3>&1 1>&2 2>&3
-	rm /tmp/backup_job_list.txt
-	main_menu
-}
-
-function backup_list(){
-	echo "Backups" > /tmp/backup_dir.txt
-	echo "--------------------------------------------" >> /tmp/backup_dir.txt
-	tree $BACKUPS >> /tmp/backup_dir.txt
-	whiptail --backtitle "Backup United" --title "Backup Directory" --textbox --scrolltext "/tmp/backup_dir.txt"  40 80  3>&1 1>&2 2>&3
-	main_menu
+	echo -e
+	rm /tmp/backupjobname.txt
+	pause
 }
 
 function add_recipient(){
-	EMAILADDRESS=$(whiptail --title "Email Address" --inputbox "Please enter a E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-	if [ "$?" = "1" ]; then main_menu; fi
-	echo "$EMAILADDRESS" >> $MAILRECIPIENT && whiptail --title "Add Recipient" --msgbox "Email Address added to Recipient List" 10 60  3>&1 1>&2 2>&3 
-	main_menu
-}
-
-function remove_recipient(){
-        EMAILADDRESS=$(whiptail --title "Email Address" --inputbox "Please enter a E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-        EXIST=FALSE && ack "$EMAILADDRESS" $MAILRECIPIENT >/dev/null && EXIST=TRUE
-        if [ "$EXIST" = TRUE ]; then
-                sed -i '/'$EMAILADDRESS'/d' $MAILRECIPIENT
-                sed -i '/^$/d' $MAILRECIPIENT
-                whiptail --title "Remove Recipient" --msgbox "Email Address removed in Recipient List" 10 60  3>&1 1>&2 2>&3
-        else
-                whiptail --title "Remove Recipient" --msgbox "Email Address Not Found in Recipient List" 10 60  3>&1 1>&2 2>&3
-                main_menu
-        fi
-        main_menu      
+	read -p "E-Mail Address : " EMAILADDRESS
+	echo "$EMAILADDRESS" >> $MAILRECIPIENT
+	pause
 }
 
 function recipient_list(){
-	echo "Mail Recipient List" > /tmp/recipient_list.txt
-	echo "--------------------------------------------" >> /tmp/recipient_list.txt
-	cat $MAILRECIPIENT >> /tmp/recipient_list.txt
-	whiptail --backtitle "Backup United" --title "Recipient List" --textbox --scrolltext "/tmp/recipient_list.txt"  40 80  3>&1 1>&2 2>&3
-	rm /tmp/recipient_list.txt
-	main_menu
+	tput setaf 8
+	echo "Mail Recipient List"
+	echo "-------------------"
+	tput sgr0
+	cat $MAILRECIPIENT
+	echo -e
+	pause
+}
+
+function read_input(){
+local c
+read -p "Please choose from Menu numbers " c
+case $c in
+1)	add_backup;;
+2)	delete_backup;;
+3)	backup_job_list;;
+11)	backup_list;;
+21)	scheduled_jobs;;
+31)	add_recipient;;
+33)	recipient_list;;
+99)	exit 0 ;;
+*)	
+echo "Please choose from Menu numbers"
+pause
+esac
 }
 
 # CTRL+C, CTRL+Z
 trap '' SIGINT SIGQUIT SIGTSTP
 
-main_menu
+while true
+do
+clear
+show_menu
+read_input
+done
