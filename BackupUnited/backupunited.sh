@@ -229,14 +229,14 @@ fi
 if [ -e "/tmp/$BACKUPNAME-mountok" ]; then
 rm -rf /tmp/$BACKUPNAME-mountok
 fi
-if [ ! -d "/usr/local/backup-united/backups/$BACKUPNAME" ]; then
-mkdir /usr/local/backup-united/backups/$BACKUPNAME
+if [ ! -d "/usr/local/backup-united/backups/sync/$BACKUPNAME" ]; then
+mkdir /usr/local/backup-united/backups/sync/$BACKUPNAME
 fi
 mkdir /tmp/$BACKUPNAME
-mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username=$BACKUPUSR,password=$BACKUPPWD && touch /tmp/$BACKUPNAME-mountok
+mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username="$BACKUPUSR",password="$BACKUPPWD" && touch /tmp/$BACKUPNAME-mountok
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
-rsync -az /tmp/$BACKUPNAME /usr/local/backup-united/backups/$BACKUPNAME
+rsync -az /tmp/$BACKUPNAME /usr/local/backup-united/backups/sync/$BACKUPNAME
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
@@ -283,6 +283,7 @@ WantedBy=timers.target
 EOF
 chmod +x $BACKUP_SCRIPTS/$BACKUPNAME
 systemctl start backupunited-$BACKUPNAME.timer
+systemctl enable backupunited-$BACKUPNAME.timer
 systemctl daemon-reload
 
 BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
