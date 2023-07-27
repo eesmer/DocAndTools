@@ -6,6 +6,7 @@ BACKUPS=$WDIR/backups
 MAILRECIPIENT=$WDIR/mail-recipient
 MAILMESSAGE=$WDIR/mail-message
 MAILSENDER=$WDIR/mail-sender.sh
+SCRIPTS=$WDIR/scripts
 
 #-----------------------------------------------
 # check & install required packages
@@ -246,8 +247,8 @@ echo "$BACKUPNAME Backup Failed" > /usr/local/backup-united/mail-message
 fi
 
 bash $MAILSENDER
-bash /usr/local/backup-united/scripts/createtar.sh $BACKUPNAME
-bash /usr/local/backup-united/scripts/incremental.sh $BACKUPNAME
+bash $SCRIPTS/createtar.sh $BACKUPNAME
+bash $SCRIPTS/incremental.sh $BACKUPNAME
 EOF
 
 # create service
