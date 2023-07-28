@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WDIR=/usr/local/backup-united
+WDIR=/usr/local/backupunited
 BACKUP_SCRIPTS=$WDIR/backup-scripts
 BACKUPS=$WDIR/backups
 SCRIPTS=$WDIR/scripts
@@ -12,30 +12,6 @@ MAILSENDER=$SCRIPTS/mail-sender.sh
 #-----------------------------------------------
 # check & install required packages
 #-----------------------------------------------
-if ! [ -x "$(command -v rsync)" ] \
-	|| ! [ -x "$(command -v rdiff-backup)" ] \
-	|| ! [ -x "$(command -v ssmtp)" ] \
-	|| ! [ -x "$(command -v mutt)" ] \
-	|| ! [ -x "$(command -v smbclient)" ] \
-	|| ! [ -x "$(command -v tree)" ] \
-	|| ! [ -x "$(command -v ack)" ]; then
-		echo "-------------------------------"
-		echo "installing missing packages..  "
-		echo "-------------------------------"
-		echo -e
-		apt-get -y install rsync rdiff-backup ssmtp mutt
-		apt-get -y install cifs-utils smbclient
-		apt-get -y install tree ack
-
-		#mkdir -p /usr/local/backup-united/backup-scripts
-		#mkdir -p /usr/local/backup-united/scripts
-		#mkdir -p /usr/local/backup-united/backups
-		#mkdir -p /usr/local/backup-united/reports
-		#mkdir -p $BACKUPS/tar
-		#mkdir -p $BACKUPS/incremental
-		#mkdir -p $BACKUPS/sync
-		#mkdir -p $WDIR/scripts
-fi
 
 function pause(){
 local message="$@"
