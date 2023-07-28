@@ -3,10 +3,11 @@
 WDIR=/usr/local/backup-united
 BACKUP_SCRIPTS=$WDIR/backup-scripts
 BACKUPS=$WDIR/backups
-MAILRECIPIENT=$WDIR/mail-recipient
-MAILMESSAGE=$WDIR/mail-message
-MAILSENDER=$WDIR/mail-sender.sh
 SCRIPTS=$WDIR/scripts
+REPORTS=$WDIR/reports
+MAILRECIPIENT=$REPORTS/mail-recipient
+MAILMESSAGE=$REPORTS/mail-message
+MAILSENDER=$SCRIPTS/mail-sender.sh
 
 #-----------------------------------------------
 # check & install required packages
@@ -26,17 +27,14 @@ if ! [ -x "$(command -v rsync)" ] \
 		apt-get -y install cifs-utils smbclient
 		apt-get -y install tree ack
 
-		mkdir -p /usr/local/backup-united/backup
-		mkdir -p /usr/local/backup-united/backup-scripts
-		mkdir -p /usr/local/backup-united/backups
-
-		wget https://raw.githubusercontent.com/eesmer/DocAndTools/main/BackupUnited/mail-sender.sh /usr/local/backup-united/
-		chmod +x /usr/local/backup-united/mail-sender.sh
-
-		mkdir -p $BACKUPS/createtar
-		mkdir -p $BACKUPS/incremental
-		mkdir -p $BACKUPS/sync
-		mkdir -p $WDIR/scripts
+		#mkdir -p /usr/local/backup-united/backup-scripts
+		#mkdir -p /usr/local/backup-united/scripts
+		#mkdir -p /usr/local/backup-united/backups
+		#mkdir -p /usr/local/backup-united/reports
+		#mkdir -p $BACKUPS/tar
+		#mkdir -p $BACKUPS/incremental
+		#mkdir -p $BACKUPS/sync
+		#mkdir -p $WDIR/scripts
 fi
 
 function pause(){
@@ -62,6 +60,12 @@ while [ "$i" -le $BACKUPJOBCOUNT ]; do
 done
 #echo -e
 rm /tmp/backupjobname.txt
+
+
+df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
+du -skh /usr/local/backup-united/backups/ >> /tmp/disk_usage.txt
+
+
 
 function show_menu(){
 date
@@ -95,6 +99,9 @@ echo "                     -----------                  "
 tput setaf 1
 tput sgr0
 echo "     $BOARDMSG                                    "
+echo "   -----------------------------------------------"
+df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
+cat /tmp/disk_usage.txt
 echo "   -----------------------------------------------"
 tput setaf 9
 echo -e
