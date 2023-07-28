@@ -19,10 +19,6 @@ local message="$@"
 read -p "$message" readEnterKey
 }
 
-#tput setaf 8
-#echo "Scheduled Backup Jobs"
-#echo "---------------------"
-#tput sgr0
 rm /tmp/scheduledbackups.txt
 ls $BACKUP_SCRIPTS > /tmp/backupjobname.txt
 BACKUPJOBCOUNT=$(cat "/tmp/backupjobname.txt" | wc -l)
@@ -36,12 +32,6 @@ while [ "$i" -le $BACKUPJOBCOUNT ]; do
 done
 #echo -e
 rm /tmp/backupjobname.txt
-
-
-df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
-du -skh /usr/local/backup-united/backups/ >> /tmp/disk_usage.txt
-
-
 
 function show_menu(){
 date
