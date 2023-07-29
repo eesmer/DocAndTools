@@ -5,7 +5,13 @@ Provides TUI in single script file for this.
 
 ---
 
-## Usage of BackupUnited Script
+## Features
+- Takes backup from SMB access.
+- It keeps syncing, .tar file and diffs of each defined backup in separate directories.
+
+---
+
+### Usage of BackupUnited Script
 ```bash
 # apt-get -y install rsync rdiff-backup ssmtp mutt
 # apt-get -y install cifs-utils smbclient
@@ -15,8 +21,8 @@ Provides TUI in single script file for this.
 ```
 ---
 
-## Questions, Answers and Study Notes
-### - What is sync / Backup vs Sync <br>
+### Questions, Answers and Study Notes
+#### - What is sync / Backup vs Sync <br>
 First, let's define the backup process;<br>
 **Backup:** It is the duplication of files from one area to another (disk, share, cloud).<br>
 In general, the purpose is; The exact copy of the files is kept in a different environment and taken from this environment when necessary.<br>
@@ -32,7 +38,7 @@ If you want to keep necessary or unnecessary deleted files, you should use backu
 With the backup process, you copy the same files again and again and you guarantee that each copied file is kept.<br>
 With Sync, the source and destination fields are only synchronized. File storage is not the purpose of the sync operation.<br>
 
-## rsync notes
+#### rsync notes
 https://rsync.samba.org/tech_report/ <br>
 https://rsync.samba.org/how-rsync-works.html
 
@@ -71,5 +77,5 @@ However, these controls negatively affect the performance of the process.<br>
 The rsync process focuses on copy performance with Directory Listing and target-source comparison instead of these checks.<br>
 It works with performance and problem-free in a smooth network traffic environment.<br>
 <br>
-### rdiff notes
+#### rdiff notes
 
