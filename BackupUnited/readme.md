@@ -19,6 +19,16 @@ With the installation of the necessary packages, it makes the use of the applica
 ---
 
 ## Usage BackupUnited Script
+```bash
+# apt-get -y install rsync rdiff-backup ssmtp mutt
+# apt-get -y install cifs-utils smbclient
+# apt-get -y install tree ack
+# mkdir /usr/local/backupunited
+# wget https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/backupunited.sh
+# ln -s /usr/local/backupunited/backupunited.sh /sbin/backupunited
+# backupunited
+```
+
 
 ## Questions, Answers and Study Notes
 ### - What is sync / Backup vs Sync <br>
