@@ -18,6 +18,8 @@ With the installation of the necessary packages, it makes the use of the applica
 
 ---
 
+## Usage BackupUnited Script
+
 ## Questions, Answers and Study Notes
 ### - What is sync / Backup vs Sync <br>
 First, let's define the backup process;<br>
