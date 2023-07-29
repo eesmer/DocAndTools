@@ -10,8 +10,11 @@ MAILMESSAGE=$REPORTS/mail-message
 MAILSENDER=$SCRIPTS/mail-sender.sh
 
 #-----------------------------------------------
-# check & install required packages
+# create working directory
 #-----------------------------------------------
+if [ ! -d "$WDIR" ]; then
+    mkdir -p $WDIR;mkdir $WDIR/backups;mkdir $WDIR/scripts;mkdir $WDIR/reports;mkdir $WDIR/backup-scripts
+fi
 
 function pause(){
 local message="$@"
