@@ -1,20 +1,7 @@
 ## BackupUnited
 
 Backup United aims to make successful backups.<br>
-With the installation of the necessary packages, it makes the use of the application with a single script file and provides a TUI for it.<br>
-
----
-
-## Features
-- Makes backup from SMB share destination on the network.
-- Manages multiple backup jobs.
-- Provides e-mail notification for the results of the backup process.
-
-**What else could it be?**<br>
-- Backup from FTP
-- DB Backup
-- Full Server Backup
-- VM Backup
+Provides TUI in single script file for this.
 
 ---
 
@@ -26,7 +13,7 @@ With the installation of the necessary packages, it makes the use of the applica
 # wget https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/backupunited.sh
 # bash backupunited
 ```
-
+---
 
 ## Questions, Answers and Study Notes
 ### - What is sync / Backup vs Sync <br>
