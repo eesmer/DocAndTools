@@ -5,7 +5,7 @@ Provides TUI in single script file for this.
 
 ---
 
-## Usage BackupUnited Script
+## Usage of BackupUnited Script
 ```bash
 # apt-get -y install rsync rdiff-backup ssmtp mutt
 # apt-get -y install cifs-utils smbclient
