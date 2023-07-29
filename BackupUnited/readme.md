@@ -24,8 +24,7 @@ With the installation of the necessary packages, it makes the use of the applica
 # apt-get -y install cifs-utils smbclient
 # apt-get -y install tree ack
 # wget https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/backupunited.sh
-# ln -s /usr/local/backupunited/backupunited.sh /sbin/backupunited
-# backupunited
+# bash backupunited
 ```
 
 
