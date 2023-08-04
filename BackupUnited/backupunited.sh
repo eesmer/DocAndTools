@@ -37,35 +37,35 @@ function show_menu(){
 date
 echo -e
 tput setaf 5
-echo "     BackupUnited                                 "
+echo "     BackupUnited                                "
 tput sgr0
-echo "   |---------------------------------------------|"
-echo "   | Backup Management Menu                      |"
-echo "   |---------------------------------------------|"
+echo "   |--------------------------------------------|"
+echo "   | Backup Management Menu                     |"
+echo "   |--------------------------------------------|"
 echo "   | 1.Add    Backup Job  | 6.Backup List       |"
 echo "   | 2.Remove Backup Job  | 7.Backup Job List   |"
 echo "   |                      | 8.Clean Backup      |"
-echo "   |---------------------------------------------|"
+echo "   |--------------------------------------------|"
 tput setaf 5
-echo "                       Settings                   "
+echo "                       Settings                  "
 tput sgr0
-echo "   |---------------------------------------------|"
-echo "   | 20.Mail Sender Set.  |                      |"
-echo "   | 21.Add Recipient     |                      |"
-echo "   | 22.Remove Recipient  |                      |"
-echo "   | 23.Recipient List    |                      |"
-echo "   |---------------------------------------------|"
+echo "   |--------------------------------------------|"
+echo "   | 20.Mail Sender Set.  |                     |"
+echo "   | 21.Add Recipient     |                     |"
+echo "   | 22.Remove Recipient  |                     |"
+echo "   | 23.Recipient List    |                     |"
+echo "   |--------------------------------------------|"
 tput setaf 9
-echo "                     -----------                  "
-echo "                     ** BOARD **                  "
-echo "                     -----------                  "
+echo "                     -----------                 "
+echo "                     ** BOARD **                 "
+echo "                     -----------                 "
 tput setaf 1
 tput sgr0
-echo "     $BOARDMSG                                    "
-echo "   -----------------------------------------------"
+echo "     $BOARDMSG                                   "
+echo "   ----------------------------------------------"
 df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
 cat /tmp/disk_usage.txt
-echo "   -----------------------------------------------"
+echo "   ----------------------------------------------"
 tput setaf 9
 echo -e
 tput setaf 9
