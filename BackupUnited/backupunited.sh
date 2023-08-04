@@ -10,11 +10,8 @@ MAILMESSAGE=$REPORTS/mail-message
 MAILSENDER=$SCRIPTS/mail-sender.sh
 
 #-----------------------------------------------
-# create working directory
+# check & install required packages
 #-----------------------------------------------
-if [ ! -d "$WDIR" ]; then
-    mkdir -p $WDIR;mkdir $WDIR/backups;mkdir $WDIR/scripts;mkdir $WDIR/reports;mkdir $WDIR/backup-scripts
-fi
 
 function pause(){
 local message="$@"
@@ -45,21 +42,18 @@ tput sgr0
 echo "   |---------------------------------------------|"
 echo "   | Backup Management Menu                      |"
 echo "   |---------------------------------------------|"
-echo "   | 1.Add    Backup Job  | 11.Backup List       |"
-echo "   | 2.Remove Backup Job  | 12.Clean Backup      |"
-echo "   | -------------------- |                      |"
-echo "   | 3.Backup Job List    |                      |"
-echo "   |---------------------------------------------|"
-echo "   | 21.Scheduled Jobs                           |"
+echo "   | 1.Add    Backup Job  | 6.Backup List       |"
+echo "   | 2.Remove Backup Job  | 7.Backup Job List   |"
+echo "   |                      | 8.Clean Backup      |"
 echo "   |---------------------------------------------|"
 tput setaf 5
 echo "                       Settings                   "
 tput sgr0
 echo "   |---------------------------------------------|"
-echo "   | 30.Mail Sender Set.  |                      |"
-echo "   | 31.Add Recipient     |                      |"
-echo "   | 32.Remove Recipient  |                      |"
-echo "   | 33.Recipient List    |                      |"
+echo "   | 20.Mail Sender Set.  |                      |"
+echo "   | 21.Add Recipient     |                      |"
+echo "   | 22.Remove Recipient  |                      |"
+echo "   | 23.Recipient List    |                      |"
 echo "   |---------------------------------------------|"
 tput setaf 9
 echo "                     -----------                  "
@@ -416,11 +410,10 @@ read -p "Please choose from Menu numbers " c
 case $c in
 1)	add_backup;;
 2)	delete_backup;;
-3)	backup_job_list;;
-11)	backup_list;;
-21)	scheduled_jobs;;
-31)	add_recipient;;
-33)	recipient_list;;
+6)	backup_list;;
+7)	backup_job_list;;
+21)	add_recipient;;
+23)	recipient_list;;
 99)	exit 0 ;;
 *)	
 echo "Please choose from Menu numbers"
