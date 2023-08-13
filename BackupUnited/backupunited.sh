@@ -221,33 +221,34 @@ fi
 if [ -e "/tmp/$BACKUPNAME-mountok" ]; then
 rm -rf /tmp/$BACKUPNAME-mountok
 fi
-if [ ! -d "/usr/local/backup-united/backups/sync/$BACKUPNAME" ]; then
-mkdir /usr/local/backup-united/backups/sync/$BACKUPNAME
+if [ ! -d "/usr/local/backupunited/backups/sync/$BACKUPNAME" ]; then
+mkdir /usr/local/backupunited/backups/sync/$BACKUPNAME
 fi
 mkdir /tmp/$BACKUPNAME
 mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username="$BACKUPUSR",password="$BACKUPPWD" && touch /tmp/$BACKUPNAME-mountok
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
-#rsync -az /tmp/$BACKUPNAME /usr/local/backup-united/backups/sync/$BACKUPNAME
+#rsync -az /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
+rdiff-backup backup /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
-echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backup-united/mail-message
+echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backupunited/mail-message
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
-echo "$BACKUPNAME Backup Failed" > /usr/local/backup-united/mail-message
+echo "$BACKUPNAME Backup Failed" > /usr/local/backupunited/mail-message
 fi
 
-TODAY1=$JOCKER(date | cut -d " " -f1)
-TODAY2=$JOCKER(date | cut -d " " -f3)
-
-if [ "$TODAY1" = "Sun" ]; then
-bash $SCRIPTS/weeklybackup.sh $BACKUPNAME
-fi
-if [ "$TODAY2" = "01" ]; then
-bash $SCRIPTS/monthlybackup.sh $BACKUPNAME
-fi
-
-bash $MAILSENDER
+#TODAY1=$JOCKER(date | cut -d " " -f1)
+#TODAY2=$JOCKER(date | cut -d " " -f3)
+#
+#if [ "$TODAY1" = "Sun" ]; then
+#bash $SCRIPTS/weeklybackup.sh $BACKUPNAME
+#fi
+#if [ "$TODAY2" = "01" ]; then
+#bash $SCRIPTS/monthlybackup.sh $BACKUPNAME
+#fi
+#
+#bash $MAILSENDER
 EOF
 
 # create service
