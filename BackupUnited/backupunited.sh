@@ -242,8 +242,8 @@ fi
 EOF
 
 # weeklybackup & monthlybackup Controls
-echo "TODAY1=$JOCKER(date | cut -d " " -f1)" >> $BACKUP_SCRIPTS/$BACKUPNAME 
-echo "TODAY2=$JOCKER(date | cut -d " " -f3)" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "TODAY1=$JOCKER(date | cut -d "'" "'" -f1)" >> $BACKUP_SCRIPTS/$BACKUPNAME 
+echo "TODAY2=$JOCKER(date | cut -d "'" "'" -f3)" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "if [ ""$JOCKER""TODAY1"" = ""Sun"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "bash $SCRIPTS/weeklybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
