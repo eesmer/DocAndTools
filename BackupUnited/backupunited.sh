@@ -222,7 +222,7 @@ if [ -e "/tmp/$BACKUPNAME-mountok" ]; then
 rm -rf /tmp/$BACKUPNAME-mountok
 fi
 if [ ! -d "/usr/local/backupunited/backups/sync/$BACKUPNAME" ]; then
-mkdir /usr/local/backupunited/backups/sync/$BACKUPNAME
+mkdir -p /usr/local/backupunited/backups/sync/$BACKUPNAME
 fi
 mkdir /tmp/$BACKUPNAME
 mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username="$BACKUPUSR",password="$BACKUPPWD" && touch /tmp/$BACKUPNAME-mountok
@@ -238,18 +238,19 @@ else
 echo "$BACKUPNAME Backup Failed" > /usr/local/backupunited/mail-message
 fi
 
-#TODAY1=$JOCKER(date | cut -d " " -f1)
-#TODAY2=$JOCKER(date | cut -d " " -f3)
-#
-#if [ "$TODAY1" = "Sun" ]; then
-#bash $SCRIPTS/weeklybackup.sh $BACKUPNAME
-#fi
-#if [ "$TODAY2" = "01" ]; then
-#bash $SCRIPTS/monthlybackup.sh $BACKUPNAME
-#fi
-#
 #bash $MAILSENDER
 EOF
+
+# weeklybackup & monthlybackup Controls
+echo "TODAY1=$JOCKER(date | cut -d " " -f1)" >> $BACKUP_SCRIPTS/$BACKUPNAME 
+echo "TODAY2=$JOCKER(date | cut -d " " -f3)" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "if [ ""$JOCKER""TODAY1"" = ""Sun"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "bash $SCRIPTS/weeklybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
+
+echo "if [ ""$JOCKER""TODAY2"" = ""01"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "bash $SCRIPTS/monthlybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
 
 # create service
 cat > /etc/systemd/system/backupunited-$BACKUPNAME.service <<EOF
