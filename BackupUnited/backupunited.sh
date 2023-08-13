@@ -79,73 +79,94 @@ echo -e
 
 function add_backup(){
 
-BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15 \
-                "Daily" "" OFF \
-                "Weekly" "" OFF \
-                "Monthly" "" OFF \
-                3>&1 1>&2 2>&3)
-		
-	if [ "$BACKUPTYPE" = "Daily" ]; then
-		BACKUPHOUR=$(whiptail --title "Backup Hour" --inputbox "At What Hour - For Example 10" 10 60  3>&1 1>&2 2>&3)
-		BACKUPMIN=$(whiptail --title "Backup Minute" --inputbox "At What Minute - For Example 18" 10 60  3>&1 1>&2 2>&3)
-		if [[ "$BACKUPHOUR" =~ ^[0-9]+$ ]] && [[ "$BACKUPMIN" =~ ^[0-9]+$ ]]; then
-			if [ "$BACKUPHOUR" -gt 23 ] || [ "$BACKUPMIN" -gt 59 ]; then
-				#echo "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59"
-				whiptail --title "At What Hour" --msgbox "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59" 10 60  3>&1 1>&2 2>&3
-				add_backup
-			fi
-		else
-			#echo "Backup Hour and Minute must a numbers"
-			whiptail --title "At What Hour" --msgbox "Backup Hour and Minute must a numbers" 10 60  3>&1 1>&2 2>&3
-			add_backup
-		fi
-		BACKUPTIME=$BACKUPHOUR:$BACKUPMIN
-	elif
-		[ "$BACKUPTYPE" = "Weekly" ]; then
-		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
-			"Monday" "" OFF \
-			"Tuesday" "" OFF \
-                        "Wednesday" "" OFF \
-                        "Thursday" "" OFF \
-                        "Friday" "" OFF \
-                        "Saturday" "" OFF \
-                        "Sunday" "" OFF \
-                        3>&1 1>&2 2>&3)
-	elif
-		[ "$BACKUPTYPE" = "Monthly" ]; then
-		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
-			"1st  Day" "" OFF \
-			"2nd  Day" "" OFF \
-			"3rd  Day" "" OFF \
-			"4th  Day" "" OFF \
-			"5th  Day" "" OFF \
-			"6th  Day" "" OFF \
-			"7th  Day" "" OFF \
-			"8th  Day" "" OFF \
-			"9th  Day" "" OFF \
-			"10th Day" "" OFF \
-			"11th Day" "" OFF \
-			"12th Day" "" OFF \
-			"13th Day" "" OFF \
-			"14th Day" "" OFF \
-			"15th Day" "" OFF \
-			"16th Day" "" OFF \
-			"17th Day" "" OFF \
-			"18th Day" "" OFF \
-			"19th Day" "" OFF \
-			"20th Day" "" OFF \
-			"21st Day" "" OFF \
-			"22nd Day" "" OFF \
-			"23rd Day" "" OFF \
-			"24th Day" "" OFF \
-			"25th Day" "" OFF \
-			"26th Day" "" OFF \
-			"27th Day" "" OFF \
-			"28th Day" "" OFF \
-			3>&1 1>&2 2>&3)
+BACKUPHOUR=$(whiptail --title "Backup Hour" --inputbox "At What Hour - For Example 10" 10 60  3>&1 1>&2 2>&3)
+BACKUPMIN=$(whiptail --title "Backup Minute" --inputbox "At What Minute - For Example 18" 10 60  3>&1 1>&2 2>&3)
+if [[ "$BACKUPHOUR" =~ ^[0-9]+$ ]] && [[ "$BACKUPMIN" =~ ^[0-9]+$ ]]; then
+	if [ "$BACKUPHOUR" -gt 23 ] || [ "$BACKUPMIN" -gt 59 ]; then
+		#echo "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59"
+		whiptail --title "At What Hour" --msgbox "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59" 10 60  3>&1 1>&2 2>&3
+		add_backup
 	fi
+else
+	#echo "Backup Hour and Minute must a numbers"
+	whiptail --title "At What Hour" --msgbox "Backup Hour and Minute must a numbers" 10 60  3>&1 1>&2 2>&3
+	add_backup
+fi
+BACKUPTIME=$BACKUPHOUR:$BACKUPMIN
+
+#BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15 \
+#                "Daily" "" OFF \
+#                "Weekly" "" OFF \
+#                "Monthly" "" OFF \
+#                3>&1 1>&2 2>&3)
+#		
+#	if [ "$BACKUPTYPE" = "Daily" ]; then
+#		BACKUPHOUR=$(whiptail --title "Backup Hour" --inputbox "At What Hour - For Example 10" 10 60  3>&1 1>&2 2>&3)
+#		BACKUPMIN=$(whiptail --title "Backup Minute" --inputbox "At What Minute - For Example 18" 10 60  3>&1 1>&2 2>&3)
+#		if [[ "$BACKUPHOUR" =~ ^[0-9]+$ ]] && [[ "$BACKUPMIN" =~ ^[0-9]+$ ]]; then
+#			if [ "$BACKUPHOUR" -gt 23 ] || [ "$BACKUPMIN" -gt 59 ]; then
+#				#echo "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59"
+#				whiptail --title "At What Hour" --msgbox "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59" 10 60  3>&1 1>&2 2>&3
+#				add_backup
+#			fi
+#		else
+#			#echo "Backup Hour and Minute must a numbers"
+#			whiptail --title "At What Hour" --msgbox "Backup Hour and Minute must a numbers" 10 60  3>&1 1>&2 2>&3
+#			add_backup
+#		fi
+#		BACKUPTIME=$BACKUPHOUR:$BACKUPMIN
+#	elif
+#		[ "$BACKUPTYPE" = "Weekly" ]; then
+#		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+#			"Monday" "" OFF \
+#			"Tuesday" "" OFF \
+#                        "Wednesday" "" OFF \
+#                        "Thursday" "" OFF \
+#                        "Friday" "" OFF \
+#                        "Saturday" "" OFF \
+#                        "Sunday" "" OFF \
+#                        3>&1 1>&2 2>&3)
+#	elif
+#		[ "$BACKUPTYPE" = "Monthly" ]; then
+#		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
+#			"1st  Day" "" OFF \
+#			"2nd  Day" "" OFF \
+#			"3rd  Day" "" OFF \
+#			"4th  Day" "" OFF \
+#			"5th  Day" "" OFF \
+#			"6th  Day" "" OFF \
+#			"7th  Day" "" OFF \
+#			"8th  Day" "" OFF \
+#			"9th  Day" "" OFF \
+#			"10th Day" "" OFF \
+#			"11th Day" "" OFF \
+#			"12th Day" "" OFF \
+#			"13th Day" "" OFF \
+#			"14th Day" "" OFF \
+#			"15th Day" "" OFF \
+#			"16th Day" "" OFF \
+#			"17th Day" "" OFF \
+#			"18th Day" "" OFF \
+#			"19th Day" "" OFF \
+#			"20th Day" "" OFF \
+#			"21st Day" "" OFF \
+#			"22nd Day" "" OFF \
+#			"23rd Day" "" OFF \
+#			"24th Day" "" OFF \
+#			"25th Day" "" OFF \
+#			"26th Day" "" OFF \
+#			"27th Day" "" OFF \
+#			"28th Day" "" OFF \
+#			3>&1 1>&2 2>&3)
+#	fi
 	
-if [ "$BACKUPTYPE" = "" ] || [ "$BACKUPTIME" = "" ]; then
+#if [ "$BACKUPTYPE" = "" ] || [ "$BACKUPTIME" = "" ]; then
+#	whiptail --title "Backup Name" --msgbox "Backup Type and Time is not null" 10 60  3>&1 1>&2 2>&3
+#else
+#	record_backup
+#fi
+
+if [ "$BACKUPTIME" = "" ]; then
 	whiptail --title "Backup Name" --msgbox "Backup Type and Time is not null" 10 60  3>&1 1>&2 2>&3
 else
 	record_backup
@@ -154,7 +175,7 @@ fi
 
 #---------------------------------------------------------
 # backup commands
-# tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar.gz" /usr/local/backup-united/backups/$BACKUPNAME
+# tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar" /usr/local/backup-united/backups/$BACKUPNAME
 #---------------------------------------------------------
 
 function record_backup(){
@@ -207,7 +228,7 @@ mkdir /tmp/$BACKUPNAME
 mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username="$BACKUPUSR",password="$BACKUPPWD" && touch /tmp/$BACKUPNAME-mountok
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
-rsync -az /tmp/$BACKUPNAME /usr/local/backup-united/backups/sync/$BACKUPNAME
+#rsync -az /tmp/$BACKUPNAME /usr/local/backup-united/backups/sync/$BACKUPNAME
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backup-united/mail-message
 umount /tmp/$BACKUPNAME
@@ -216,9 +237,17 @@ else
 echo "$BACKUPNAME Backup Failed" > /usr/local/backup-united/mail-message
 fi
 
+TODAY1=$JOCKER(date | cut -d " " -f1)
+TODAY2=$JOCKER(date | cut -d " " -f3)
+
+if [ "$TODAY1" = "Sun" ]; then
+bash $SCRIPTS/weeklybackup.sh $BACKUPNAME
+fi
+if [ "$TODAY2" = "01" ]; then
+bash $SCRIPTS/monthlybackup.sh $BACKUPNAME
+fi
+
 bash $MAILSENDER
-bash $SCRIPTS/createtar.sh $BACKUPNAME
-bash $SCRIPTS/incremental.sh $BACKUPNAME
 EOF
 
 # create service
@@ -236,10 +265,13 @@ ExecStart=$BACKUP_SCRIPTS/$BACKUPNAME
 WantedBy=multi-user.target
 EOF
 
-if [ "$BACKUPTYPE" = "Daily" ]; then
-	DESCRIPTION="BackupUnited $BACKUPNAME Daily Timer"
-	ONCALENDAR="*-*-* $BACKUPTIME:00"
-fi
+#if [ "$BACKUPTYPE" = "Daily" ]; then
+#	DESCRIPTION="BackupUnited $BACKUPNAME Daily Timer"
+#	ONCALENDAR="*-*-* $BACKUPTIME:00"
+#fi
+
+DESCRIPTION="BackupUnited $BACKUPNAME Daily Timer"
+ONCALENDAR="*-*-* $BACKUPTIME:00"
 
 cat > /etc/systemd/system/backupunited-$BACKUPNAME.timer <<EOF
 [Unit]
@@ -412,6 +444,7 @@ case $c in
 2)	delete_backup;;
 6)	backup_list;;
 7)	backup_job_list;;
+20)	mail_settings;;
 21)	add_recipient;;
 23)	recipient_list;;
 99)	exit 0 ;;
