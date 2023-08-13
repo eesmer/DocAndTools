@@ -94,77 +94,6 @@ else
 fi
 BACKUPTIME=$BACKUPHOUR:$BACKUPMIN
 
-#BACKUPTYPE=$(whiptail --title "Select Backup Type" --radiolist "Choose" 20 40 15 \
-#                "Daily" "" OFF \
-#                "Weekly" "" OFF \
-#                "Monthly" "" OFF \
-#                3>&1 1>&2 2>&3)
-#		
-#	if [ "$BACKUPTYPE" = "Daily" ]; then
-#		BACKUPHOUR=$(whiptail --title "Backup Hour" --inputbox "At What Hour - For Example 10" 10 60  3>&1 1>&2 2>&3)
-#		BACKUPMIN=$(whiptail --title "Backup Minute" --inputbox "At What Minute - For Example 18" 10 60  3>&1 1>&2 2>&3)
-#		if [[ "$BACKUPHOUR" =~ ^[0-9]+$ ]] && [[ "$BACKUPMIN" =~ ^[0-9]+$ ]]; then
-#			if [ "$BACKUPHOUR" -gt 23 ] || [ "$BACKUPMIN" -gt 59 ]; then
-#				#echo "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59"
-#				whiptail --title "At What Hour" --msgbox "Backup hour is not bigger than 23 and Backup Minute is not bigger than 59" 10 60  3>&1 1>&2 2>&3
-#				add_backup
-#			fi
-#		else
-#			#echo "Backup Hour and Minute must a numbers"
-#			whiptail --title "At What Hour" --msgbox "Backup Hour and Minute must a numbers" 10 60  3>&1 1>&2 2>&3
-#			add_backup
-#		fi
-#		BACKUPTIME=$BACKUPHOUR:$BACKUPMIN
-#	elif
-#		[ "$BACKUPTYPE" = "Weekly" ]; then
-#		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
-#			"Monday" "" OFF \
-#			"Tuesday" "" OFF \
-#                        "Wednesday" "" OFF \
-#                        "Thursday" "" OFF \
-#                        "Friday" "" OFF \
-#                        "Saturday" "" OFF \
-#                        "Sunday" "" OFF \
-#                        3>&1 1>&2 2>&3)
-#	elif
-#		[ "$BACKUPTYPE" = "Monthly" ]; then
-#		BACKUPTIME=$(whiptail --title "Select Day" --radiolist "Choose" 20 40 15 \
-#			"1st  Day" "" OFF \
-#			"2nd  Day" "" OFF \
-#			"3rd  Day" "" OFF \
-#			"4th  Day" "" OFF \
-#			"5th  Day" "" OFF \
-#			"6th  Day" "" OFF \
-#			"7th  Day" "" OFF \
-#			"8th  Day" "" OFF \
-#			"9th  Day" "" OFF \
-#			"10th Day" "" OFF \
-#			"11th Day" "" OFF \
-#			"12th Day" "" OFF \
-#			"13th Day" "" OFF \
-#			"14th Day" "" OFF \
-#			"15th Day" "" OFF \
-#			"16th Day" "" OFF \
-#			"17th Day" "" OFF \
-#			"18th Day" "" OFF \
-#			"19th Day" "" OFF \
-#			"20th Day" "" OFF \
-#			"21st Day" "" OFF \
-#			"22nd Day" "" OFF \
-#			"23rd Day" "" OFF \
-#			"24th Day" "" OFF \
-#			"25th Day" "" OFF \
-#			"26th Day" "" OFF \
-#			"27th Day" "" OFF \
-#			"28th Day" "" OFF \
-#			3>&1 1>&2 2>&3)
-#	fi
-	
-#if [ "$BACKUPTYPE" = "" ] || [ "$BACKUPTIME" = "" ]; then
-#	whiptail --title "Backup Name" --msgbox "Backup Type and Time is not null" 10 60  3>&1 1>&2 2>&3
-#else
-#	record_backup
-#fi
 
 if [ "$BACKUPTIME" = "" ]; then
 	whiptail --title "Backup Name" --msgbox "Backup Type and Time is not null" 10 60  3>&1 1>&2 2>&3
@@ -172,11 +101,6 @@ else
 	record_backup
 fi
 }
-
-#---------------------------------------------------------
-# backup commands
-# tar -cf /usr/local/backup-united/backups/$BACKUPNAME-"$JOCKER(date +%Y%m%d-%H%M).tar" /usr/local/backup-united/backups/$BACKUPNAME
-#---------------------------------------------------------
 
 function record_backup(){
 JOCKER=$
@@ -228,7 +152,6 @@ mkdir /tmp/$BACKUPNAME
 mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username="$BACKUPUSR",password="$BACKUPPWD" && touch /tmp/$BACKUPNAME-mountok
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
-#rsync -az /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
 rdiff-backup backup /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backupunited/mail-message
@@ -238,7 +161,6 @@ else
 echo "$BACKUPNAME Backup Failed" > /usr/local/backupunited/mail-message
 fi
 
-#bash $MAILSENDER
 EOF
 
 # weeklybackup & monthlybackup Controls
@@ -247,10 +169,11 @@ echo "TODAY2=$JOCKER(date | cut -d "'" "'" -f3)" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "if [ ""$JOCKER""TODAY1"" = ""Sun"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "bash $SCRIPTS/weeklybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
-
 echo "if [ ""$JOCKER""TODAY2"" = ""01"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "bash $SCRIPTS/monthlybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo -e >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "bash $MAILSENDER" >> $BACKUP_SCRIPTS/$BACKUPNAME
 
 # create service
 cat > /etc/systemd/system/backupunited-$BACKUPNAME.service <<EOF
@@ -266,11 +189,6 @@ ExecStart=$BACKUP_SCRIPTS/$BACKUPNAME
 [Install]
 WantedBy=multi-user.target
 EOF
-
-#if [ "$BACKUPTYPE" = "Daily" ]; then
-#	DESCRIPTION="BackupUnited $BACKUPNAME Daily Timer"
-#	ONCALENDAR="*-*-* $BACKUPTIME:00"
-#fi
 
 DESCRIPTION="BackupUnited $BACKUPNAME Daily Timer"
 ONCALENDAR="*-*-* $BACKUPTIME:00"
