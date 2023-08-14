@@ -280,18 +280,29 @@ pause
 
 function backup_job_list(){
 	tput setaf 8
+	echo -e
 	echo "Backup Job List"
 	echo "---------------"
 	tput sgr0
-	ls $BACKUP_SCRIPTS
+	ls $BACKUP_SCRIPTS > /tmp/backupscriptlist.txt
+	JOBCOUNT=$(cat /tmp/backupscriptlist.txt | wc -l)
+	i=1
+	while [ "$i" -le "$JOBCOUNT" ]; do
+		JOB=$(ls -l |sed -n $i{p} /tmp/backupscriptlist.txt)
+		RUNTIME=$(systemctl status backupunited-$JOB.timer | grep Trigger: | cut -d ";" -f2 | xargs)
+		echo "$JOB - $RUNTIME" >> /tmp/backupscriptdetail.txt
+		echo "----------------------------------------------" >> /tmp/backupscriptdetail.txt
+		i=$(( i + 1 ))
+	done
+	cat /tmp/backupscriptdetail.txt
+	rm /tmp/backupscriptlist.txt
+	rm /tmp/backupscriptdetail.txt
+
 	echo -e
-	
 	tput setaf 8	
 	echo "Backup Paths"
 	echo "---------------"
 	tput sgr0
-	#ack "mount -t cifs" "$BACKUP_SCRIPTS" | cut -d " " -f4
-	#ack "BACKUPNAME=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
 	ack "BACKUPPATH=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
 	echo -e
 	pause
