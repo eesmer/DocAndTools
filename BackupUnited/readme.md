@@ -39,9 +39,13 @@ If you want to keep necessary or unnecessary deleted files, you should use backu
 With the backup process, you copy the same files again and again and you guarantee that each copied file is kept.<br>
 With Sync, the source and destination fields are only synchronized. File storage is not the purpose of the sync operation.<br>
 
-#### rsync notes
-https://rsync.samba.org/tech_report/ <br>
+#### rdiff-backup
+https://rdiff-backup.net
+#### rsync
+https://rsync.samba.org/tech_report <br>
 https://rsync.samba.org/how-rsync-works.html
+#### tar
+https://www.gnu.org/software/tar
 
 <br>
 
