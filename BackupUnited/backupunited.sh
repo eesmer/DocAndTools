@@ -161,6 +161,8 @@ else
 echo "$BACKUPNAME Backup Failed" > /usr/local/backupunited/mail-message
 fi
 
+bash $SCRIPTS/dailybackup.sh $BACKUPNAME
+
 EOF
 
 # weeklybackup & monthlybackup Controls
