@@ -13,6 +13,11 @@ MAILSENDER=$SCRIPTS/mail-sender.sh
 # check & install required packages
 #-----------------------------------------------
 
+mkdir -p $BACKUPS/daily/
+mkdir -p $BACKUPS/weekly/
+mkdir -p $BACKUPS/monthly/
+mkdir -p $BACKUPS/yearly/
+
 function pause(){
 local message="$@"
 [ -z $message ] && message="Press [Enter] to continue ..."
@@ -75,7 +80,6 @@ echo "    -----------"
 tput sgr0
 echo -e
 }
-
 
 function add_backup(){
 
@@ -325,11 +329,43 @@ function backup_now(){
 }
 
 function backup_list(){
+	ls $BACKUPS/daily > /tmp/dailybackups.txt
+	ls $BACKUPS/weekly > /tmp/weeklybackups.txt
+	ls $BACKUPS/monthly > /tmp/monthlybackups.txt
+	ls $BACKUPS/yearly > /tmp/yearlybackups.txt
+		
 	tput setaf 8
-	echo "Backups"
+	echo "Backup List"
 	echo "---------------"
+	tput setaf 5
+	echo "Daily Backups:"
 	tput sgr0
-	tree $BACKUPS
+	cat /tmp/dailybackups.txt
+	echo "---------------------------------------------"
+	echo -e
+	tput setaf 5
+	echo "Weekly Backups:"
+	tput sgr0
+	cat /tmp/weeklybackups.txt
+	echo "---------------------------------------------"
+	echo -e
+	tput setaf 5
+	echo "Monthly Backups:"
+	tput sgr0
+	cat /tmp/monthlybackups.txt
+	echo "---------------------------------------------"
+	echo -e
+	tput setaf 5
+	echo "Yearly Backups:"
+	tput sgr0
+	cat /tmp/yearlybackups.txt
+	echo "---------------------------------------------"
+	echo -e
+	#tree $BACKUPS
+	rm /tmp/dailybackups.txt
+	rm /tmp/weeklybackups.txt
+	rm /tmp/monthlybackups.txt
+	rm /tmp/yearlybackups.txt
 	pause
 }
 
