@@ -305,11 +305,18 @@ function backup_job_list(){
 	rm /tmp/backupscriptdetail.txt
 
 	echo -e
-	tput setaf 8	
+	tput setaf 8
 	echo "Backup Paths"
 	echo "---------------"
 	tput sgr0
 	ack "BACKUPPATH=" "$BACKUP_SCRIPTS" | cut -d "=" -f2
+	echo -e
+	tput setaf 8
+	echo "Service Status & Info"
+	echo "---------------------------------------------------------------------------------------------------------------------------------------------------"
+	tput setaf 7
+	systemctl list-timers | grep "backupunited"
+	tput sgr0
 	echo -e
 	pause
 }
@@ -360,8 +367,6 @@ function backup_list(){
 	tput sgr0
 	cat /tmp/yearlybackups.txt
 	echo "---------------------------------------------"
-	echo -e
-	#tree $BACKUPS
 	rm /tmp/dailybackups.txt
 	rm /tmp/weeklybackups.txt
 	rm /tmp/monthlybackups.txt
