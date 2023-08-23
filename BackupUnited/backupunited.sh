@@ -400,6 +400,18 @@ function add_recipient(){
 	pause
 }
 
+function remove_recipient(){
+	read -p "Recipient Mail : " EMAILADDRESS
+	RESULT=FALSE
+	ack "$EMAILADDRESS" $MAILRECIPIENT >/dev/null && RESULT=TRUE
+	if [ "$RESULT" = "TRUE" ]; then
+		sed -i "/$EMAILADDRESS/d" $MAILRECIPIENT
+	else
+		whiptail --msgbox "Recipient Not Found!!" 10 60 3>&1 1>&2 2>&3
+	fi
+	pause
+}
+
 function recipient_list(){
 	tput setaf 8
 	echo "Mail Recipient List"
@@ -420,6 +432,7 @@ case $c in
 7)	backup_job_list;;
 20)	mail_settings;;
 21)	add_recipient;;
+22)	remove_recipient;;
 23)	recipient_list;;
 99)	exit 0 ;;
 *)	
