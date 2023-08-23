@@ -397,6 +397,11 @@ function scheduled_jobs(){
 function add_recipient(){
 	read -p "E-Mail Address : " EMAILADDRESS
 	echo "$EMAILADDRESS" >> $MAILRECIPIENT
+	echo -e
+	tput setaf 5
+	echo "$EMAILADDRESS successfully added to Mail Recipient List"
+	tput sgr0
+	echo -e
 	pause
 }
 
@@ -407,7 +412,9 @@ function remove_recipient(){
 	if [ "$RESULT" = "TRUE" ]; then
 		sed -i "/$EMAILADDRESS/d" $MAILRECIPIENT
 		echo -e
+		tput setaf 5
 		echo "$EMAILADDRESS successfully removed from Mail Recipient List"
+		tput sgr0
 		echo -e
 	else
 		whiptail --msgbox "Recipient Not Found!!" 10 60 3>&1 1>&2 2>&3
