@@ -262,7 +262,7 @@ function mail_settings(){
 	MAILADDR=$(whiptail --title "Backup Name" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
 	SMTP=$(whiptail --title "Path of the Area" --inputbox "Please Enter SMTP Address-SMTP Port your Mailserver (smtp.gmail.com:587)" 10 60  3>&1 1>&2 2>&3)
 	MAILUSER=$(whiptail --title "Username" --inputbox "Please Enter Username for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
-	MAILPASS=$(whiptail --title "Password" --inputbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
+	MAILPASS=$(whiptail --title "Password" --passwordbox "Please Enter Password for E-Mail Address" 10 60  3>&1 1>&2 2>&3)
 	MAILDOMAIN=$(whiptail --title "Domain" --inputbox "Please Enter Domain for E-Mail Address (gmail.com,xyz.net etc)" 10 60  3>&1 1>&2 2>&3)
 	cat /dev/null > /etc/ssmtp/ssmtp.conf
 cat > /etc/ssmtp/ssmtp.conf <<EOF
@@ -280,7 +280,7 @@ EOF
 echo root:$MAILADDR:$SMTP
 chfn -f 'backup-united' root
 
-cp /usr/local/backup-united/notification/99-mail-sender /usr/local/backup-united/backup-scripts/
+cp /usr/local/backupunited/notification/99-mail-sender /usr/local/backupunited/backup-scripts/
 pause
 }
 
