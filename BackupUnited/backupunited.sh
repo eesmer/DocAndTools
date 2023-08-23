@@ -406,6 +406,9 @@ function remove_recipient(){
 	ack "$EMAILADDRESS" $MAILRECIPIENT >/dev/null && RESULT=TRUE
 	if [ "$RESULT" = "TRUE" ]; then
 		sed -i "/$EMAILADDRESS/d" $MAILRECIPIENT
+		echo -e
+		echo "$EMAILADDRESS successfully removed from Mail Recipient List"
+		echo -e
 	else
 		whiptail --msgbox "Recipient Not Found!!" 10 60 3>&1 1>&2 2>&3
 	fi
