@@ -49,7 +49,6 @@ echo "   | Backup Management Menu                     |"
 echo "   |--------------------------------------------|"
 echo "   | 1.Add    Backup Job  | 6.Backup List       |"
 echo "   | 2.Remove Backup Job  | 7.Backup Job List   |"
-echo "   |                      | 8.Clean Backup      |"
 echo "   |--------------------------------------------|"
 tput setaf 5
 echo "                       Settings                  "
