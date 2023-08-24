@@ -397,6 +397,7 @@ function scheduled_jobs(){
 function add_recipient(){
 	read -p "E-Mail Address : " EMAILADDRESS
 	echo "$EMAILADDRESS" >> $MAILRECIPIENT
+	sed -i '/^$/d' $MAILRECIPIENT
 	echo -e
 	tput setaf 5
 	echo "$EMAILADDRESS successfully added to Mail Recipient List"
@@ -411,6 +412,7 @@ function remove_recipient(){
 	ack "$EMAILADDRESS" $MAILRECIPIENT >/dev/null && RESULT=TRUE
 	if [ "$RESULT" = "TRUE" ]; then
 		sed -i "/$EMAILADDRESS/d" $MAILRECIPIENT
+		sed -i '/^$/d' $MAILRECIPIENT
 		echo -e
 		tput setaf 5
 		echo "$EMAILADDRESS successfully removed from Mail Recipient List"
