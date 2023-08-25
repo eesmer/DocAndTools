@@ -127,7 +127,7 @@ cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 #BACKUPNAME=$BACKUPNAME
 
 if [ -d "$BACKUPPATH" ]; then
-rsync -avz "$BACKUPPATH" "$BACKUPS/$BACKUPNAME"
+rsync -az "$BACKUPPATH" "$BACKUPS/$BACKUPNAME"
 echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 else
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
