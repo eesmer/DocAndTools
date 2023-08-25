@@ -12,11 +12,18 @@ MAILSENDER=$SCRIPTS/mail-sender.sh
 #-----------------------------------------------
 # check & install required packages
 #-----------------------------------------------
-
+mkdir -p $BACKUP_SCRIPTS
+mkdir -p $SCRIPTS
+mkdir -p $REPORTS
 mkdir -p $BACKUPS/daily/
 mkdir -p $BACKUPS/weekly/
 mkdir -p $BACKUPS/monthly/
 mkdir -p $BACKUPS/yearly/
+
+wget -O $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
+wget -O $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
+wget -O $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
+wget -O $REPORTS/mail-sender.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/reports/mail-sender.sh
 
 function pause(){
 local message="$@"
@@ -121,9 +128,9 @@ cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 
 if [ -d "$BACKUPPATH" ]; then
 rsync -avz "$BACKUPPATH" "$BACKUPS/$BACKUPNAME"
-echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
+echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 else
-echo "$BACKUPNAME Backup Successfully Taken" > /usr/local/backup-united/mail-message
+echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
 fi
 EOF
 ;;
@@ -157,18 +164,18 @@ if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
 rdiff-backup backup /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
-echo "$BACKUPNAME Backup Successfully Taken - $JOCKERBACKUPDATE" > /usr/local/backupunited/mail-message
+echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 umount /tmp/$BACKUPNAME
 rm -rf /tmp/$BACKUPNAME-mountok
 else
-echo "$BACKUPNAME Backup Failed" > /usr/local/backupunited/mail-message
+echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
 fi
 
 bash $SCRIPTS/dailybackup.sh $BACKUPNAME
 
 EOF
 
-# weeklybackup & monthlybackup Controls
+# WEEKLY BACKUP & MONTHLY BACKUP
 echo "TODAY1=$JOCKER(date | cut -d "'" "'" -f1)" >> $BACKUP_SCRIPTS/$BACKUPNAME 
 echo "TODAY2=$JOCKER(date | cut -d "'" "'" -f3)" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "if [ ""$JOCKER""TODAY1"" = ""Sun"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
