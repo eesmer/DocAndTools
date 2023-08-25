@@ -8,6 +8,10 @@ Provides TUI in single script file for this.
 ## Features
 - Takes backup from SMB access.
 - It keeps syncing, .tar file and diffs of each defined backup in separate directories.
+- The directory to be backed up;
+    - syncs with **rsync**
+    - Compresses with **tar**
+    - It keeps incremental diffs with **rdiff-backup**
 - Sends notification of backup jobs. (email)
 
 ---
