@@ -20,10 +20,11 @@ mkdir -p $BACKUPS/weekly/
 mkdir -p $BACKUPS/monthly/
 mkdir -p $BACKUPS/yearly/
 
-wget -O $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
-wget -O $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
-wget -O $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
-wget -O $REPORTS/mail-sender.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/reports/mail-sender.sh
+export DEBIAN_FRONTEND=noninteractive
+wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
+wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
+wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
+wget -qO $REPORTS/mail-sender.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/reports/mail-sender.sh
 
 function pause(){
 local message="$@"
