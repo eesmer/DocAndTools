@@ -8,6 +8,7 @@ REPORTS=$WDIR/reports
 MAILRECIPIENT=$REPORTS/mail-recipient
 MAILMESSAGE=$REPORTS/mail-message
 MAILSENDER=$SCRIPTS/mail-sender.sh
+RESTOREDIR=/usr/local/backupunited/backups/restoredir
 
 #-----------------------------------------------
 # check & install required packages
@@ -19,6 +20,7 @@ mkdir -p $BACKUPS/daily/
 mkdir -p $BACKUPS/weekly/
 mkdir -p $BACKUPS/monthly/
 mkdir -p $BACKUPS/yearly/
+mkdir -p $BACKUPS/restoredir/
 
 export DEBIAN_FRONTEND=noninteractive
 wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
@@ -62,7 +64,7 @@ tput setaf 5
 echo "                       Settings                  "
 tput sgr0
 echo "   |--------------------------------------------|"
-echo "   | 20.Mail Sender Set.  |                     |"
+echo "   | 20.Mail Sender Set.  | 30.Restore Backup   |"
 echo "   | 21.Add Recipient     |                     |"
 echo "   | 22.Remove Recipient  |                     |"
 echo "   | 23.Recipient List    |                     |"
@@ -441,6 +443,24 @@ function recipient_list(){
 	pause
 }
 
+function restore_backup(){
+	BACKUPDIR=$(whiptail --title "Select Backup Dir" --radiolist "Choose" 20 40 15 \
+		"daily" "" OFF \
+		"weekly" "" OFF \
+		"monthly" "" OFF \
+		"yearly" "" OFF \
+		3>&1 1>&2 2>&3)
+	
+	BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name" 10 60  3>&1 1>&2 2>&3)
+	RBACKUPNAME=$(echo $BACKUPNAME | cut -d "-" -f1)
+			
+	tar -xvf $BACKUPS/$BACKUPDIR/$BACKUPNAME -C $RESTOREDIR/
+	mv $RESTOREDIR/usr/local/taliaundo/backups/sync/* $RESTOREDIR/
+	rm -r $RESTOREDIR/$RBACKUPNAME/rdiff-backup-data
+	rm -r $RESTOREDIR/usr
+	pause
+}
+
 function read_input(){
 local c
 read -p "Please choose from Menu numbers " c
@@ -453,6 +473,7 @@ case $c in
 21)	add_recipient;;
 22)	remove_recipient;;
 23)	recipient_list;;
+30)	restore_backup;;
 99)	exit 0 ;;
 *)	
 echo "Please choose from Menu numbers"
