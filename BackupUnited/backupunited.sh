@@ -65,7 +65,7 @@ echo "                       Settings                  "
 tput sgr0
 echo "   |--------------------------------------------|"
 echo "   | 20.Mail Sender Set.  | 30.Restore Backup   |"
-echo "   | 21.Add Recipient     |                     |"
+echo "   | 21.Add Recipient     | 31.Show Restore Dir |"
 echo "   | 22.Remove Recipient  |                     |"
 echo "   | 23.Recipient List    |                     |"
 echo "   |--------------------------------------------|"
@@ -461,6 +461,15 @@ function restore_backup(){
 	pause
 }
 
+function show_restoredir(){
+	tput setaf 8
+	echo "Restore Directory"
+	echo "-----------------"
+	tput sgr0
+	tree -d $RESTOREDIR
+	pause
+}
+
 function read_input(){
 local c
 read -p "Please choose from Menu numbers " c
@@ -474,6 +483,7 @@ case $c in
 22)	remove_recipient;;
 23)	recipient_list;;
 30)	restore_backup;;
+31)	show_restoredir;;
 99)	exit 0 ;;
 *)	
 echo "Please choose from Menu numbers"
