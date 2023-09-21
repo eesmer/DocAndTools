@@ -13,20 +13,88 @@ RESTOREDIR=/usr/local/backupunited/backups/restoredir
 #-----------------------------------------------
 # check & install required packages
 #-----------------------------------------------
-mkdir -p $BACKUP_SCRIPTS
-mkdir -p $SCRIPTS
-mkdir -p $REPORTS
-mkdir -p $BACKUPS/daily/
-mkdir -p $BACKUPS/weekly/
-mkdir -p $BACKUPS/monthly/
-mkdir -p $BACKUPS/yearly/
-mkdir -p $BACKUPS/restoredir/
 
-export DEBIAN_FRONTEND=noninteractive
-wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
-wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
-wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
-wget -qO $REPORTS/mail-sender.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/reports/mail-sender.sh
+WDIREXIST=EXIST
+DAILYSCRIPT=NONE
+WEEKLYSCRIPT=NONE
+MONTHLYSCRIPT=NONE
+YEARLYSCRIPT=NONE
+RUNSTATUS=RUN
+
+if [ ! -d "$WDIR" ]; then
+	WDIREXIST=NONE
+	RUNSTATUS=NEWINSTALL
+else
+	if [ -f "$SCRIPTS/dailybackup.sh" ]; then
+		DAILYSCRIPT=EXIST
+	else
+		RUNSTATUS=UPDATE
+	fi
+	if [ -f "$SCRIPTS/weeklybackup.sh" ]; then
+		WEEKLYSCRIPT=EXIST
+	else
+		RUNSTATUS=UPDATE
+	fi
+	if [ -f "$SCRIPTS/monthlybackup.sh" ]; then
+		MONTHLYSCRIPT=EXIST
+	else
+		RUNSTATUS=UPDATE
+	fi
+	if [ -f "$SCRIPTS/yearlybackup.sh" ]; then
+		YEARLYSCRIPT=EXIST
+	else
+		RUNSTATUS=UPDATE
+	fi
+
+
+fi
+
+if [ ! "$RUNSTATUS" = "RUN" ];then
+	whiptail --title "Installation Info" --msgbox "The installation needs to be completed.\nYou will be directed to the installation menu." 10 60  3>&1 1>&2 2>&3
+fi
+
+if [ "$WDIREXIST" = "NONE" ]; then
+	echo "Calisma Dizini Bulunamadı. Kurululum baslatiliyor.."
+	apt-get -y update
+elif [ "$DAILYSCRIPT" = "NONE" ]; then
+	echo "Daily Script Bulunamadi. Daily Script Yükleniyor.."
+elif [ "$WEEKLYSCRIPT" = "NONE" ]; then
+	echo "Weekly Script Bulunamadi. Weekly Script Yükleniyor.."
+elif [ "$MONTHLYSCRIPT" = "NONE" ]; then
+	echo "Monthly Script Bulunamadi. Monthly Script Yükleniyor.."
+elif [ "$YEARLYSCRIPT" = "NONE" ]; then
+	echo "Yearly Script Bulunamadi. Yearly Script Yükleniyor.."
+fi
+
+
+exit 1
+
+#mkdir -p $BACKUP_SCRIPTS
+#mkdir -p $SCRIPTS
+#mkdir -p $REPORTS
+#mkdir -p $BACKUPS/daily/
+#mkdir -p $BACKUPS/weekly/
+#mkdir -p $BACKUPS/monthly/
+#mkdir -p $BACKUPS/yearly/
+#mkdir -p $BACKUPS/restoredir/
+
+#if [ ! -f "$SCRIPTS/dailybackup.sh" ]; then
+#	export DEBIAN_FRONTEND=noninteractive
+#	wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
+#fi
+#if [ ! -f "$SCRIPTS/weeklybackup.sh" ]; then
+#	export DEBIAN_FRONTEND=noninteractive
+#	wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
+#fi
+#if [ ! -f $SCRIPTS/monthlybackup.sh ];then
+#	export DEBIAN_FRONTEND=noninteractive
+#	wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
+#fi
+#
+#if [ -f $REPORTS/mail-sender.sh ]; then
+#	export DEBIAN_FRONTEND=noninteractive
+#	wget -qO $REPORTS/mail-sender.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/reports/mail-sender.sh
+#fi
 
 function pause(){
 local message="$@"
