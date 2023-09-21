@@ -9,6 +9,7 @@ MAILRECIPIENT=$REPORTS/mail-recipient
 MAILMESSAGE=$REPORTS/mail-message
 MAILSENDER=$SCRIPTS/mail-sender.sh
 RESTOREDIR=/usr/local/backupunited/backups/restoredir
+WEBSITE=www.esmerkan.com
 
 # Check Install/Update
 function checkandinstall(){
@@ -43,13 +44,11 @@ else
 	else
 		RUNSTATUS=UPDATE
 	fi
-
-
 fi
 
 if [ ! "$RUNSTATUS" = "RUN" ];then
 	whiptail --title "Installation Info" --msgbox "The installation needs to be completed.\nYou will be directed to the installation." 10 60  3>&1 1>&2 2>&3
-	curl -4 www.esmerkan.com &>/dev/null
+	curl -4 $WEBSITE &>/dev/null
 	if [ ! "$?" = "0" ]; then
 		whiptail --title "Internet Access" --msgbox "Internet connection could not be established." 10 60  3>&1 1>&2 2>&3
 		clear
@@ -60,7 +59,7 @@ if [ ! "$RUNSTATUS" = "RUN" ];then
 		tput sgr0
 		echo "================================================================================"
 		echo -e
-		exit 1
+		exit 0;
 	fi
 fi
 
@@ -76,9 +75,11 @@ if [ "$WDIREXIST" = "NONE" ]; then
 	mkdir -p $BACKUPS/yearly/
 	mkdir -p $BACKUPS/restoredir/
 	
-	apt-get -y install rsync rdiff-backup ssmtp mutt
+	apt-get -y install rsync rdiff-backup
 	apt-get -y install cifs-utils smbclient
 	apt-get -y install tree ack
+	apt-get -y install whiptail
+	apt-get -y install ssmtp mutt
 
 elif [ "$DAILYSCRIPT" = "NONE" ]; then
 	echo "Daily Backup Script is downloading.."
