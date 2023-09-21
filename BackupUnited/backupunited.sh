@@ -75,25 +75,31 @@ if [ ! "$RUNSTATUS" = "RUN" ];then
 		mkdir -p $BACKUPS/yearly/
 		mkdir -p $BACKUPS/restoredir/
 		
-		apt-get -y install rsync rdiff-backup
-		apt-get -y install cifs-utils smbclient
-		apt-get -y install tree ack
-		apt-get -y install whiptail
-		apt-get -y install ssmtp mutt
-	elif [ "$DAILYSCRIPT" = "NONE" ]; then
+		#apt-get -y install rsync rdiff-backup
+		#apt-get -y install cifs-utils smbclient
+		#apt-get -y install tree ack
+		#apt-get -y install whiptail
+		#apt-get -y install ssmtp mutt
+	fi
+	if [ "$DAILYSCRIPT" = "NONE" ]; then
 		echo "Daily Backup Script is downloading.."
 		export DEBIAN_FRONTEND=noninteractive
 		wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
-	elif [ "$WEEKLYSCRIPT" = "NONE" ]; then
+	fi
+	if [ "$WEEKLYSCRIPT" = "NONE" ]; then
 		echo "Weekly Backup Script is downloading.."
 		export DEBIAN_FRONTEND=noninteractive
 		wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
-	elif [ "$MONTHLYSCRIPT" = "NONE" ]; then
+	fi
+	if [ "$MONTHLYSCRIPT" = "NONE" ]; then
 		echo "Monthly Backup Script is downloading.."
 		export DEBIAN_FRONTEND=noninteractive
 		wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
-	elif [ "$YEARLYSCRIPT" = "NONE" ]; then
+	fi
+	if [ "$YEARLYSCRIPT" = "NONE" ]; then
 		echo "Yearly Backup Script is downloading.."
+		export DEBIAN_FRONTEND=noninteractive
+		wget -qO $SCRIPTS/yearlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/yearlybackup.sh
 	fi
 #else
 	#clear
