@@ -14,37 +14,39 @@ WEBSITE=www.esmerkan.com
 # Check Install/Update
 function checkandinstall(){
 WDIREXIST=EXIST
-DAILYSCRIPT=NONE
-WEEKLYSCRIPT=NONE
-MONTHLYSCRIPT=NONE
-YEARLYSCRIPT=NONE
+DAILYSCRIPT=EXIST
+WEEKLYSCRIPT=EXIST
+MONTHLYSCRIPT=EXIST
+YEARLYSCRIPT=EXIST
 RUNSTATUS=RUN
 
 if [ ! -d "$WDIR" ]; then
 	WDIREXIST=NONE
 	RUNSTATUS=NEWINSTALL
 else
-	if [ -f "$SCRIPTS/dailybackup.sh" ]; then
-		DAILYSCRIPT=EXIST
-	else
+	if [ ! -f "$SCRIPTS/dailybackup.sh" ]; then
+		DAILYSCRIPT=NONE
 		RUNSTATUS=UPDATE
 	fi
-	if [ -f "$SCRIPTS/weeklybackup.sh" ]; then
-		WEEKLYSCRIPT=EXIST
-	else
+	if [ ! -f "$SCRIPTS/weeklybackup.sh" ]; then
+		WEEKLYSCRIPT=NONE
 		RUNSTATUS=UPDATE
 	fi
-	if [ -f "$SCRIPTS/monthlybackup.sh" ]; then
-		MONTHLYSCRIPT=EXIST
-	else
+	if [ ! -f "$SCRIPTS/monthlybackup.sh" ]; then
+		MONTHLYSCRIPT=NONE
 		RUNSTATUS=UPDATE
 	fi
-	if [ -f "$SCRIPTS/yearlybackup.sh" ]; then
-		YEARLYSCRIPT=EXIST
-	else
+	if [ ! -f "$SCRIPTS/yearlybackup.sh" ]; then
+		YEARLYSCRIPT=NONE
 		RUNSTATUS=UPDATE
 	fi
 fi
+
+echo "Run Status: $RUNSTATUS"
+echo "Daily     : $DAILYSCRIPT"
+echo "Weekly    : $WEEKLYSCRIPT"
+echo "Monthly   : $MONTHLYSCRIPT"
+echo "Yearly    : $YEARLYSCRIPT"
 
 if [ ! "$RUNSTATUS" = "RUN" ];then
 	whiptail --title "Installation Info" --msgbox "The installation needs to be completed.\nYou will be directed to the installation." 10 60  3>&1 1>&2 2>&3
@@ -60,45 +62,46 @@ if [ ! "$RUNSTATUS" = "RUN" ];then
 		echo "================================================================================"
 		echo -e
 		exit 0;
+	fi	
+	if [ "$WDIREXIST" = "NONE" ]; then
+		echo "Working directory not found."
+		echo "Starting the installation.."
+		mkdir -p $BACKUP_SCRIPTS
+		mkdir -p $SCRIPTS
+		mkdir -p $REPORTS
+		mkdir -p $BACKUPS/daily/
+		mkdir -p $BACKUPS/weekly/
+		mkdir -p $BACKUPS/monthly/
+		mkdir -p $BACKUPS/yearly/
+		mkdir -p $BACKUPS/restoredir/
+		
+		apt-get -y install rsync rdiff-backup
+		apt-get -y install cifs-utils smbclient
+		apt-get -y install tree ack
+		apt-get -y install whiptail
+		apt-get -y install ssmtp mutt
+	elif [ "$DAILYSCRIPT" = "NONE" ]; then
+		echo "Daily Backup Script is downloading.."
+		export DEBIAN_FRONTEND=noninteractive
+		wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
+	elif [ "$WEEKLYSCRIPT" = "NONE" ]; then
+		echo "Weekly Backup Script is downloading.."
+		export DEBIAN_FRONTEND=noninteractive
+		wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
+	elif [ "$MONTHLYSCRIPT" = "NONE" ]; then
+		echo "Monthly Backup Script is downloading.."
+		export DEBIAN_FRONTEND=noninteractive
+		wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
+	elif [ "$YEARLYSCRIPT" = "NONE" ]; then
+		echo "Yearly Backup Script is downloading.."
 	fi
+#else
+	#clear
+	#show_menu;
 fi
-
-if [ "$WDIREXIST" = "NONE" ]; then
-	echo "Working directory not found."
-	echo "Starting the installation.."
-	mkdir -p $BACKUP_SCRIPTS
-	mkdir -p $SCRIPTS
-	mkdir -p $REPORTS
-	mkdir -p $BACKUPS/daily/
-	mkdir -p $BACKUPS/weekly/
-	mkdir -p $BACKUPS/monthly/
-	mkdir -p $BACKUPS/yearly/
-	mkdir -p $BACKUPS/restoredir/
-	
-	apt-get -y install rsync rdiff-backup
-	apt-get -y install cifs-utils smbclient
-	apt-get -y install tree ack
-	apt-get -y install whiptail
-	apt-get -y install ssmtp mutt
-
-elif [ "$DAILYSCRIPT" = "NONE" ]; then
-	echo "Daily Backup Script is downloading.."
-	export DEBIAN_FRONTEND=noninteractive
-	wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
-elif [ "$WEEKLYSCRIPT" = "NONE" ]; then
-	echo "Weekly Backup Script is downloading.."
-	export DEBIAN_FRONTEND=noninteractive
-	wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
-elif [ "$MONTHLYSCRIPT" = "NONE" ]; then
-	echo "Monthly Backup Script is downloading.."
-	export DEBIAN_FRONTEND=noninteractive
-	wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
-elif [ "$YEARLYSCRIPT" = "NONE" ]; then
-	echo "Yearly Backup Script is downloading.."
-fi
-
-pause
-exit 0;
+clear
+#pause
+#exit 0;
 }
 
 function pause(){
