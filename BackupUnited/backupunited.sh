@@ -14,6 +14,8 @@ RESTOREDIR=/usr/local/backupunited/backups/restoredir
 # check & install required packages
 #-----------------------------------------------
 
+
+function checkandinstall(){
 WDIREXIST=EXIST
 DAILYSCRIPT=NONE
 WEEKLYSCRIPT=NONE
@@ -64,33 +66,41 @@ if [ ! "$RUNSTATUS" = "RUN" ];then
 		echo -e
 		exit 1
 	fi
-
 fi
 
 if [ "$WDIREXIST" = "NONE" ]; then
-	echo "Calisma Dizini Bulunamadı. Kurululum baslatiliyor.."
-	apt-get -y update
+	echo "Working directory not found."
+	echo "Starting the installation.."
+	mkdir -p $BACKUP_SCRIPTS
+	mkdir -p $SCRIPTS
+	mkdir -p $REPORTS
+	mkdir -p $BACKUPS/daily/
+	mkdir -p $BACKUPS/weekly/
+	mkdir -p $BACKUPS/monthly/
+	mkdir -p $BACKUPS/yearly/
+	mkdir -p $BACKUPS/restoredir/
+	
+	apt-get -y install rsync rdiff-backup ssmtp mutt
+	apt-get -y install cifs-utils smbclient
+	apt-get -y install tree ack
+
 elif [ "$DAILYSCRIPT" = "NONE" ]; then
-	echo "Daily Script Bulunamadi. Daily Script Yükleniyor.."
+	echo "Daily Backup Script is downloading.."
+	export DEBIAN_FRONTEND=noninteractive
+	wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
 elif [ "$WEEKLYSCRIPT" = "NONE" ]; then
-	echo "Weekly Script Bulunamadi. Weekly Script Yükleniyor.."
+	echo "Weekly Backup Script is downloading.."
+	export DEBIAN_FRONTEND=noninteractive
+	wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
 elif [ "$MONTHLYSCRIPT" = "NONE" ]; then
-	echo "Monthly Script Bulunamadi. Monthly Script Yükleniyor.."
+	echo "Monthly Backup Script is downloading.."
+	export DEBIAN_FRONTEND=noninteractive
+	wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
 elif [ "$YEARLYSCRIPT" = "NONE" ]; then
 	echo "Yearly Script Bulunamadi. Yearly Script Yükleniyor.."
+	echo "Yearly Backup Script is downloading.."
 fi
 
-
-exit 1
-
-#mkdir -p $BACKUP_SCRIPTS
-#mkdir -p $SCRIPTS
-#mkdir -p $REPORTS
-#mkdir -p $BACKUPS/daily/
-#mkdir -p $BACKUPS/weekly/
-#mkdir -p $BACKUPS/monthly/
-#mkdir -p $BACKUPS/yearly/
-#mkdir -p $BACKUPS/restoredir/
 
 #if [ ! -f "$SCRIPTS/dailybackup.sh" ]; then
 #	export DEBIAN_FRONTEND=noninteractive
@@ -109,6 +119,10 @@ exit 1
 #	export DEBIAN_FRONTEND=noninteractive
 #	wget -qO $REPORTS/mail-sender.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/reports/mail-sender.sh
 #fi
+
+pause
+exit 0;
+}
 
 function pause(){
 local message="$@"
@@ -579,6 +593,7 @@ trap '' SIGINT SIGQUIT SIGTSTP
 while true
 do
 clear
+checkandinstall
 show_menu
 read_input
 done
