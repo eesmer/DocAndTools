@@ -254,12 +254,20 @@ EOF
 # WEEKLY BACKUP & MONTHLY BACKUP
 echo "TODAY1=$JOCKER(date | cut -d "'" "'" -f1)" >> $BACKUP_SCRIPTS/$BACKUPNAME 
 echo "TODAY2=$JOCKER(date | cut -d "'" "'" -f3)" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "TODAY3=$JOCKER(date | cut -d "'" "'" -f2)" >> $BACKUP_SCRIPTS/$BACKUPNAME
+
 echo "if [ ""$JOCKER""TODAY1"" = ""Sun"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "bash $SCRIPTS/weeklybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
+
 echo "if [ ""$JOCKER""TODAY2"" = ""01"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "bash $SCRIPTS/monthlybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
+
+echo "if [ ""$JOCKER""TODAY2"" = ""31"" ] && [ ""$JOCKER""TODAY3"" = ""Dec"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "bash $SCRIPTS/yearlybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
+
 echo -e >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "bash $MAILSENDER" >> $BACKUP_SCRIPTS/$BACKUPNAME
 
