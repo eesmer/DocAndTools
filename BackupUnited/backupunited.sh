@@ -10,11 +10,7 @@ MAILMESSAGE=$REPORTS/mail-message
 MAILSENDER=$SCRIPTS/mail-sender.sh
 RESTOREDIR=/usr/local/backupunited/backups/restoredir
 
-#-----------------------------------------------
-# check & install required packages
-#-----------------------------------------------
-
-
+# Check Install/Update
 function checkandinstall(){
 WDIREXIST=EXIST
 DAILYSCRIPT=NONE
@@ -100,25 +96,6 @@ elif [ "$YEARLYSCRIPT" = "NONE" ]; then
 	echo "Yearly Script Bulunamadi. Yearly Script Yükleniyor.."
 	echo "Yearly Backup Script is downloading.."
 fi
-
-
-#if [ ! -f "$SCRIPTS/dailybackup.sh" ]; then
-#	export DEBIAN_FRONTEND=noninteractive
-#	wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
-#fi
-#if [ ! -f "$SCRIPTS/weeklybackup.sh" ]; then
-#	export DEBIAN_FRONTEND=noninteractive
-#	wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
-#fi
-#if [ ! -f $SCRIPTS/monthlybackup.sh ];then
-#	export DEBIAN_FRONTEND=noninteractive
-#	wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
-#fi
-#
-#if [ -f $REPORTS/mail-sender.sh ]; then
-#	export DEBIAN_FRONTEND=noninteractive
-#	wget -qO $REPORTS/mail-sender.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/reports/mail-sender.sh
-#fi
 
 pause
 exit 0;
