@@ -483,15 +483,15 @@ function backup_list(){
 	ls /usr/local/backupunited/backups/sync/ > /tmp/backupdirs.txt
 	let i=0
 	W=()
-	while read -r line; do
+	while read -r LINE; do
 		let i=$i+1
-		W+=($line " ")
+		W+=($LINE " ")
 		echo -e
 		tput setaf 4
-		echo "Backup Name: $line"
+		echo "Backup Name: $LINE"
 		echo "---------------------------------------------"
 		tput sgr0
-		rdiff-backup -l /usr/local/backupunited/backups/sync/$line
+		rdiff-backup -l /usr/local/backupunited/backups/sync/$LINE
 	done < <( cat /tmp/backupdirs.txt)
 	pause
 }
