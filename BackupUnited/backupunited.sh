@@ -82,21 +82,25 @@ if [ ! "$RUNSTATUS" = "RUN" ];then
 		#apt-get -y install ssmtp mutt
 	fi
 	if [ "$DAILYSCRIPT" = "NONE" ]; then
+		echo -e
 		echo "Daily Backup Script is downloading.."
 		export DEBIAN_FRONTEND=noninteractive
 		wget -qO $SCRIPTS/dailybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/dailybackup.sh
 	fi
 	if [ "$WEEKLYSCRIPT" = "NONE" ]; then
+		echo -e
 		echo "Weekly Backup Script is downloading.."
 		export DEBIAN_FRONTEND=noninteractive
 		wget -qO $SCRIPTS/weeklybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/weeklybackup.sh
 	fi
 	if [ "$MONTHLYSCRIPT" = "NONE" ]; then
+		echo -e
 		echo "Monthly Backup Script is downloading.."
 		export DEBIAN_FRONTEND=noninteractive
 		wget -qO $SCRIPTS/monthlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/monthlybackup.sh
 	fi
 	if [ "$YEARLYSCRIPT" = "NONE" ]; then
+		echo -e
 		echo "Yearly Backup Script is downloading.."
 		export DEBIAN_FRONTEND=noninteractive
 		wget -qO $SCRIPTS/yearlybackup.sh https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/scripts/yearlybackup.sh
@@ -466,10 +470,27 @@ function backup_list(){
 	tput sgr0
 	cat /tmp/yearlybackups.txt
 	echo "---------------------------------------------"
+	echo -e
 	rm /tmp/dailybackups.txt
 	rm /tmp/weeklybackups.txt
 	rm /tmp/monthlybackups.txt
 	rm /tmp/yearlybackups.txt
+	
+	tput setaf 5
+	echo "Differential Backup List from Backup Sync."
+	echo "---------------------------------------------"
+	tput sgr0
+	ls /usr/local/backupunited/backups/sync/ > /tmp/backupdirs.txt
+	let i=0
+	W=()
+	while read -r line; do
+		let i=$i+1
+		W+=($line " ")
+		echo "Backup Name: $line"
+		echo "------------------"
+		rdiff-backup -l /usr/local/backupunited/backups/sync/$line
+	done < <( cat /tmp/backupdirs.txt)
+	#BACKUPDIRS=$(whiptail --title "Backup Directory List" --menu "Chose one" 24 50 17 "${W[@]}" 3>&2 2>&1 1>&3)
 	pause
 }
 
