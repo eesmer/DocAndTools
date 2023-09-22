@@ -216,11 +216,15 @@ cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 #BACKUPNAME=$BACKUPNAME
 
 if [ -d "$BACKUPPATH" ]; then
-rsync -az "$BACKUPPATH" "$BACKUPS/$BACKUPNAME"
-echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
+echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
+rdiff-backup backup "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
+BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 else
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
 fi
+
+bash $SCRIPTS/dailybackup.sh $BACKUPNAME
+
 EOF
 ;;
 SMB_Share_Backup)
