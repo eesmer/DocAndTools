@@ -477,7 +477,7 @@ function backup_list(){
 	rm /tmp/yearlybackups.txt
 	
 	tput setaf 5
-	echo "Differential Backup List from Backup Sync."
+	echo "Increment List from Backup Sync."
 	echo "---------------------------------------------"
 	tput sgr0
 	ls /usr/local/backupunited/backups/sync/ > /tmp/backupdirs.txt
