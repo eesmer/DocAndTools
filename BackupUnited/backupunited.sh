@@ -482,7 +482,6 @@ function backup_list(){
 	tput sgr0
 	ls /usr/local/backupunited/backups/sync/ > /tmp/backupdirs.txt
 	let i=0
-	W=()
 	while read -r LINE; do
 		let i=$i+1
 		W+=($LINE " ")
@@ -493,6 +492,7 @@ function backup_list(){
 		tput sgr0
 		rdiff-backup -l /usr/local/backupunited/backups/sync/$LINE
 	done < <( cat /tmp/backupdirs.txt)
+	rm /tmp/backupdirs.txt
 	pause
 }
 
