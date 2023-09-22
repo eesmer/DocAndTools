@@ -486,8 +486,9 @@ function backup_list(){
 	while read -r line; do
 		let i=$i+1
 		W+=($line " ")
+		echo -e
 		echo "Backup Name: $line"
-		echo "------------------"
+		echo "---------------------------------------------"
 		rdiff-backup -l /usr/local/backupunited/backups/sync/$line
 	done < <( cat /tmp/backupdirs.txt)
 	#BACKUPDIRS=$(whiptail --title "Backup Directory List" --menu "Chose one" 24 50 17 "${W[@]}" 3>&2 2>&1 1>&3)
