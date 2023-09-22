@@ -476,7 +476,7 @@ function backup_list(){
 	rm /tmp/monthlybackups.txt
 	rm /tmp/yearlybackups.txt
 	
-	tput setaf 5
+	tput setaf 7
 	echo "Increment List from Backup Sync."
 	echo "---------------------------------------------"
 	tput sgr0
@@ -487,11 +487,12 @@ function backup_list(){
 		let i=$i+1
 		W+=($line " ")
 		echo -e
+		tput setaf 4
 		echo "Backup Name: $line"
 		echo "---------------------------------------------"
+		tput sgr0
 		rdiff-backup -l /usr/local/backupunited/backups/sync/$line
 	done < <( cat /tmp/backupdirs.txt)
-	#BACKUPDIRS=$(whiptail --title "Backup Directory List" --menu "Chose one" 24 50 17 "${W[@]}" 3>&2 2>&1 1>&3)
 	pause
 }
 
