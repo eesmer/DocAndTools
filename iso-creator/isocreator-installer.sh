@@ -13,4 +13,4 @@ echo "iso-creator app installation completed.."
 echo -e
 echo "[ for usage ]"
 echo "cd $WDIR"
-echo "bash create-iso.sh ISOFILEPATH/ISOFILENAME.iso preseed.cfg menu.cfg NEW_NAME-Custom.iso"
+echo "bash create-iso.sh ISOFILEPATH/ISOFILENAME.iso NEW_NAME-Custom.iso"
