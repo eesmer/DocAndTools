@@ -3,19 +3,15 @@
 #-------------------------------------------------------------
 # ISOGen
 # $1 = Source Debian .iso
-# $2 = preseed.cfg file
-# $3 = menu.cfg file
-# $4 = Custom-iso Name
-# $5 = splash.png file
-# $1 parameter is must. Other parameters is optional
+# $2 = Custom-iso Name
 # example:
-# bash create-iso.sh debian-11.7.0-amd64-netinst.iso preseed.cfg menu.cfg DebianDC.iso
+# bash create-iso.sh debian-11.7.0-amd64-netinst.iso Custom.iso
 #-------------------------------------------------------------
 
 WORKDIR=/usr/local/isogen
 
-if [ -z "${$1}" ]; then
-	echo "Option required. Example:bash create-iso Debian.iso preseed.cfg menu.cfg"
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo "Option required. Example:bash create-iso Debian.iso Name_of_custom_iso.iso"
 	exit 1
 fi
 
@@ -38,7 +34,7 @@ fi
 mkdir -p $WORKDIR/iso
 bsdtar -C $WORKDIR/iso -xf $1
 
-# Set preseed.cfg
+# Set preseed.cfg, menu.cfg and splash.png
 mkdir $WORKDIR/initrd
 cd $WORKDIR/initrd
 gzip -d < $WORKDIR/iso/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
@@ -50,7 +46,7 @@ cp $WORKDIR/splash.png $WORKDIR/iso/isolinux/
 
 # Create custom iso
 cd $WORKDIR
-xorriso -as mkisofs -o $4 \
+xorriso -as mkisofs -o $2 \
 	-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
 	-c isolinux/boot.cat -b isolinux/isolinux.bin \
 	-no-emul-boot -boot-load-size 4 -boot-info-table $WORKDIR/iso
