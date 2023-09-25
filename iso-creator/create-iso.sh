@@ -7,6 +7,13 @@
 # example:
 # bash create-iso.sh debian-11.7.0-amd64-netinst.iso Custom.iso
 #-------------------------------------------------------------
+# The script adds files preseed.cfg, menu.cfg and splash.png 
+# in the /usr/local/isogen directory to the new .iso file it creates.
+# You can create a custom .iso file by editing these files as you wish.
+#-------------------------------------------------------------
+# Don't forget! The syntax of the prepeed and menu files must not be incorrect and the splash.png size must be correct.
+# You can take these files as an example.
+#-------------------------------------------------------------
 
 WORKDIR=/usr/local/isogen
 
