@@ -15,3 +15,6 @@ bash isocreator-installer.sh
 ```
 cd /usr/local/isogen/
 ```
+```
+bash create-iso.sh /path/to/Debian/iso Name_of_Custom-iso.iso
+```
