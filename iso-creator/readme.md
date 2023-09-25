@@ -6,6 +6,6 @@ You can use menu.cfg and splash.png files for these, and change and use the pres
 ---
 
 ## Usage
-``
-bash create-iso.sh debian-11.7.0-amd64-netinst.iso preseed.cfg menu.cfg NewNameCustom.iso
-``
+```
+https://raw.githubusercontent.com/eesmer/DocAndTools/master/iso-creator/isocreator-installer.sh
+```
