@@ -27,11 +27,6 @@ fi
 # -----------------------------------------------------------------------------
 apt-get -y install bsdtar xorriso isolinux cpio
 
-if [[ ! -f "$1" ]]; then
-	echo "the source ISO file is missing"
-	exit 1
-fi
-
 mkdir -p $WORKDIR/iso
 bsdtar -C $WORKDIR/iso -xf $1
 
