@@ -32,12 +32,6 @@ if [[ ! -f "$1" ]]; then
 	exit 1
 fi
 
-#if [ -d "$WORKDIR" ]; then
-#	rm -rf $WORKDIR
-#	mkdir -p $WORKDIR/iso
-#fi
-#cp {$1,$2,$3} $WORKDIR/
-
 mkdir -p $WORKDIR/iso
 bsdtar -C $WORKDIR/iso -xf $1
 
