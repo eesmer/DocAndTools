@@ -7,7 +7,7 @@ You can use menu.cfg and splash.png files for these, and change and use the pres
 
 ## Usage
 ```
-wget https://raw.githubusercontent.com/eesmer/DocAndTools/master/iso-creator/isocreator-installer.sh
+wget https://raw.githubusercontent.com/eesmer/DocAndTools/master/Debian-iso_Creator/isocreator-installer.sh
 ```
 ```
 bash isocreator-installer.sh
