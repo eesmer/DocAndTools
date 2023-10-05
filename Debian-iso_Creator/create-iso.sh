@@ -18,10 +18,11 @@
 #-------------------------------------------------------------
 
 WORKDIR=/usr/local/isogen
+CURRENTDIR=$(pwd)
 
 if [ -z "$1" ] || [ -z "$2" ]; then
-	echo "Option required. Example:bash create-iso Debian.iso Name_of_custom_iso.iso"
-	exit 1
+    echo "Option required. Example:bash create-iso Debian.iso Name_of_custom_iso.iso"
+    exit 1
 fi
 
 # -----------------------------------------------------------------------------
@@ -30,6 +31,9 @@ fi
 apt-get -y install bsdtar xorriso isolinux cpio
 
 mkdir -p $WORKDIR/iso
+cp preseed.cfg $WORKDIR/
+cp menu.cfg $WORKDIR/
+cp splash.png $WORKDIR/
 bsdtar -C $WORKDIR/iso -xf $1
 
 # Set preseed.cfg, menu.cfg and splash.png
@@ -45,6 +49,9 @@ cp $WORKDIR/splash.png $WORKDIR/iso/isolinux/
 # Create custom iso
 cd $WORKDIR
 xorriso -as mkisofs -o $2 \
-	-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
-	-c isolinux/boot.cat -b isolinux/isolinux.bin \
-	-no-emul-boot -boot-load-size 4 -boot-info-table $WORKDIR/iso
+    -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
+    -c isolinux/boot.cat -b isolinux/isolinux.bin \
+    -no-emul-boot -boot-load-size 4 -boot-info-table $WORKDIR/iso
+
+mv $2 $CURRENTDIR
+rm -r $WORKDIR
