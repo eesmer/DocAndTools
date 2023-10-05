@@ -1,18 +1,20 @@
 #!/bin/bash
 
 #-------------------------------------------------------------
-# ISOGen
 # $1 = Source Debian .iso
 # $2 = Custom-iso Name
-# example:
-# bash create-iso.sh debian-11.7.0-amd64-netinst.iso Custom.iso
+# Usage:
+# # bash create-iso.sh debian-11.7.0-amd64-netinst.iso Custom.iso
 #-------------------------------------------------------------
-# The script adds files preseed.cfg, menu.cfg and splash.png 
-# in the /usr/local/isogen directory to the new .iso file it creates.
-# You can create a custom .iso file by editing these files as you wish.
-#-------------------------------------------------------------
-# Don't forget! The syntax of the prepeed and menu files must not be incorrect and the splash.png size must be correct.
-# You can take these files as an example.
+# Debian adds preseed.cfg to the .iso file.
+# Replaces the menu.cfg file.
+# Adds the splash.png file.
+# Creates an .iso file named $2.
+# create-iso.sh, preseed.cfg, menu.cfg, splash.png must be in the same directory.
+# script must be run with root user.
+#------------------------------------------------- ------------
+# The splash.png file must be 640x480. Otherwise, the graphic will not be displayed in the install menu.
+# preseed.cfg syntax must be correct. Otherwise, preseed.cfg cannot be used in the installation.
 #-------------------------------------------------------------
 
 WORKDIR=/usr/local/isogen
