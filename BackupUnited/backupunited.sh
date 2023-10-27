@@ -264,14 +264,16 @@ else
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
 fi
 
-bash $SCRIPTS/dailybackup.sh $BACKUPNAME
-
 EOF
 
 # WEEKLY BACKUP & MONTHLY BACKUP
 echo "TODAY1=$JOCKER(date | cut -d "'" "'" -f1)" >> $BACKUP_SCRIPTS/$BACKUPNAME 
 echo "TODAY2=$JOCKER(date | cut -d "'" "'" -f3)" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "TODAY3=$JOCKER(date | cut -d "'" "'" -f2)" >> $BACKUP_SCRIPTS/$BACKUPNAME
+
+echo "if [ ! ""$JOCKER""TODAY1"" = ""Sun"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "bash $SCRIPTS/dailybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
+echo "fi" >> $BACKUP_SCRIPTS/$BACKUPNAME
 
 echo "if [ ""$JOCKER""TODAY1"" = ""Sun"" ]; then" >> $BACKUP_SCRIPTS/$BACKUPNAME
 echo "bash $SCRIPTS/weeklybackup.sh $BACKUPNAME" >> $BACKUP_SCRIPTS/$BACKUPNAME
