@@ -564,27 +564,37 @@ function recipient_list(){
 
 function restore_backup(){
 	BACKUPDIR=$(whiptail --title "Select Backup Dir" --radiolist "Choose" 20 40 15 \
-		"Current Sync." "" OFF \
-		"Daily" "" OFF \
-		"Weekly" "" OFF \
-		"Monthly" "" OFF \
-		"Yearly" "" OFF \
+		"sync" "" OFF \
+		"daily" "" OFF \
+		"weekly" "" OFF \
+		"monthly" "" OFF \
+		"yearly" "" OFF \
 		3>&1 1>&2 2>&3)
 	
+	# BackupDir List
+	#DIRLIST=`for DL in $(ls -1 /usr/local/backupunited/backups/$BACKUPDIR/); do echo $DL "-"; done`
+	#whiptail --title "Backups" --menu "Choice Backup" 20 80 10 $DIRLIST
+	
+	ls /usr/local/backupunited/backups/$BACKUPDIR > /tmp/backuplist.txt
+	whiptail --title="Backups" --textbox /tmp/backuplist.txt 20 50 10
+	rm /tmp/backuplist.txt
 	BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name" 10 60  3>&1 1>&2 2>&3)
-	RBACKUPNAME=$(echo $BACKUPNAME | cut -d "-" -f1)
-			
+
+	if [ -f "/usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME" ]; then
+		echo "--------"
+		echo $BACKUPNAME
+		echo "--------"
+		ls -l /usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME
+		echo "--------"
+	else
+		whiptail --title "Select Backup" --msgbox "The specified file was not found\nUnable to restore" 10 60  3>&1 1>&2 2>&3
+	fi
+	
 	#tar -xvf $BACKUPS/$BACKUPDIR/$BACKUPNAME -C $RESTOREDIR/
 	#mv $RESTOREDIR/usr/local/taliaundo/backups/sync/* $RESTOREDIR/
 	#rm -r $RESTOREDIR/$RBACKUPNAME/rdiff-backup-data
 	#rm -r $RESTOREDIR/usr
 	
-	DIRLIST=`for x in $(ls -1 /usr/local/backupunited/backups/daily/); do echo $x "-"; done`
-	whiptail --menu "Backups" 20 80 10 $DIRLIST
-	echo $?
-	
-	echo $BACKUPNAME
-	echo $RBACKUPNAME
 	pause
 }
 
