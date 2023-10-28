@@ -575,21 +575,25 @@ function restore_backup(){
 	#DIRLIST=`for DL in $(ls -1 /usr/local/backupunited/backups/$BACKUPDIR/); do echo $DL "-"; done`
 	#whiptail --title "Backups" --menu "Choice Backup" 20 80 10 $DIRLIST
 	
-	ls /usr/local/backupunited/backups/$BACKUPDIR > /tmp/backuplist.txt
-	whiptail --title="Backups" --textbox /tmp/backuplist.txt 20 50 10
-	rm /tmp/backuplist.txt
-	BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name" 10 60  3>&1 1>&2 2>&3)
+	# Determining the parameter in the if condition for file or dir exist check
+	PARAM="-f"
+	if [ "$BACKUPDIR" = "sync" ]; then PARAM="-d"; fi
 
-	if [ -f "/usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME" ]; then
-		echo "--------"
-		echo $BACKUPNAME
-		echo "--------"
-		ls -l /usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME
-		echo "--------"
+	ls /usr/local/backupunited/backups/$BACKUPDIR > /tmp/backuplist.txt && LISTCOUNT=$(cat /tmp/backuplist.txt | wc -l)
+	if [ ! "$LISTCOUNT" = 0 ]; then
+		whiptail --title="Backups" --textbox /tmp/backuplist.txt 20 50 10
+		BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name" 10 60  3>&1 1>&2 2>&3)
+		if [ $PARAM "/usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME" ]; then
+			mkdir /tmp/RESTOREDIR
+			cp -r /usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME /tmp/RESTOREDIR/
+		else
+			whiptail --title "Select Backup" --msgbox "The specified file was not found\nUnable to restore" 10 60  3>&1 1>&2 2>&3
+		fi
 	else
-		whiptail --title "Select Backup" --msgbox "The specified file was not found\nUnable to restore" 10 60  3>&1 1>&2 2>&3
+		whiptail --title "Select Backup" --msgbox "The Backup Directory is null" 10 60  3>&1 1>&2 2>&3
 	fi
-	
+	#rm /tmp/backuplist.txt
+
 	#tar -xvf $BACKUPS/$BACKUPDIR/$BACKUPNAME -C $RESTOREDIR/
 	#mv $RESTOREDIR/usr/local/taliaundo/backups/sync/* $RESTOREDIR/
 	#rm -r $RESTOREDIR/$RBACKUPNAME/rdiff-backup-data
