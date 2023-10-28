@@ -564,6 +564,7 @@ function recipient_list(){
 
 function restore_backup(){
 	BACKUPDIR=$(whiptail --title "Select Backup Dir" --radiolist "Choose" 20 40 15 \
+		"Current Sync." "" OFF \
 		"daily" "" OFF \
 		"weekly" "" OFF \
 		"monthly" "" OFF \
