@@ -565,19 +565,21 @@ function recipient_list(){
 function restore_backup(){
 	BACKUPDIR=$(whiptail --title "Select Backup Dir" --radiolist "Choose" 20 40 15 \
 		"Current Sync." "" OFF \
-		"daily" "" OFF \
-		"weekly" "" OFF \
-		"monthly" "" OFF \
-		"yearly" "" OFF \
+		"Daily" "" OFF \
+		"Weekly" "" OFF \
+		"Monthly" "" OFF \
+		"Yearly" "" OFF \
 		3>&1 1>&2 2>&3)
 	
 	BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name" 10 60  3>&1 1>&2 2>&3)
 	RBACKUPNAME=$(echo $BACKUPNAME | cut -d "-" -f1)
 			
-	tar -xvf $BACKUPS/$BACKUPDIR/$BACKUPNAME -C $RESTOREDIR/
-	mv $RESTOREDIR/usr/local/taliaundo/backups/sync/* $RESTOREDIR/
-	rm -r $RESTOREDIR/$RBACKUPNAME/rdiff-backup-data
-	rm -r $RESTOREDIR/usr
+	#tar -xvf $BACKUPS/$BACKUPDIR/$BACKUPNAME -C $RESTOREDIR/
+	#mv $RESTOREDIR/usr/local/taliaundo/backups/sync/* $RESTOREDIR/
+	#rm -r $RESTOREDIR/$RBACKUPNAME/rdiff-backup-data
+	#rm -r $RESTOREDIR/usr
+	echo $BACKUPNAME
+	echo $RBACKUPNAME
 	pause
 }
 
