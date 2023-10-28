@@ -8,7 +8,7 @@ REPORTS=$WDIR/reports
 MAILRECIPIENT=$REPORTS/mail-recipient
 MAILMESSAGE=$REPORTS/mail-message
 MAILSENDER=$SCRIPTS/mail-sender.sh
-RESTOREDIR=/usr/local/backupunited/backups/restoredir
+RESTOREDIR=$WDIR/backups/restoredir
 WEBSITE=www.esmerkan.com
 
 # Check Install/Update
@@ -584,15 +584,15 @@ function restore_backup(){
 		whiptail --title="Backups" --textbox /tmp/backuplist.txt 20 50 10
 		BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name" 10 60  3>&1 1>&2 2>&3)
 		if [ $PARAM "/usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME" ]; then
-			mkdir -p /tmp/RESTOREDIR
-			cp -r /usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME /tmp/RESTOREDIR/
+			mkdir -p $RESTOREDIR
+			cp -r /usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME $RESTOREDIR/
 		else
 			whiptail --title "Select Backup" --msgbox "The specified file was not found\nUnable to restore" 10 60  3>&1 1>&2 2>&3
 		fi
 	else
 		whiptail --title "Select Backup" --msgbox "The Backup Directory is null" 10 60  3>&1 1>&2 2>&3
 	fi
-	#rm /tmp/backuplist.txt
+	rm /tmp/backuplist.txt
 
 	#tar -xvf $BACKUPS/$BACKUPDIR/$BACKUPNAME -C $RESTOREDIR/
 	#mv $RESTOREDIR/usr/local/taliaundo/backups/sync/* $RESTOREDIR/
@@ -607,7 +607,7 @@ function show_restoredir(){
 	echo "Restore Directory"
 	echo "-----------------"
 	tput sgr0
-	tree -d $RESTOREDIR
+	tree $RESTOREDIR
 	pause
 }
 
