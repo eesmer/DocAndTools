@@ -578,6 +578,11 @@ function restore_backup(){
 	#mv $RESTOREDIR/usr/local/taliaundo/backups/sync/* $RESTOREDIR/
 	#rm -r $RESTOREDIR/$RBACKUPNAME/rdiff-backup-data
 	#rm -r $RESTOREDIR/usr
+	
+	DIRLIST=`for x in $(ls -1 /usr/local/backupunited/backups/daily/); do echo $x "-"; done`
+	whiptail --menu "Backups" 20 80 10 $DIRLIST
+	echo $?
+	
 	echo $BACKUPNAME
 	echo $RBACKUPNAME
 	pause
