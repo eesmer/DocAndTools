@@ -24,7 +24,7 @@ Provides TUI in single script file for this.
 # apt-get -y install whiptail
 # apt-get -y install ssmtp mutt
 # wget https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/backupunited.sh
-# bash backupunited
+# bash backupunited.sh
 ```
 ---
 
