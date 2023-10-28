@@ -584,7 +584,7 @@ function restore_backup(){
 		whiptail --title="Backups" --textbox /tmp/backuplist.txt 20 50 10
 		BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name" 10 60  3>&1 1>&2 2>&3)
 		if [ $PARAM "/usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME" ]; then
-			mkdir /tmp/RESTOREDIR
+			mkdir -p /tmp/RESTOREDIR
 			cp -r /usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME /tmp/RESTOREDIR/
 		else
 			whiptail --title "Select Backup" --msgbox "The specified file was not found\nUnable to restore" 10 60  3>&1 1>&2 2>&3
