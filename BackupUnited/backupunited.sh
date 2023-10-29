@@ -613,7 +613,7 @@ function show_restoredir(){
 
 function clean_backup(){
 	find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
-	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
+	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | xargs -d '\n' rm -f
 }
 
 function read_input(){
