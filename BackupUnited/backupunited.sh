@@ -141,18 +141,25 @@ tput setaf 5
 echo "     BackupUnited                                "
 tput sgr0
 echo "   |--------------------------------------------|"
-echo "   | Backup Management Menu                     |"
+echo "   | Backup Management                          |"
 echo "   |--------------------------------------------|"
 echo "   | 1.Add    Backup Job  | 6.Backup List       |"
 echo "   | 2.Remove Backup Job  | 7.Backup Job List   |"
+echo "   |--------------------------------------------|"
+echo "   | Backup Restore                             |"
+echo "   |--------------------------------------------|"
+echo "   | 30. Restore Backup   |                     |"
+echo "   | 31. Show Restore Dir |                     |"
 echo "   |--------------------------------------------|"
 tput setaf 5
 echo "                       Settings                  "
 tput sgr0
 echo "   |--------------------------------------------|"
-echo "   | 20.Mail Sender Set.  | 30.Restore Backup   |"
-echo "   | 21.Add Recipient     | 31.Show Restore Dir |"
-echo "   | 22.Remove Recipient  | 50. Clean Backup    |"
+echo "   | Mail Settings                              |"
+echo "   |--------------------------------------------|"
+echo "   | 20.Mail Sender Set.  |                     |"
+echo "   | 21.Add Recipient     |                     |"
+echo "   | 22.Remove Recipient  |                     |"
 echo "   | 23.Recipient List    |                     |"
 echo "   |--------------------------------------------|"
 tput setaf 9
@@ -584,7 +591,7 @@ function restore_backup(){
 		whiptail --title="Backups" --textbox /tmp/backuplist.txt 20 50 10
 		BACKUPNAME=$(whiptail --title "Backup Name" --inputbox "Please Enter Backup Name" 10 60  3>&1 1>&2 2>&3)
 		if [ $PARAM "/usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME" ]; then
-			mkdir -p $RESTOREDIR
+			#mkdir -p $RESTOREDIR
 			cp -r /usr/local/backupunited/backups/$BACKUPDIR/$BACKUPNAME $RESTOREDIR/
 		else
 			whiptail --title "Select Backup" --msgbox "The specified file was not found\nUnable to restore" 10 60  3>&1 1>&2 2>&3
@@ -612,6 +619,7 @@ function show_restoredir(){
 }
 
 function clean_backup(){
+	# These processes will run as systemd service
 	find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
 	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | xargs -d '\n' rm -f
 	find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | xargs -d '\n' rm -f
@@ -632,7 +640,6 @@ case $c in
 23)	recipient_list;;
 30)	restore_backup;;
 31)	show_restoredir;;
-50)	clean_backup;;
 99)	exit 0 ;;
 *)	
 echo "Please choose from Menu numbers"
