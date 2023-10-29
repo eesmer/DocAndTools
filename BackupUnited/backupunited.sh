@@ -624,6 +624,9 @@ function show_restoredir(){
 
 function clean_backup(){
 	# These processes will run as systemd service
+	# -ctime 10   # exactly   10 days ago
+	# -ctime +10  # more than 10 days ago
+	# -ctime -10  # less than 10 days ago
 	find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
 	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | xargs -d '\n' rm -f
 	find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | xargs -d '\n' rm -f
