@@ -175,6 +175,8 @@ echo "   ----------------------------------------------"
 df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
 cat /tmp/disk_usage.txt
 echo "   ----------------------------------------------"
+du -skh $BACKUPS/*
+echo "   ----------------------------------------------"
 tput setaf 9
 echo -e
 tput setaf 9
