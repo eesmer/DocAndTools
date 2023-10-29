@@ -141,21 +141,23 @@ tput setaf 5
 echo "     BackupUnited                                "
 tput sgr0
 echo "   |--------------------------------------------|"
-echo "   | Backup Management                          |"
+tput setaf 7
+echo "    Backup Management                            "
+tput sgr0
 echo "   |--------------------------------------------|"
 echo "   | 1.Add    Backup Job  | 6.Backup List       |"
 echo "   | 2.Remove Backup Job  | 7.Backup Job List   |"
 echo "   |--------------------------------------------|"
-echo "   | Backup Restore                             |"
+tput setaf 7
+echo "    Backup Restore                               "
+tput sgr0
 echo "   |--------------------------------------------|"
 echo "   | 30. Restore Backup   |                     |"
 echo "   | 31. Show Restore Dir |                     |"
 echo "   |--------------------------------------------|"
-tput setaf 5
-echo "                       Settings                  "
+tput setaf 7
+echo "    Mail Settings                                "
 tput sgr0
-echo "   |--------------------------------------------|"
-echo "   | Mail Settings                              |"
 echo "   |--------------------------------------------|"
 echo "   | 20.Mail Sender Set.  |                     |"
 echo "   | 21.Add Recipient     |                     |"
