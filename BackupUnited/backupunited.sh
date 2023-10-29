@@ -152,7 +152,7 @@ tput sgr0
 echo "   |--------------------------------------------|"
 echo "   | 20.Mail Sender Set.  | 30.Restore Backup   |"
 echo "   | 21.Add Recipient     | 31.Show Restore Dir |"
-echo "   | 22.Remove Recipient  |                     |"
+echo "   | 22.Remove Recipient  | 50. Clean Backup    |"
 echo "   | 23.Recipient List    |                     |"
 echo "   |--------------------------------------------|"
 tput setaf 9
@@ -609,6 +609,11 @@ function show_restoredir(){
 	tput sgr0
 	tree $RESTOREDIR
 	pause
+}
+
+function clean_backup(){
+	find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
+	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
 }
 
 function read_input(){
