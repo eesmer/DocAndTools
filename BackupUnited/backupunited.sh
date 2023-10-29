@@ -614,6 +614,8 @@ function show_restoredir(){
 function clean_backup(){
 	find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
 	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | xargs -d '\n' rm -f
+	find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | xargs -d '\n' rm -f
+	find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370 | xargs -d '\n' rm -f
 }
 
 function read_input(){
@@ -630,6 +632,7 @@ case $c in
 23)	recipient_list;;
 30)	restore_backup;;
 31)	show_restoredir;;
+50)	clean_backup;;
 99)	exit 0 ;;
 *)	
 echo "Please choose from Menu numbers"
