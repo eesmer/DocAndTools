@@ -138,42 +138,43 @@ function show_menu(){
 date
 echo -e
 tput setaf 5
-echo "     BackupUnited                                "
+echo "     BackupUnited                               "
 tput sgr0
-echo "   |--------------------------------------------|"
+echo "   |-------------------------------------------|"
 tput setaf 7
-echo "    Backup Management                            "
+echo "    Backup Management                           "
 tput sgr0
-echo "   |--------------------------------------------|"
-echo "   | 1.Add    Backup Job  | 6.Backup List       |"
-echo "   | 2.Remove Backup Job  | 7.Backup Job List   |"
-echo "   |--------------------------------------------|"
+echo "   |-------------------------------------------|"
+echo "   | 1.Add    Backup Job  | 6.Backup List      |"
+echo "   | 2.Remove Backup Job  | 7.Backup Job List  |"
+echo "   |-------------------------------------------|"
 tput setaf 7
-echo "    Backup Restore                               "
+echo "    Backup Restore                              "
 tput sgr0
-echo "   |--------------------------------------------|"
-echo "   | 30. Restore Backup   |                     |"
-echo "   | 31. Show Restore Dir |                     |"
-echo "   |--------------------------------------------|"
+echo "   |-------------------------------------------|"
+echo "   | 30. Restore Backup                        |"
+echo "   | - RestoreDir                              |" 
+echo "   |   31.Show | 32.Share | 33.UnShare         |"
+echo "   |-------------------------------------------|"
 tput setaf 7
-echo "    Mail Settings                                "
+echo "    Mail Settings                               "
 tput sgr0
-echo "   |--------------------------------------------|"
-echo "   | 20.Mail Sender Set.  |                     |"
-echo "   | 21.Add Recipient     |                     |"
-echo "   | 22.Remove Recipient  |                     |"
-echo "   | 23.Recipient List    |                     |"
-echo "   |--------------------------------------------|"
+echo "   |-------------------------------------------|"
+echo "   | 20.Mail Sender Set.  |                    |"
+echo "   | 21.Add Recipient     |                    |"
+echo "   | 22.Remove Recipient  |                    |"
+echo "   | 23.Recipient List    |                    |"
+echo "   |-------------------------------------------|"
 echo -e
 tput setaf 7
-echo "   ::. Disk Usage / Data Size ::.                "
+echo "   ::. Disk Usage / Data Size ::.               "
 tput sgr0
-echo "   ----------------------------------------------"
+echo "   ---------------------------------------------"
 df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
 cat /tmp/disk_usage.txt | grep -v "/dev/loop"
-echo "   ----------------------------------------------"
+echo "   ---------------------------------------------"
 du -skh $BACKUPS/*
-echo "   ----------------------------------------------"
+echo "   ---------------------------------------------"
 echo -e
 tput setaf 9
 echo "    -----------"
