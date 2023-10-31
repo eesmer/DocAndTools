@@ -224,7 +224,8 @@ cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 
 if [ -d "$BACKUPPATH" ]; then
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
-rdiff-backup backup "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
+#rdiff-backup backup "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
+rsync -a "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 else
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
@@ -262,7 +263,8 @@ mkdir /tmp/$BACKUPNAME
 mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username="$BACKUPUSR",password="$BACKUPPWD" && touch /tmp/$BACKUPNAME-mountok
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
-rdiff-backup backup /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
+#rdiff-backup backup /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
+rsync -a "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 umount /tmp/$BACKUPNAME
