@@ -225,7 +225,7 @@ cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 if [ -d "$BACKUPPATH" ]; then
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
 #rdiff-backup backup "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
-rsync -a "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
+rsync -a "$BACKUPPATH" /usr/local/backupunited/backups/sync/ && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 else
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
@@ -264,7 +264,7 @@ mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username="$BACKUPUSR",password="$B
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
 #rdiff-backup backup /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
-rsync -a "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
+rsync -a /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/ && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 umount /tmp/$BACKUPNAME
@@ -351,6 +351,7 @@ function delete_backup(){
 			rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.service
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.timer
+			# rm /etc/systemd/system/timers.target.wants/backupunited-$BACKUPNAME.*
 			systemctl daemon-reload
                         systemctl reset-failed
 			#BOARDMSG="$BACKUPNAME Backup Job Successfully Removed"
