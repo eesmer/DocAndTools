@@ -173,7 +173,7 @@ tput sgr0
 echo "     $BOARDMSG                                   "
 echo "   ----------------------------------------------"
 df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
-cat /tmp/disk_usage.txt
+cat /tmp/disk_usage.txt | grep -v "/dev/loop"
 echo "   ----------------------------------------------"
 du -skh $BACKUPS/*
 echo "   ----------------------------------------------"
