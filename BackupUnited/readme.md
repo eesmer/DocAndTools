@@ -18,13 +18,13 @@ Provides TUI in single script file for this.
 
 ### Usage of BackupUnited Script
 ```bash
-# apt-get -y install rsync rdiff-backup
-# apt-get -y install cifs-utils smbclient
-# apt-get -y install tree ack
-# apt-get -y install whiptail
-# apt-get -y install ssmtp mutt
-# wget https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/backupunited.sh
-# bash backupunited.sh
+apt-get -y install rsync rdiff-backup
+apt-get -y install samba cifs-utils smbclient
+apt-get -y install tree ack
+apt-get -y install whiptail
+apt-get -y install ssmtp mutt
+wget https://raw.githubusercontent.com/eesmer/DocAndTools/master/BackupUnited/backupunited.sh
+bash backupunited.sh
 ```
 ---
 
