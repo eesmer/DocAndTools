@@ -135,6 +135,8 @@ done
 rm /tmp/backupjobname.txt
 
 function show_menu(){
+# RestoreDir Share Status Check
+SHARESTATUS=$(systemctl is-active smbd.service)
 date
 echo -e
 tput setaf 5
@@ -155,6 +157,10 @@ echo "   |-------------------------------------------|"
 echo "   | 30. Restore Backup                        |"
 echo "   | - RestoreDir                              |" 
 echo "   |   31.Show | 32.Share | 33.UnShare         |"
+echo "   |-------------------------------------------|"
+tput setaf 7
+echo "    RestoreDir Share Status: $SHARESTATUS       "
+tput sgr0
 echo "   |-------------------------------------------|"
 tput setaf 7
 echo "    Mail Settings                               "
