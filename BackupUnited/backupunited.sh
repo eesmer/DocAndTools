@@ -646,7 +646,28 @@ chmod 644 /etc/samba/smb.conf
 systemctl enable smbd.service &>/dev/null
 systemctl start smbd.service &>/dev/null
 
+SHARESTATUS=$(systemctl is-active smbd.service)
+echo -e
+tput setaf 5
+echo "RestoreDir Share Status: $SHARESTATUS"
+echo -e
+tput sgr0
+
 pause
+}
+
+function unshare_restoredir(){
+	systemctl stop smbd.service
+	systemctl is-active smbd.service
+	
+	SHARESTATUS=$(systemctl is-active smbd.service)
+	echo -e
+	tput setaf 5
+	echo "RestoreDir Share Status: $SHARESTATUS"
+	echo -e
+	tput sgr0
+
+	pause
 }
 
 function clean_backup(){
@@ -663,6 +684,8 @@ function clean_backup(){
 	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | xargs -d '\n' rm -f
 	find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | xargs -d '\n' rm -f
 	find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370 | xargs -d '\n' rm -f
+
+	pause
 }
 
 function read_input(){
@@ -680,6 +703,7 @@ case $c in
 30)	restore_backup;;
 31)	show_restoredir;;
 32)	share_restoredir;;
+33)	unshare_restoredir;;
 99)	exit 0 ;;
 *)	
 echo "Please choose from Menu numbers"
