@@ -164,17 +164,12 @@ echo "   | 21.Add Recipient     |                     |"
 echo "   | 22.Remove Recipient  |                     |"
 echo "   | 23.Recipient List    |                     |"
 echo "   |--------------------------------------------|"
-echo "   ----------------------------------------------"
 tput setaf 7
-echo "   Disk Usage                                    "
+echo "   ::. Disk Usage / Data Size ::.                "
 tput sgr0
 echo "   ----------------------------------------------"
 df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
 cat /tmp/disk_usage.txt | grep -v "/dev/loop"
-echo "   ----------------------------------------------"
-tput setaf 7
-echo "   Data Size / Disk Usage                        "
-tput sgr0
 echo "   ----------------------------------------------"
 du -skh $BACKUPS/*
 echo "   ----------------------------------------------"
