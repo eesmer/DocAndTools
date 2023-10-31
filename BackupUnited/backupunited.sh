@@ -164,6 +164,7 @@ echo "   | 21.Add Recipient     |                     |"
 echo "   | 22.Remove Recipient  |                     |"
 echo "   | 23.Recipient List    |                     |"
 echo "   |--------------------------------------------|"
+echo -e
 tput setaf 7
 echo "   ::. Disk Usage / Data Size ::.                "
 tput sgr0
