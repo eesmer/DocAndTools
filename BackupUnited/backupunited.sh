@@ -622,6 +622,27 @@ function show_restoredir(){
 	pause
 }
 
+function share_restoredir(){
+cat > /etc/samba/smb.conf << EOF
+logging = file
+map to guest = bad user
+
+[restore-backup]
+comment = all restored backup
+browseable = yes
+path = /usr/local/backupunited/backups/restoredir
+guest ok = yes
+read only = yes
+EOF
+
+chmod 644 /etc/samba/smb.conf
+
+systemctl enable smbd.service &>/dev/null
+systemctl start smbd.service &>/dev/null
+
+pause
+}
+
 function clean_backup(){
 	# These processes will run as systemd service
 	# ---------------------------------------------------------------------
@@ -652,6 +673,7 @@ case $c in
 23)	recipient_list;;
 30)	restore_backup;;
 31)	show_restoredir;;
+32)	share_restoredir;;
 99)	exit 0 ;;
 *)	
 echo "Please choose from Menu numbers"
