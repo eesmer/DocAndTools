@@ -164,20 +164,20 @@ echo "   | 21.Add Recipient     |                     |"
 echo "   | 22.Remove Recipient  |                     |"
 echo "   | 23.Recipient List    |                     |"
 echo "   |--------------------------------------------|"
-tput setaf 9
-echo "                     -----------                 "
-echo "                     ** BOARD **                 "
-echo "                     -----------                 "
-tput setaf 1
+echo "   ----------------------------------------------"
+tput setaf 7
+echo "   Disk Usage                                    "
 tput sgr0
-echo "     $BOARDMSG                                   "
 echo "   ----------------------------------------------"
 df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
 cat /tmp/disk_usage.txt | grep -v "/dev/loop"
 echo "   ----------------------------------------------"
+tput setaf 7
+echo "   Data Size / Disk Usage                        "
+tput sgr0
+echo "   ----------------------------------------------"
 du -skh $BACKUPS/*
 echo "   ----------------------------------------------"
-tput setaf 9
 echo -e
 tput setaf 9
 echo "    -----------"
@@ -335,7 +335,7 @@ systemctl start backupunited-$BACKUPNAME.timer
 systemctl enable backupunited-$BACKUPNAME.timer
 systemctl daemon-reload
 
-BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
+#BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
 fi
 ;;
 *)
@@ -355,7 +355,7 @@ function delete_backup(){
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.timer
 			systemctl daemon-reload
                         systemctl reset-failed
-			BOARDMSG="$BACKUPNAME Backup Job Successfully Removed"
+			#BOARDMSG="$BACKUPNAME Backup Job Successfully Removed"
 		else
 			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
 		fi
