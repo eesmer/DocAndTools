@@ -151,7 +151,7 @@ echo "   | 1.Add    Backup Job  | 6.Backup List      |"
 echo "   | 2.Remove Backup Job  | 7.Backup Job List  |"
 echo "   |-------------------------------------------|"
 tput setaf 7
-echo "    Backup Restore                              "
+echo "    Restore Management                         "
 tput sgr0
 echo "   |-------------------------------------------|"
 echo "   | 30. Restore Backup                        |"
