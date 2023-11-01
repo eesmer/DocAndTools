@@ -155,11 +155,11 @@ echo "    Backup Restore                              "
 tput sgr0
 echo "   |-------------------------------------------|"
 echo "   | 30. Restore Backup                        |"
-echo "   | - RestoreDir                              |" 
+echo "   | - RestoreDir -                            |" 
 echo "   |   31.Show | 32.Share | 33.UnShare         |"
 echo "   |-------------------------------------------|"
 tput setaf 7
-echo "    RestoreDir Share Status: $SHARESTATUS       "
+echo "    Share Status: $SHARESTATUS                  "
 tput sgr0
 echo "   |-------------------------------------------|"
 tput setaf 7
