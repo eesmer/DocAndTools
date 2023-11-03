@@ -583,7 +583,7 @@ function recipient_list(){
 
 function restore_backup(){
 	BACKUPDIR=$(whiptail --title "Select Backup Dir" --radiolist "Choose" 20 40 15 \
-		"sync" "" OFF \
+		"current" "" OFF \
 		"daily" "" OFF \
 		"weekly" "" OFF \
 		"monthly" "" OFF \
@@ -596,7 +596,7 @@ function restore_backup(){
 	
 	# Determining the parameter in the if condition for file or dir exist check
 	PARAM="-f"
-	if [ "$BACKUPDIR" = "sync" ]; then PARAM="-d"; fi
+	if [ "$BACKUPDIR" = "current" ]; then PARAM="-d"; fi
 
 	ls /usr/local/backupunited/backups/$BACKUPDIR > /tmp/backuplist.txt && LISTCOUNT=$(cat /tmp/backuplist.txt | wc -l)
 	if [ ! "$LISTCOUNT" = 0 ]; then
