@@ -633,23 +633,22 @@ function backup_cleaner(){
 	# mtime -- modified time = last time file contents was modified
 	# ctime -- changed time = last time file inode was modified
 	echo -e	
-	DAILYBACKUPS=$(find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | wc -l)
 	tput setaf 4
+	DAILYBACKUPS=$(find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | wc -l)
 	echo "Daily backups older than 8 days: $DAILYBACKUPS"
 	echo "----------------------------------------"
 	find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
 	WEEKLYBACKUPS=$(find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | wc -l)
-	tput setaf 4
 	echo "Weekly backups older than 10 days: $WEEKLYBACKUPS"
 	echo "----------------------------------------"
 	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | xargs -d '\n' rm -f
-	echo "Monthly backups older than 40 days"
-	echo "----------------------------------"
-	find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40
+	MONTHLYBACKUPS=$(find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | wc -l)
+	echo "Monthly backups older than 40 days: $MONTHLYBACKUPS"
+	echo "----------------------------------------"
 	find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | xargs -d '\n' rm -f
-	echo "Yersly backups older than 370 days"
-	echo "----------------------------------"
-	find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370
+	YEARLYBACKUPS=$(find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370 | wc -l)
+	echo "Yearly backups older than 370 days: $YEARLYBACKUPS"
+	echo "----------------------------------------"
 	find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370 | xargs -d '\n' rm -f
 	tput sgr0
 
