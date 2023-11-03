@@ -135,49 +135,54 @@ done
 rm /tmp/backupjobname.txt
 
 function show_menu(){
+# RestoreDir Share Status Check
+SHARESTATUS=$(systemctl is-active smbd.service)
 date
 echo -e
 tput setaf 5
-echo "     BackupUnited                                "
+echo "     BackupUnited                               "
 tput sgr0
-echo "   |--------------------------------------------|"
+echo "   |-------------------------------------------|"
 tput setaf 7
-echo "    Backup Management                            "
+echo "    Backup Management                           "
 tput sgr0
-echo "   |--------------------------------------------|"
-echo "   | 1.Add    Backup Job  | 6.Backup List       |"
-echo "   | 2.Remove Backup Job  | 7.Backup Job List   |"
-echo "   |--------------------------------------------|"
+echo "   |-------------------------------------------|"
+echo "   | 1.Add    Backup Job  | 6.Backup List      |"
+echo "   | 2.Remove Backup Job  | 7.Backup Job List  |"
+echo "   |-------------------------------------------|"
 tput setaf 7
-echo "    Backup Restore                               "
+echo "    Restore Management                         "
 tput sgr0
-echo "   |--------------------------------------------|"
-echo "   | 30. Restore Backup   |                     |"
-echo "   | 31. Show Restore Dir | 40.Backup Cleaner   |"
-echo "   |--------------------------------------------|"
+echo "   |-------------------------------------------|"
+echo "   | 30.Restore Backup                         |"
+echo "   | - RestoreDir -                            |" 
+echo "   |   31.Show | 32.Share | 33.UnShare         |"
+echo "   |-------------------------------------------|"
+echo "   | 40.Backup Cleaner                         |"
+echo "   |-------------------------------------------|"
 tput setaf 7
-echo "    Mail Settings                                "
+echo "    Share Status: $SHARESTATUS                  "
 tput sgr0
-echo "   |--------------------------------------------|"
-echo "   | 20.Mail Sender Set.  |                     |"
-echo "   | 21.Add Recipient     |                     |"
-echo "   | 22.Remove Recipient  |                     |"
-echo "   | 23.Recipient List    |                     |"
-echo "   |--------------------------------------------|"
-tput setaf 9
-echo "                     -----------                 "
-echo "                     ** BOARD **                 "
-echo "                     -----------                 "
-tput setaf 1
+echo "   |-------------------------------------------|"
+tput setaf 7
+echo "    Mail Settings                               "
 tput sgr0
-echo "     $BOARDMSG                                   "
-echo "   ----------------------------------------------"
+echo "   |-------------------------------------------|"
+echo "   | 20.Mail Sender Set.  |                    |"
+echo "   | 21.Add Recipient     |                    |"
+echo "   | 22.Remove Recipient  |                    |"
+echo "   | 23.Recipient List    |                    |"
+echo "   |-------------------------------------------|"
+echo -e
+tput setaf 7
+echo "   ::. Disk Usage / Data Size ::.               "
+tput sgr0
+echo "   ---------------------------------------------"
 df -H | grep -vE 'Filesystem|tmpfs|cdrom|udev' | awk '{ print $5" "$1"("$2" "$3")" " --- "}' > /tmp/disk_usage.txt
-cat /tmp/disk_usage.txt
-echo "   ----------------------------------------------"
+cat /tmp/disk_usage.txt | grep -v "/dev/loop"
+echo "   ---------------------------------------------"
 du -skh $BACKUPS/*
-echo "   ----------------------------------------------"
-tput setaf 9
+echo "   ---------------------------------------------"
 echo -e
 tput setaf 9
 echo "    -----------"
@@ -228,7 +233,8 @@ cat > "$BACKUP_SCRIPTS/$BACKUPNAME" <<EOF
 
 if [ -d "$BACKUPPATH" ]; then
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
-rdiff-backup backup "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
+#rdiff-backup backup "$BACKUPPATH" /usr/local/backupunited/backups/sync/$BACKUPNAME && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
+rsync -arz "$BACKUPPATH" /usr/local/backupunited/backups/sync/ && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 else
 echo "$BACKUPNAME Backup Failed" > $MAILMESSAGE
@@ -266,7 +272,8 @@ mkdir /tmp/$BACKUPNAME
 mount -t cifs $BACKUPPATH /tmp/$BACKUPNAME -o username="$BACKUPUSR",password="$BACKUPPWD" && touch /tmp/$BACKUPNAME-mountok
 if [ -e "/tmp/$BACKUPNAME-mountok" ]
 then
-rdiff-backup backup /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
+#rdiff-backup backup /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/$BACKUPNAME
+rsync -arz /tmp/$BACKUPNAME /usr/local/backupunited/backups/sync/ && echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 BACKUPDATE=$JOCKER(date +%Y%m%d-%H%M)
 echo "$BACKUPNAME Backup Taken Successfully" > $MAILMESSAGE
 umount /tmp/$BACKUPNAME
@@ -335,7 +342,7 @@ systemctl start backupunited-$BACKUPNAME.timer
 systemctl enable backupunited-$BACKUPNAME.timer
 systemctl daemon-reload
 
-BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
+#BOARDMSG="$BACKUPNAME Backup Job Successfully Added"
 fi
 ;;
 *)
@@ -353,9 +360,10 @@ function delete_backup(){
 			rm -rf $BACKUP_SCRIPTS/$BACKUPNAME
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.service
 			rm /etc/systemd/system/backupunited-$BACKUPNAME.timer
+			# rm /etc/systemd/system/timers.target.wants/backupunited-$BACKUPNAME.*
 			systemctl daemon-reload
                         systemctl reset-failed
-			BOARDMSG="$BACKUPNAME Backup Job Successfully Removed"
+			#BOARDMSG="$BACKUPNAME Backup Job Successfully Removed"
 		else
 			whiptail --msgbox "Backup Not Found!!" 10 60 3>&1 1>&2 2>&3
 		fi
@@ -622,37 +630,79 @@ function show_restoredir(){
 	pause
 }
 
-function backup_cleaner(){
-	# These processes will run as systemd service
-	# ---------------------------------------------------------------------
-	# -ctime 10   # exactly   10 days ago
-	# -ctime +10  # more than 10 days ago
-	# -ctime -10  # less than 10 days ago
-	# ---------------------------------------------------------------------
-	# atime -- access time = last time file opened
-	# mtime -- modified time = last time file contents was modified
-	# ctime -- changed time = last time file inode was modified
-	echo -e	
-	tput setaf 4
-	DAILYBACKUPS=$(find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | wc -l)
-	echo "Daily backups older than 8 days: $DAILYBACKUPS"
-	echo "----------------------------------------"
-	find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
-	WEEKLYBACKUPS=$(find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | wc -l)
-	echo "Weekly backups older than 10 days: $WEEKLYBACKUPS"
-	echo "----------------------------------------"
-	find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | xargs -d '\n' rm -f
-	MONTHLYBACKUPS=$(find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | wc -l)
-	echo "Monthly backups older than 40 days: $MONTHLYBACKUPS"
-	echo "----------------------------------------"
-	find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | xargs -d '\n' rm -f
-	YEARLYBACKUPS=$(find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370 | wc -l)
-	echo "Yearly backups older than 370 days: $YEARLYBACKUPS"
-	echo "----------------------------------------"
-	find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370 | xargs -d '\n' rm -f
+function share_restoredir(){
+cat > /etc/samba/smb.conf << EOF
+logging = file
+map to guest = bad user
+
+[restore-backup]
+comment = all restored backup
+browseable = yes
+path = /usr/local/backupunited/backups/restoredir
+guest ok = yes
+read only = yes
+EOF
+
+chmod 644 /etc/samba/smb.conf
+
+systemctl enable smbd.service &>/dev/null
+systemctl start smbd.service &>/dev/null
+
+SHARESTATUS=$(systemctl is-active smbd.service)
+echo -e
+tput setaf 5
+echo "RestoreDir Share Status: $SHARESTATUS"
+echo -e
+tput sgr0
+
+pause
+}
+
+function unshare_restoredir(){
+	systemctl stop smbd.service
+	systemctl is-active smbd.service
+	
+	SHARESTATUS=$(systemctl is-active smbd.service)
+	echo -e
+	tput setaf 5
+	echo "RestoreDir Share Status: $SHARESTATUS"
+	echo -e
 	tput sgr0
 
 	pause
+}
+
+function backup_cleaner(){
+        # These processes will run as systemd service
+        # ---------------------------------------------------------------------
+        # -ctime 10   # exactly   10 days ago
+        # -ctime +10  # more than 10 days ago
+        # -ctime -10  # less than 10 days ago
+        # ---------------------------------------------------------------------
+        # atime -- access time = last time file opened
+        # mtime -- modified time = last time file contents was modified
+        # ctime -- changed time = last time file inode was modified
+        echo -e
+        tput setaf 4
+        DAILYBACKUPS=$(find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +1 | wc -l)
+        echo "Daily backups older than 8 days: $DAILYBACKUPS"
+        echo "----------------------------------------"
+        find /usr/local/backupunited/backups/daily/ -maxdepth 1 -type f -ctime +8 | xargs -d '\n' rm -f
+        WEEKLYBACKUPS=$(find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | wc -l)
+        echo "Weekly backups older than 10 days: $WEEKLYBACKUPS"
+        echo "----------------------------------------"
+        find /usr/local/backupunited/backups/weekly/ -maxdepth 1 -type f -ctime +10 | xargs -d '\n' rm -f
+        MONTHLYBACKUPS=$(find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | wc -l)
+        echo "Monthly backups older than 40 days: $MONTHLYBACKUPS"
+        echo "----------------------------------------"
+        find /usr/local/backupunited/backups/monthly/ -maxdepth 1 -type f -ctime +40 | xargs -d '\n' rm -f
+        YEARLYBACKUPS=$(find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370 | wc -l)
+        echo "Yearly backups older than 370 days: $YEARLYBACKUPS"
+        echo "----------------------------------------"
+        find /usr/local/backupunited/backups/yearly/ -maxdepth 1 -type f -ctime +370 | xargs -d '\n' rm -f
+        tput sgr0
+
+        pause
 }
 
 function read_input(){
@@ -669,6 +719,8 @@ case $c in
 23)	recipient_list;;
 30)	restore_backup;;
 31)	show_restoredir;;
+32)	share_restoredir;;
+33)	unshare_restoredir;;
 40)	backup_cleaner;;
 99)	exit 0 ;;
 *)	
