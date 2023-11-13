@@ -502,23 +502,23 @@ function backup_list(){
 	rm /tmp/monthlybackups.txt
 	rm /tmp/yearlybackups.txt
 	
-	tput setaf 7
-	echo "Increment List from Backup Sync."
-	echo "---------------------------------------------"
-	tput sgr0
-	ls /usr/local/backupunited/backups/sync/ > /tmp/backupdirs.txt
-	let i=0
-	while read -r LINE; do
-		let i=$i+1
-		W+=($LINE " ")
-		echo -e
-		tput setaf 4
-		echo "Backup Name: $LINE"
-		echo "---------------------------------------------"
-		tput sgr0
-		rdiff-backup -l /usr/local/backupunited/backups/sync/$LINE
-	done < <( cat /tmp/backupdirs.txt)
-	rm /tmp/backupdirs.txt
+#	tput setaf 7
+#	echo "Increment List from Backup Sync."
+#	echo "---------------------------------------------"
+#	tput sgr0
+#	ls /usr/local/backupunited/backups/sync/ > /tmp/backupdirs.txt
+#	let i=0
+#	while read -r LINE; do
+#		let i=$i+1
+#		W+=($LINE " ")
+#		echo -e
+#		tput setaf 4
+#		echo "Backup Name: $LINE"
+#		echo "---------------------------------------------"
+#		tput sgr0
+#		rdiff-backup -l /usr/local/backupunited/backups/sync/$LINE
+#	done < <( cat /tmp/backupdirs.txt)
+#	rm /tmp/backupdirs.txt
 	pause
 }
 
