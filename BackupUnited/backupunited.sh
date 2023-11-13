@@ -450,19 +450,19 @@ function backup_job_list(){
 	pause
 }
 
-function backup_now(){
-	chmod +x $BACKUP_SCRIPTS/*
-	run-parts $BACKUP_SCRIPTS
-
-	NUMRECIPIENT=$(cat "$MAILRECIPIENT" | wc -l)
-	i=0
-	while [ "$i" -le $NUMRECIPIENT ]; do
-		RECIPIENT=$(ls -l | sed -n $i{p} "$MAILRECIPIENT")
-		cat $MAILMESSAGE | mutt -s "Backup United Notification" $RECIPIENT
-		i=$(( i + 1 ))
-	done
-	pause
-}
+#function backup_now(){
+#	chmod +x $BACKUP_SCRIPTS/*
+#	run-parts $BACKUP_SCRIPTS
+#
+#	NUMRECIPIENT=$(cat "$MAILRECIPIENT" | wc -l)
+#	i=0
+#	while [ "$i" -le $NUMRECIPIENT ]; do
+#		RECIPIENT=$(ls -l | sed -n $i{p} "$MAILRECIPIENT")
+#		cat $MAILMESSAGE | mutt -s "Backup United Notification" $RECIPIENT
+#		i=$(( i + 1 ))
+#	done
+#	pause
+#}
 
 function backup_list(){
 	ls $BACKUPS/daily > /tmp/dailybackups.txt
