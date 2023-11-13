@@ -48,6 +48,8 @@ echo "Weekly    : $WEEKLYSCRIPT"
 echo "Monthly   : $MONTHLYSCRIPT"
 echo "Yearly    : $YEARLYSCRIPT"
 
+sleep 2
+
 if [ ! "$RUNSTATUS" = "RUN" ];then
 	whiptail --title "Installation Info" --msgbox "The installation needs to be completed.\nYou will be directed to the installation." 10 60  3>&1 1>&2 2>&3
 	curl -4 $WEBSITE &>/dev/null
@@ -208,7 +210,6 @@ else
 	add_backup
 fi
 BACKUPTIME=$BACKUPHOUR:$BACKUPMIN
-
 
 if [ "$BACKUPTIME" = "" ]; then
 	whiptail --title "Backup Name" --msgbox "Backup Type and Time is not null" 10 60  3>&1 1>&2 2>&3
@@ -371,20 +372,20 @@ function delete_backup(){
 	pause
 }
 
-function clean_backup(){
-	ls /usr/local/backup-united/backup/ > /tmp/folderlist
-	numfolder=$(cat /tmp/folderlist | wc -l)
-	i=1
-	while [ "$i" -le $numfolder ]; do
-		folder=$(ls -l | sed -n $i{p} /tmp/folderlist)
-		cd /usr/local/backup-united/backup/$folder
-		pwd
-		rdiff-backup --remove-older-than 15D /usr/local/backup-united/backup/$folder
-		i=$(( i + 1 ))
-	done
-	rm -rf /tmp/folderlist
-	pause
-}
+#function clean_backup(){
+#	ls /usr/local/backup-united/backup/ > /tmp/folderlist
+#	numfolder=$(cat /tmp/folderlist | wc -l)
+#	i=1
+#	while [ "$i" -le $numfolder ]; do
+#		folder=$(ls -l | sed -n $i{p} /tmp/folderlist)
+#		cd /usr/local/backup-united/backup/$folder
+#		pwd
+#		rdiff-backup --remove-older-than 15D /usr/local/backup-united/backup/$folder
+#		i=$(( i + 1 ))
+#	done
+#	rm -rf /tmp/folderlist
+#	pause
+#}
 
 function mail_settings(){
 	MAILADDR=$(whiptail --title "Backup Name" --inputbox "Please Enter E-Mail Address" 10 60  3>&1 1>&2 2>&3)
