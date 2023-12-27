@@ -1,6 +1,6 @@
 
 ## Assigning specific command execution permissions to user accounts
-#### Assigning permission to use fdisk command to user2 user account
+#### Assign permission to use fdisk command to user account User 2 on ubuntuserver1 machine
 ```
 visudo -f /etc/sudoers.d/user
 ```
