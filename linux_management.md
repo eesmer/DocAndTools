@@ -6,4 +6,9 @@ visudo -f /etc/sudoers.d/user
 ```
 user2 ubuntuserver1 = /sbin/fdisk
 
+#### usage
+```
+sudo fdisk -l
+```
+
 ---
