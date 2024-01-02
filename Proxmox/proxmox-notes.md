@@ -17,5 +17,9 @@ deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription
 #deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise
 deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription
 ```
+<br>
+```
+apt update && apt upgrade
+```
 
 ---
