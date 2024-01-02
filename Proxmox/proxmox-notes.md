@@ -3,7 +3,8 @@
 After installation, repo settings must be made first. <br>
 There are two types of repos available: membership-based or community-maintained. <br>
 <br>
-If membership will not be used;
+If membership will not be used;<br>
+The repositories are updated with the addresses below.
 
 ##### /etc/apt/sources.list.d/pve-enterprise.list
 ```
