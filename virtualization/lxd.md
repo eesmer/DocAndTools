@@ -26,6 +26,11 @@ Create a new ZFS pool? (yes/no) [default=yes]: yes
 Would you like to use an existing block device? (yes/no) [default=no]: yes                         
 Path to the existing block device: /dev/disk/by-id/scsi-0DO_Volume_volume-fra1-01
 ```
-
+```
+lxc storage list
+lxc network show lxdbr0
+lxc image list images:
+lxc image list images: | grep trixie
+```
 
 ---
