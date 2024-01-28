@@ -38,6 +38,7 @@ lxc image list images: | grep trixie
 lxc launch images:debian/trixie/amd64 template1
 lxc list
 lxc list --columns ns4
+lxc info template1
 ```
 ```
 lxc exec template1 bash
