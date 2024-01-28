@@ -32,5 +32,15 @@ lxc network show lxdbr0
 lxc image list images:
 lxc image list images: | grep trixie
 ```
+```
+lxc launch images:debian/trixie/amd64 template1
+lxc list
+lxc list --columns ns4
+```
+```
+lxc exec template1 bash
+```
+
+
 
 ---
