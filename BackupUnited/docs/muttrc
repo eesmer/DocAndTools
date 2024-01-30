@@ -1,0 +1,10 @@
+# mutt package rc file
+# path: /root/
+# ---------------------------
+# SMTP
+set from = "notification@backupunited"
+set realname = "BackupUnited"
+set smtp_url = "smtp://notification@backupunited@mx.mail.net:587/"
+set smtp_pass = ""
+set ssl_force_tls = yes
+unset ssl_starttls
