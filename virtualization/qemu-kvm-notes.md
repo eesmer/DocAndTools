@@ -1,3 +1,8 @@
+
+### bochs
+bochs is an open source portable (x86) PC emulator.
+Provides x86 PC emulation for x86 processor, hardware devices and memory usage.
+
 ### QEMU
 Full system emulation
 QEMU emulates a full system. It can bu used to launch different Operation System<br>
