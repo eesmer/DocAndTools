@@ -3,7 +3,11 @@
 bochs is an open source portable (x86) PC emulator.<br>
 Provides x86 PC emulation for x86 processor, hardware devices and memory usage.<br>
 
-It emulates many different x86 CPUs.
+It emulates many different x86 CPUs.<br>
+This means that you can run the operating system and applications inside the emulator on your host machine as if there was a machine inside the machine.<br>
+This is the beginning of virtualization.<br>
+<br>
+https://bochs.sourceforge.io/<br>
 
 ---
 
