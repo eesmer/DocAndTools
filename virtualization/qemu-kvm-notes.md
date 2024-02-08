@@ -24,6 +24,6 @@ QEMU mods;
 https://wiki.debian.org/QEMU
 
 ### KVM
-KVM is a full virtualization solution consisting of kvm.ko and kvm-intel.ko or kvm-amd.ko kernel modules depending on the CPU of the host machine.<br>
+KVM is a full virtualization solution consisting of **kvm.ko** and **kvm-intel.ko** or **kvm-amd.ko** kernel modules depending on the CPU of the host machine.<br>
 <br>
 https://wiki.debian.org/KVM
