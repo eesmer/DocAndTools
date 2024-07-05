@@ -29,3 +29,24 @@ whiptail --msgbox \
         \n\nhttps://github.com/eesmer/SambaAD-HelperScripts \
         \nhttps://github.com/eesmer/sambadtui \
         \nhttps://github.com/eesmer/DebianDC" 20 90 45
+
+CHECK_DISTRO() {
+cat /etc/*-release /etc/issue > "/tmp/distrocheck"
+if grep -qi "debian\|ubuntu" "/tmp/distrocheck"; then
+REP=APT
+elif grep -qi "centos\|rocky\|red hat" "/tmp/distrocheck"; then
+REP=YUM
+fi
+rm /tmp/distrocheck
+# Not support message
+if [ ! "$REP" = "APT" ]; then
+$RED
+echo -e
+echo "-------------------------------------------------------------------------------------"
+echo -e "This script has been tested in Debian environment.\nIt is compatible with Debian. "
+echo "-------------------------------------------------------------------------------------"
+echo -e
+$NOCOL
+exit 1
+fi
+}
