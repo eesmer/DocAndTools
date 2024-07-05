@@ -50,3 +50,17 @@ $NOCOL
 exit 1
 fi
 }
+
+SAMBAAD_INSTALL() {
+        HOSTNAME=$(whiptail --inputbox "Enter DC Machine Hostname" 8 39 --title "DC Hostname" 3>&1 1>&2 2>&3)
+        exitstatus=$?
+        if [ ! $exitstatus = 0 ]; then
+                echo "User canceled input."
+        fi
+        REALM=$(whiptail --inputbox "Enter Domain Name" 8 39 --title "DomainName" 3>&1 1>&2 2>&3)
+        PASSWORD=$(whiptail --passwordbox "Enter Administrator Password" 8 39 3>&1 1>&2 2>&3)
+
+        echo $HOSTNAME
+        echo $REALM
+        echo $PASSWORD
+}
