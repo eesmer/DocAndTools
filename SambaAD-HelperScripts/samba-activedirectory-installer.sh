@@ -17,3 +17,15 @@ RED="tput setaf 9"
 BLUE="tput setaf 12"
 NOCOL="tput sgr0"
 BOLD="tput bold"
+
+whiptail --msgbox \
+        ".:: Samba Active Directory Domain Controller Installer ::. \
+        \n---------------------------------------------------------------- \
+        \nThis program is distributed for the purpose of being useful. \
+        \nThis program installs Samba Active Directory. \
+        \nIt will ask you questions about the domain and it will install and will install it according to the information it receives. \
+        \n\nWhen the installation is completed;\na Domain is created and this machine is configured as a Domain Controller. \
+        \n---------------------------------------------------------------- \
+        \n\nhttps://github.com/eesmer/SambaAD-HelperScripts \
+        \nhttps://github.com/eesmer/sambadtui \
+        \nhttps://github.com/eesmer/DebianDC" 20 90 45
