@@ -64,3 +64,6 @@ SAMBAAD_INSTALL() {
         echo $REALM
         echo $PASSWORD
 }
+
+CHECK_DISTRO
+SAMBAAD_INSTALL
