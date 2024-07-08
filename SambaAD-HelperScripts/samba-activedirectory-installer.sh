@@ -100,8 +100,8 @@ SAMBAAD_INSTALL() {
 
 	apt-get -y install openssh-server chrony ntpdate
 	apt-get -y install dnsutils net-tools
-
-
+	#apt-get -y install ack expect krb5-user krb5-config
+	#apt-get -y install curl wget
 }
 
 CHECK_DISTRO
