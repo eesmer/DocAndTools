@@ -98,8 +98,9 @@ SAMBAAD_INSTALL() {
 	systemctl disable smbd nmbd winbind
 	systemctl mask smbd nmbd winbind
 
-	apt-get -y install openssh-server chrony ntpdate
+	apt-get -y install chrony ntpdate
 	apt-get -y install dnsutils net-tools
+	apt-get -y install openssh-server 
 	#apt-get -y install ack expect krb5-user krb5-config
 	#apt-get -y install curl wget
 	
@@ -110,6 +111,7 @@ SAMBAAD_INSTALL() {
 	sed -i '/server services =/a log level = 4' /etc/samba/smb.conf
 	sed -i '/log level =/a log file = /var/log/samba/$REALM.log' /etc/samba/smb.conf
 	sed -i '/log file =/a debug timestamp = yes' /etc/samba/smb.conf
+	#Time/Sync Config
 	ntpdate -bu pool.ntp.org
 	echo "allow 0.0.0.0/0" >> /etc/chrony/chrony.conf
 	echo "ntpsigndsocket  /var/lib/samba/ntp_signd" >> /etc/chrony/chrony.conf
@@ -117,6 +119,13 @@ SAMBAAD_INSTALL() {
 	chmod 750 /var/lib/samba/ntp_signd/
 	systemctl restart chrony
 	systemctl enable chrony
+	#sed -i "s/\$IP/$SERVER_IP/" /var/lib/samba/private/dns_update_list
+	
+	rm /etc/krb5.conf
+	cp /var/lib/samba/private/krb5.conf /etc/
+	echo "search $REALM" > /etc/resolv.conf
+	echo "nameserver 127.0.0.1" >> /etc/resolv.conf
+
 
 }
 
