@@ -86,6 +86,18 @@ SAMBAAD_INSTALL() {
 	DOMAIN=$(echo $REALM | cut -d "." -f1)
 	sed -i "/127.0.1.1/ c 127.0.1.1 $HOSTNAME.$REALM $HOSTNAME" /etc/hosts
 	hostnamectl set-hostname $HOSTNAME.$REALM
+	
+	export DEBIAN_FRONTEND=noninteractive
+	apt-get -y update && apt-get -y upgrade && apt-get -y autoremove
+	apt-get -y install bind9 bind9utils dnsutils
+	apt-get -y install samba --install-recommends
+	apt-get -y install winbind
+	apt-get -y install krb5-config krb5-user
+	
+	systemctl stop smbd nmbd winbind
+	systemctl disable smbd nmbd winbind
+	systemctl mask smbd nmbd winbind
+
 }
 
 CHECK_DISTRO
