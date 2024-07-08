@@ -53,16 +53,27 @@ fi
 
 SAMBAAD_INSTALL() {
         HOSTNAME=$(whiptail --inputbox "Enter DC Machine Hostname" 8 39 --title "DC Hostname" 3>&1 1>&2 2>&3)
-        exitstatus=$?
-        if [ ! $exitstatus = 0 ]; then
+        ANSWER=$?
+        if [ ! $ANSWER = 0 ]; then
                 echo "User canceled input."
+		exit 1
         fi
         REALM=$(whiptail --inputbox "Enter Domain Name" 8 39 --title "DomainName" 3>&1 1>&2 2>&3)
+	ANSWER=$?
+	if [ ! $ANSWER = 0 ]; then
+		echo "User canceled input."
+		exit 1
+	fi
         PASSWORD=$(whiptail --passwordbox "Enter Administrator Password" 8 39 3>&1 1>&2 2>&3)
-
-        echo $HOSTNAME
-        echo $REALM
-        echo $PASSWORD
+	ANSWER=$?
+	if [ ! $ANSWER = 0 ]; then
+		echo "User canceled input."
+		exit 1
+	fi
+	if [ -z "$HOSTNAME" ] || [ -z "$REALM" ] || [ -z "$PASSWORD" ]; then
+		whiptail --msgbox "Please fill in all fields.." --title "SambaAD Install" --backtitle "Samba Active Directory Installation" 0 0 0
+		SAMBAAD_INSTALL
+	fi
 }
 
 CHECK_DISTRO
