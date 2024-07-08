@@ -82,9 +82,8 @@ SAMBAAD_INSTALL() {
 		exit 1
 	fi
 
-	#echo "DOMAIN NAME: $REALM" > /tmp/setup-info.txt
-	#echo "-----------" >> /tmp/setup-info.txt
-	#echo "start installation?" >> /tmp/setup-info.txt
+	SERVER_IP=$(ip r | grep link | grep src | cut -d '/' -f2 | cut -d'c' -f3 | cut -d ' ' -f2)
+	DOMAIN=$(echo $REALM | cut -d "." -f1)
 
 }
 
