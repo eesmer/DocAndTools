@@ -107,10 +107,12 @@ SAMBAAD_INSTALL() {
 	#Domain Provision
 	rm /etc/samba/smb.conf
 	samba-tool domain provision --server-role=dc --use-rfc2307 --realm="$REALM" --domain="$DOMAIN" --adminpass="$PASSWORD"
+	
 	#Log Config
 	sed -i '/server services =/a log level = 4' /etc/samba/smb.conf
 	sed -i '/log level =/a log file = /var/log/samba/$REALM.log' /etc/samba/smb.conf
 	sed -i '/log file =/a debug timestamp = yes' /etc/samba/smb.conf
+	
 	#Time/Sync Config
 	ntpdate -bu pool.ntp.org
 	echo "allow 0.0.0.0/0" >> /etc/chrony/chrony.conf
@@ -126,7 +128,49 @@ SAMBAAD_INSTALL() {
 	echo "search $REALM" > /etc/resolv.conf
 	echo "nameserver 127.0.0.1" >> /etc/resolv.conf
 
+	# named.conf.options
+cat > /etc/bind/named.conf.options << EOF
+options {
+directory "/var/cache/bind";
 
+forwarders {
+8.8.8.8;
+};
+
+allow-query {  any;};
+dnssec-validation no;
+
+auth-nxdomain no; #RFC1035
+listen-on-v6 { any; };
+
+tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
+minimal-responses yes;
+};
+EOF
+
+# named.conf.local
+cat > /etc/bind/named.conf.local << EOF
+dlz "$REALM" {
+database "dlopen /usr/lib/x86_64-linux-gnu/samba/bind9/dlz_bind9_10.so";
+};
+EOF
+
+cat > /etc/default/bind << EOF
+RESOLVCONF=no
+OPTIONS="-4 -u bind"
+EOF
+chmod 644 /etc/default/bind9
+
+sed -i 's/dns forwarder = .*/server services = -dns/' /etc/samba/smb.conf
+mkdir -p /var/lib/samba/bind-dns
+mkdir -p /var/lib/samba/bind-dns/dns
+
+samba_upgradedns --dns-backend=BIND9_DLZ
+
+systemctl unmask samba-ad-dc.service
+systemctl enable samba-ad-dc.service
+systemctl restart samba-ad-dc
+systemctl restart bind9
 }
 
 CHECK_DISTRO
