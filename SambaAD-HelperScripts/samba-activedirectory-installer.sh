@@ -103,8 +103,10 @@ SAMBAAD_INSTALL() {
 	#apt-get -y install ack expect krb5-user krb5-config
 	#apt-get -y install curl wget
 	
+	#Domain Provision
 	rm /etc/samba/smb.conf
 	samba-tool domain provision --server-role=dc --use-rfc2307 --realm="$REALM" --domain="$DOMAIN" --adminpass="$PASSWORD"
+	#Log Config
 	sed -i '/server services =/a log level = 4' /etc/samba/smb.conf
 	sed -i '/log level =/a log file = /var/log/samba/$REALM.log' /etc/samba/smb.conf
 	sed -i '/log file =/a debug timestamp = yes' /etc/samba/smb.conf
