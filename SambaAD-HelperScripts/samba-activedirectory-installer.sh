@@ -98,6 +98,10 @@ SAMBAAD_INSTALL() {
 	systemctl disable smbd nmbd winbind
 	systemctl mask smbd nmbd winbind
 
+	apt-get -y install openssh-server chrony ntpdate
+	apt-get -y install dnsutils net-tools
+
+
 }
 
 CHECK_DISTRO
