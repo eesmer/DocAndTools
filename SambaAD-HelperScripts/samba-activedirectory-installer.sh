@@ -110,6 +110,14 @@ SAMBAAD_INSTALL() {
 	sed -i '/server services =/a log level = 4' /etc/samba/smb.conf
 	sed -i '/log level =/a log file = /var/log/samba/$REALM.log' /etc/samba/smb.conf
 	sed -i '/log file =/a debug timestamp = yes' /etc/samba/smb.conf
+	ntpdate -bu pool.ntp.org
+	echo "allow 0.0.0.0/0" >> /etc/chrony/chrony.conf
+	echo "ntpsigndsocket  /var/lib/samba/ntp_signd" >> /etc/chrony/chrony.conf
+	chown root:_chrony /var/lib/samba/ntp_signd/
+	chmod 750 /var/lib/samba/ntp_signd/
+	systemctl restart chrony
+	systemctl enable chrony
+
 }
 
 CHECK_DISTRO
