@@ -128,7 +128,7 @@ SAMBAAD_INSTALL() {
 	echo "search $REALM" > /etc/resolv.conf
 	echo "nameserver 127.0.0.1" >> /etc/resolv.conf
 
-	# named.conf.options
+# named.conf.options
 cat > /etc/bind/named.conf.options << EOF
 options {
 directory "/var/cache/bind";
