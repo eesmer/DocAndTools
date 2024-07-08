@@ -84,7 +84,8 @@ SAMBAAD_INSTALL() {
 
 	SERVER_IP=$(ip r | grep link | grep src | cut -d '/' -f2 | cut -d'c' -f3 | cut -d ' ' -f2)
 	DOMAIN=$(echo $REALM | cut -d "." -f1)
-
+	sed -i "/127.0.1.1/ c 127.0.1.1 $HOSTNAME.$REALM $HOSTNAME" /etc/hosts
+	hostnamectl set-hostname $HOSTNAME.$REALM
 }
 
 CHECK_DISTRO
