@@ -34,3 +34,12 @@ whiptail --msgbox \
         \nhttps://github.com/eesmer/SambaAD-HelperScripts \
         \nhttps://github.com/eesmer/sambadtui \
         \nhttps://github.com/eesmer/DebianDC" 20 90 45
+
+
+samba-tool domain level show
+#samba-tool domain info $SERVER
+
+samba-tool processes
+samba-tool dbcheck
+samba-tool domain passwordsettings show
+samba-tool ou listobjects OU="Domain Controllers"
