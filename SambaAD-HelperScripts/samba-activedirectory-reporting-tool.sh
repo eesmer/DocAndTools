@@ -23,8 +23,14 @@ whiptail --msgbox \
         \nServer Role             : $SERVERROLE \
         \nForest Level            : $FORESTLEVEL \
         \nDomain Level            : $DOMAINLEVEL \
+        \nLowest Level            : $LOWESTLEVEL \
+        \nDB Check Result         : $DBCHECKRESULT \
+        \nPassword Complexity     : $PASSCOMPLEX \
+        \nPassword History        : $PASSHISTORY \
+        \nMinimum Password Length : $MINPASSLENGTH \
+        \nMinimum Password Age    : $MINPASSAGE \
+        \nMaximum Password Age    : $MAXPASSAGE \
         \n\n---------------------------------------------------------------- \
         \nhttps://github.com/eesmer/SambaAD-HelperScripts \
         \nhttps://github.com/eesmer/sambadtui \
         \nhttps://github.com/eesmer/DebianDC" 20 90 45
-
