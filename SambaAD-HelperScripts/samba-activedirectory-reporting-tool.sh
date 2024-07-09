@@ -35,6 +35,7 @@ whiptail --msgbox \
         \nhttps://github.com/eesmer/sambadtui \
         \nhttps://github.com/eesmer/DebianDC" 20 90 45
 
+exit 1
 
 samba-tool domain level show
 #samba-tool domain info $SERVER
