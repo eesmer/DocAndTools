@@ -13,3 +13,18 @@ PASSHISTORY=$(samba-tool domain passwordsettings show | grep "Password history l
 MINPASSLENGTH=$(samba-tool domain passwordsettings show | grep "Minimum password length:" | cut -d ":" -f2 | xargs)
 MINPASSAGE=$(samba-tool domain passwordsettings show | grep "Minimum password age (days):" | cut -d ":" -f2 | xargs)
 MAXPASSAGE=$(samba-tool domain passwordsettings show | grep "Maximum password age (days):" | cut -d ":" -f2 | xargs)
+
+whiptail --msgbox \
+        ".:: Samba Active Directory Domain Controller Server Report ::. \
+        \n---------------------------------------------------------------- \
+        \nHostName                : $SERVERNAME \
+        \nServer IP Addr.         : $SERVERIP \
+        \nDomain Name             : $DOMAINNAME \
+        \nServer Role             : $SERVERROLE \
+        \nForest Level            : $FORESTLEVEL \
+        \nDomain Level            : $DOMAINLEVEL \
+        \n\n---------------------------------------------------------------- \
+        \nhttps://github.com/eesmer/SambaAD-HelperScripts \
+        \nhttps://github.com/eesmer/sambadtui \
+        \nhttps://github.com/eesmer/DebianDC" 20 90 45
+
