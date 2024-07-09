@@ -54,3 +54,21 @@ samba-tool ou listobjects OU="Domain Controllers"
 
 samba-tool fsmo show
 samba-tool fsmo show |grep "DomainDnsZonesMasterRole" |cut -d "," -f2
+
+samba-tool domain level show
+#samba-tool domain info $SERVER
+
+samba-tool processes
+samba-tool dbcheck
+samba-tool domain passwordsettings show
+samba-tool ou listobjects OU="Domain Controllers"
+
+samba-tool fsmo show
+samba-tool fsmo show |grep "DomainDnsZonesMasterRole" |cut -d "," -f2
+- SchemaMasterRole
+- InfrastructureMasterRole
+- RidAllocationMasterRole
+- PdcEmulationMasterRole
+- DomainNamingMasterRole
+- DomainDnsZonesMasterRole
+- ForestDnsZonesMasterRole
