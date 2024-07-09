@@ -15,47 +15,28 @@ MINPASSAGE=$(samba-tool domain passwordsettings show | grep "Minimum password ag
 MAXPASSAGE=$(samba-tool domain passwordsettings show | grep "Maximum password age (days):" | cut -d ":" -f2 | xargs)
 
 whiptail --msgbox \
-        ".:: Samba Active Directory Domain Controller Server Report ::. \
-        \n---------------------------------------------------------------- \
-        \nHostName                : $SERVERNAME \
-        \nServer IP Addr.         : $SERVERIP \
-        \n\nDomain Name           : $DOMAINNAME \
-        \nServer Role             : $SERVERROLE \
-        \nForest Level            : $FORESTLEVEL \
-        \nDomain Level            : $DOMAINLEVEL \
-        \nLowest Level            : $LOWESTLEVEL \
-        \nDB Check Result         : $DBCHECKRESULT \
-        \nPassword Complexity     : $PASSCOMPLEX \
-        \nPassword History        : $PASSHISTORY \
-        \nMinimum Password Length : $MINPASSLENGTH \
-        \nMinimum Password Age    : $MINPASSAGE \
-        \nMaximum Password Age    : $MAXPASSAGE \
-        \n\n---------------------------------------------------------------- \
-        \nhttps://github.com/eesmer/SambaAD-HelperScripts \
-        \nhttps://github.com/eesmer/sambadtui \
-        \nhttps://github.com/eesmer/DebianDC" 0 0 0
-        #20 90 45
+".:: Samba Active Directory Domain Controller Server Report ::. \
+\n---------------------------------------------------------------- \
+\nHostName                : $SERVERNAME \
+\nServer IP Addr.         : $SERVERIP \
+\n\nDomain Name             : $DOMAINNAME \
+\nServer Role             : $SERVERROLE \
+\nForest Level            : $FORESTLEVEL \
+\nDomain Level            : $DOMAINLEVEL \
+\nLowest Level            : $LOWESTLEVEL \
+\nDB Check Result         : $DBCHECKRESULT \
+\nPassword Complexity     : $PASSCOMPLEX \
+\nPassword History        : $PASSHISTORY \
+\nMinimum Password Length : $MINPASSLENGTH \
+\nMinimum Password Age    : $MINPASSAGE \
+\nMaximum Password Age    : $MAXPASSAGE \
+\n\n---------------------------------------------------------------- \
+\nhttps://github.com/eesmer/SambaAD-HelperScripts \
+\nhttps://github.com/eesmer/sambadtui \
+\nhttps://github.com/eesmer/DebianDC" 0 0 0
+#20 90 45
 
 exit 1
-
-samba-tool domain level show
-#samba-tool domain info $SERVER
-
-samba-tool processes
-samba-tool dbcheck
-samba-tool domain passwordsettings show
-samba-tool ou listobjects OU="Domain Controllers"
-
-samba-tool domain level show
-#samba-tool domain info $SERVER
-
-samba-tool processes
-samba-tool dbcheck
-samba-tool domain passwordsettings show
-samba-tool ou listobjects OU="Domain Controllers"
-
-samba-tool fsmo show
-samba-tool fsmo show |grep "DomainDnsZonesMasterRole" |cut -d "," -f2
 
 samba-tool domain level show
 #samba-tool domain info $SERVER
