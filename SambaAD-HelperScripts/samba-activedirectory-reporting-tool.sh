@@ -19,7 +19,7 @@ whiptail --msgbox \
 \n---------------------------------------------------------------- \
 \nHostName                : $SERVERNAME \
 \nServer IP Addr.         : $SERVERIP \
-\n\nDomain Name             : $DOMAINNAME \
+\n\nDomain Name           : $DOMAINNAME \
 \nServer Role             : $SERVERROLE \
 \nForest Level            : $FORESTLEVEL \
 \nDomain Level            : $DOMAINLEVEL \
