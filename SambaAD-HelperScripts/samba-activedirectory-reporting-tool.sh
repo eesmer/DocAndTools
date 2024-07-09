@@ -19,7 +19,7 @@ whiptail --msgbox \
         \n---------------------------------------------------------------- \
         \nHostName                : $SERVERNAME \
         \nServer IP Addr.         : $SERVERIP \
-        \n\nDomain Name             : $DOMAINNAME \
+        \n\nDomain Name           : $DOMAINNAME \
         \nServer Role             : $SERVERROLE \
         \nForest Level            : $FORESTLEVEL \
         \nDomain Level            : $DOMAINLEVEL \
@@ -33,7 +33,8 @@ whiptail --msgbox \
         \n\n---------------------------------------------------------------- \
         \nhttps://github.com/eesmer/SambaAD-HelperScripts \
         \nhttps://github.com/eesmer/sambadtui \
-        \nhttps://github.com/eesmer/DebianDC" 20 90 45
+        \nhttps://github.com/eesmer/DebianDC" 0 0 0
+        #20 90 45
 
 exit 1
 
