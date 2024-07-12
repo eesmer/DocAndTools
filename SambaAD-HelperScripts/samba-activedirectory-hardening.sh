@@ -16,3 +16,6 @@ sed -i '/global/a\ \tprinting = bsd' /etc/samba/smb.conf
 sed -i '/global/a\ \tdisable spoolss = yes' /etc/samba/smb.conf
 sed -i '/global/a\ \tload printers = no' /etc/samba/smb.conf
 sed -i '/global/a\ \tprintcap name = /dev/null' /etc/samba/smb.conf
+
+# Turn off NTLMv1
+sed -i '/global/a\ \tntlm auth = mschapv2-and-ntlmv2-only' /etc/samba/smb.conf
