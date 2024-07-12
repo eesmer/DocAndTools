@@ -11,3 +11,8 @@
 # https://github.com/eesmer/DebianDC
 #------------------------------------------------------------------------------------
 
+# Disable printer
+sed -i '/global/a\ \tprinting = bsd' /etc/samba/smb.conf
+sed -i '/global/a\ \tdisable spoolss = yes' /etc/samba/smb.conf
+sed -i '/global/a\ \tload printers = no' /etc/samba/smb.conf
+sed -i '/global/a\ \tprintcap name = /dev/null' /etc/samba/smb.conf
