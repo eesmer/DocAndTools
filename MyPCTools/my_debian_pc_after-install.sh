@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#----------------------------------------------------------------
+# The machine is installed with Debian netinstall iso.
+# On the tasksel screen, only system-utilities is selected.
+# When the installation is complete, this script is run.
+#----------------------------------------------------------------
+
 cat > /etc/apt/sources.list << EOF
 deb https://deb.debian.org/debian/ bookworm contrib main non-free non-free-firmware
 deb-src https://deb.debian.org/debian/ bookworm contrib main non-free non-free-firmware
