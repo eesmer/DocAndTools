@@ -72,3 +72,22 @@ sleep 2
 # Create Template Container (Debian Stable)
 #lxc-create -n template-bullseye -t download -P /var/lib/lxc/ -- -d debian -r bullseye -a amd64
 lxc-create -n template-bullseye -t debian -- -r bullseye
+
+cat > /var/lib/lxc/template-bullseye/config << EOF
+# Common configuration
+lxc.include = /usr/share/lxc/config/debian.common.conf
+lxc.arch = amd64
+lxc.apparmor.profile = unconfined
+lxc.apparmor.allow_nesting = 1
+lxc.uts.name = template-bullseye
+lxc.rootfs.path = dir:/var/lib/lxc/template-bullseye2/rootfs
+
+# Container specific configuration
+lxc.include = /usr/share/lxc/config/nesting.conf
+
+# Network Configuration
+lxc.net.0.type = veth
+lxc.net.0.link = bridge1
+lxc.net.0.name = eth0
+lxc.net.0.flags = up
+EOF
