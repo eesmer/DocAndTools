@@ -79,7 +79,7 @@ lxc.include = /usr/share/lxc/config/debian.common.conf
 lxc.arch = amd64
 lxc.apparmor.profile = unconfined
 lxc.apparmor.allow_nesting = 1
-lxc.uts.name = template-bullseye
+lxc.uts.name = template-bullseye2
 lxc.rootfs.path = dir:/var/lib/lxc/template-bullseye2/rootfs
 
 # Container specific configuration
@@ -91,3 +91,6 @@ lxc.net.0.link = bridge1
 lxc.net.0.name = eth0
 lxc.net.0.flags = up
 EOF
+
+# Set static ip to template-bullseye container
+# vim /var/lib/lxc/template-bullseye/rootfs/etc/network/interfaces
