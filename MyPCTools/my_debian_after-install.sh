@@ -33,17 +33,18 @@ apt-get -y install software-properties-common
 apt-get -y install lsb-release apt-transport-https
 apt-get -y install net-tools
 
-# Virtualbox Install
+#-------------------------------------
+# LAB and TOOLS
+#-------------------------------------
+
+# Virtualbox Install (Virtualbox current version)
 wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | gpg --dearmor -o /usr/share/keyrings/virtualbox.gpg
 echo "deb [signed-by=/usr/share/keyrings/virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" >> /etc/apt/sources.list
 
 apt update
 apt-get -y install "virtualbox-7.1"
 
-#-------------------------------------
-# LAB and TOOLS
-#-------------------------------------
-# LXC and Virtual Network
+# Install LXC and create a Virtual Network
 apt-get -y install --install-recommends lxc debootstrap bridge-utils
 
 # Network1 and Bridge1 Virtual Network Configured
