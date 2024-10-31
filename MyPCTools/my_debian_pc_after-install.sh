@@ -23,6 +23,7 @@ wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | gpg --dea
 echo "deb [signed-by=/usr/share/keyrings/virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" >> /etc/apt/sources.list
 
 apt-get -y install $(apt search ^firmware- 2> /dev/null | grep ^firmware | grep -v micropython-dl | cut -d "/" -f 1)
+apt-get -y install "virtualbox-7.1" #Virtualbox Current Version
 apt-get -y install i3 xtrlock thunar zsh
 apt-get -y install vim tmux openssh-server htop
 apt-get -y install feathernotes atril pavucontrol unzip xfce4-terminal freerdp2-x11 vlc
