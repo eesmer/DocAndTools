@@ -22,16 +22,14 @@ apt-get -y install feathernotes atril pavucontrol unzip xfce4-terminal freerdp2-
 apt-get -y install firefox-esr chromium
 apt-get -y install libreoffice-writer libreoffice-calc
 apt-get -y install git
-apt-get -y install ack wget curl rsync dnsutils whois
-apt-get -y install gnupg2
-apt-get -y install openvpn
+apt-get -y install ack wget curl rsync dnsutils whois net-tools
+apt-get -y install gnupg2 openvpn
 apt-get -y install encfs ntfs-3g
 apt-get -y install python-pip
 apt-get -y install python3 bpython3
 apt-get -y install python3-pip --install-recommends
 apt-get -y install software-properties-common
 apt-get -y install lsb-release apt-transport-https
-apt-get -y install net-tools
 
 #-------------------------------------
 # LAB and TOOLS
