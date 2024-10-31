@@ -40,7 +40,10 @@ echo "deb [signed-by=/usr/share/keyrings/virtualbox.gpg] https://download.virtua
 apt update
 apt-get -y install "virtualbox-7.1"
 
-# LXC and Lab. Environment Install
+#-------------------------------------
+# LAB and TOOLS
+#-------------------------------------
+# LXC and Virtual Network
 apt-get -y install --install-recommends lxc debootstrap bridge-utils
 
 # Network1 and Bridge1 Virtual Network Configured
@@ -67,6 +70,6 @@ ifup bridge1
 
 sleep 2
 
-# Create Template Container
+# Create Template Container (Debian Stable)
 #lxc-create -n template-bullseye -t download -P /var/lib/lxc/ -- -d debian -r bullseye -a amd64
 lxc-create -n template-bullseye -t debian -- -r bullseye
