@@ -68,4 +68,5 @@ ifup bridge1
 sleep 2
 
 # Create Template Container
-lxc-create -n template-bullseye -t download -P /var/lib/lxc/ -- -d debian -r bullseye -a amd64
+#lxc-create -n template-bullseye -t download -P /var/lib/lxc/ -- -d debian -r bullseye -a amd64
+lxc-create -n template-bullseye -t debian -- -r bullseye
