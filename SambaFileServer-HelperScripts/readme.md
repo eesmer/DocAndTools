@@ -28,13 +28,14 @@ Deleted files in the share are stored in this area. <br>
    recycle:maxsize = 0
 ```
 
-**vfs objects = recycle**  : Enables the recycle module. <br>
-**recycle:repository**     : Specifies the directory to which deleted files will be moved.  <br>
-**recycle:keeptree = yes** : Maintains the directory structure where deleted files are located. <br>
+- **vfs objects = recycle**  : Enables the recycle module. <br>
+- **recycle:repository**     : Specifies the directory to which deleted files will be moved.  <br>
+- **recycle:keeptree = yes** : Maintains the directory structure where deleted files are located. <br>
 **recycle:versions = yes** : If multiple files with the same name are deleted, they are stored as different versions. <br>
 **recycle:touch = yes**    : Updates the last access time after files are deleted. <br>
 **recycle:exclude**        : Excludes certain file types from recycling (e.g. temporary files). <br>
 **recycle:exclude_dir**    : Excludes certain directories. <br>
 **recycle:maxsize**        : Specifies the maximum file size that can be moved to recycling. 0 means unlimited.
+**note**                   : recycle:repository = **.Trash/%U** - You can create a separate subfolder for each user using **%U**
 
 ---
