@@ -3,8 +3,8 @@
 
 
 ### Samba FileServer Installer
-This script;
-Installs the Samba package, <br>
+This script; <br>
+Installs the Sambsa package, <br>
 Defines a new share, <br>
 Creates a User Account with access permission to the share <br>
 Runs in a Debian environment <br>
