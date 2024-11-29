@@ -18,3 +18,8 @@ SMB_PASS=$(whiptail --inputbox "Please Enter Password to be Defined to Samba Use
 mkdir -p "$SHARE_DIR"
 chmod -R 0775 "$SHARE_DIR"
 chown -R nobody:nogroup "$SHARE_DIR"
+
+# Create Samba User Account
+useradd -M -s /sbin/nologin "$SMB_USER"
+(echo "$SMB_PASS"; echo "$SMB_PASS") | smbpasswd -a "$SMB_USER"
+smbpasswd -e "$SMB_USER"
