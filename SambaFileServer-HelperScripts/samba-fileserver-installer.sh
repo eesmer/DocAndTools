@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#-------------------------------------------------------------------
+# This script,
+# Installs the Samba package
+# Defines a new share
+# Creates a User Account with access permission to the share
+# Runs in a Debian environment
+#-------------------------------------------------------------------
+
 SMB_CONFIG="/etc/samba/smb.conf"
 
 # Is the user root?
