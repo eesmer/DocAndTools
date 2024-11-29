@@ -42,4 +42,10 @@ testparm
 sleep 1
 systemctl restart smbd nmbd
 
+# Show Result
+echo "Share Name: $SHARE_NAME"
+echo "Share Directory: $SHARE_DIR"
+echo "User: $SMB_USER"
+echo "Password: $SMB_PASS"
+
 exit 0
