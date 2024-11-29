@@ -19,7 +19,7 @@ Deleted files in the share are stored in this area. <br>
    read only = no
    browsable = yes
    vfs objects = recycle
-   recycle:repository = .Trash/%U
+   recycle:repository = .Trash/
    recycle:keeptree = yes
    recycle:versions = yes
    recycle:touch = yes
@@ -27,3 +27,6 @@ Deleted files in the share are stored in this area. <br>
    recycle:exclude_dir = /tmp,/cache
    recycle:maxsize = 0
 ```
+
+**vfs objects = recycle** : Enables the recycle module. <br>
+**recycle:repository**    : Specifies the directory to which deleted files will be moved.  <br>
