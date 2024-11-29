@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SMB_CONFIG="/etc/samba/smb.conf"
+
 # Is the user root?
 if [[ $EUID -ne 0 ]]; then
     echo "Root privileges are required to run this script."
@@ -23,3 +25,14 @@ chown -R nobody:nogroup "$SHARE_DIR"
 useradd -M -s /sbin/nologin "$SMB_USER"
 (echo "$SMB_PASS"; echo "$SMB_PASS") | smbpasswd -a "$SMB_USER"
 smbpasswd -e "$SMB_USER"
+
+# Generate Samba Configuration
+cat > "$SMB_CONFIG" <<EOF
+
+[$SHARE_NAME]
+   path = $SHARE_DIR
+   browseable = yes
+   writable = yes
+   guest ok = no
+   valid users = $SMB_USER
+EOF
