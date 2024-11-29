@@ -36,7 +36,9 @@ Deleted files in the share are stored in this area. <br>
 - **recycle:exclude**        : Excludes certain file types from recycling (e.g. temporary files).
 - **recycle:exclude_dir**    : Excludes certain directories.
 - **recycle:maxsize**        : Specifies the maximum file size that can be moved to recycling. 0 means unlimited.
+
 <br>
+
 **note**                   : recycle:repository = **.Trash/%U** - You can create a separate subfolder for each user using **%U**
 
 ---
