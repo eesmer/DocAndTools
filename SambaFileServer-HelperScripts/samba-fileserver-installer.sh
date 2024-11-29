@@ -36,3 +36,8 @@ cat > "$SMB_CONFIG" <<EOF
    guest ok = no
    valid users = $SMB_USER
 EOF
+
+# Config Test and Service Restart/Reload
+testparm
+sleep 1
+systemctl restart smbd nmbd
