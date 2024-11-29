@@ -11,6 +11,9 @@ Runs in a Debian environment
 This configuration, uses a recycle area for the share with the vfs recycle module configuration.
 Deleted files in the share are stored in this area. <br>
 ```
+/etc/samba/smb.conf
+```
+```
 [ShareName]
    path = /mnt/shares
    read only = no
