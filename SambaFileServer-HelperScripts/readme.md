@@ -28,7 +28,8 @@ Deleted files in the share are stored in this area. <br>
    recycle:maxsize = 0
 ```
 
-**vfs objects = recycle** : Enables the recycle module. <br>
-**recycle:repository**    : Specifies the directory to which deleted files will be moved.  <br>
+**vfs objects = recycle**  : Enables the recycle module. <br>
+**recycle:repository**     : Specifies the directory to which deleted files will be moved.  <br>
+**recycle:keeptree = yes** : Maintains the directory structure where deleted files are located.
 
 ---
