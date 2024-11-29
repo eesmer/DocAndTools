@@ -30,6 +30,8 @@ Deleted files in the share are stored in this area. <br>
 
 **vfs objects = recycle**  : Enables the recycle module. <br>
 **recycle:repository**     : Specifies the directory to which deleted files will be moved.  <br>
-**recycle:keeptree = yes** : Maintains the directory structure where deleted files are located.
+**recycle:keeptree = yes** : Maintains the directory structure where deleted files are located. <br>
+**recycle:versions = yes** : If multiple files with the same name are deleted, they are stored as different versions. <br>
+**recycle:touch = yes**    : Updates the last access time after files are deleted. <br>
 
 ---
