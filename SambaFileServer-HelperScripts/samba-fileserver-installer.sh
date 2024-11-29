@@ -41,3 +41,5 @@ EOF
 testparm
 sleep 1
 systemctl restart smbd nmbd
+
+exit 0
