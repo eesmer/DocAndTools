@@ -3,7 +3,6 @@
 
 
 ### Samba FileServer Installer
-#### About of Script:
 This script;
 Installs the Samba package, <br>
 Defines a new share, <br>
