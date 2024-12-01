@@ -16,4 +16,4 @@ These repos contain collaborative work. <br>
 
 ---
 
-- [smb.conf ](https://github.com/eesmer/SambaAD-HelperScripts/blob/master/docs/notes-of-smb-conf.md)
+- [smb.conf ](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/scripts/smb-conf.md)
