@@ -15,7 +15,7 @@ It should be run in a Debian 11 or Debian 12 environment.
 
 ---
 
-[Samba-Activedirectory-Installer.sh](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/scripts/samba-activedirectory-installer.sh)
+[Samba-Activedirectory-Installer.sh](https://raw.githubusercontent.com/eesmer/SambaAD-HelperScripts/master/scripts/samba-activedirectory-installer.sh)
 
 ```
 wget https://raw.githubusercontent.com/eesmer/SambaAD-HelperScripts/master/scripts/samba-activedirectory-installer.sh
