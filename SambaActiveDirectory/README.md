@@ -8,7 +8,7 @@ These repos contain collaborative work. <br>
 
 ### Install and Configiuration
 - [Samba Active Directory Installer](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/SambaActiveDirectory-Installer.md)
-- [Samba Active Directory Hardening](https://github.com/eesmer/SambaAD-HelperScripts/blob/master/pages/SambaActiveDirectory-Hardening.md)
+- [Samba Active Directory Hardening](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/SambaActiveDirectory-Hardening.md)
 - [Samba Active Directory ADC Joiner](https://github.com/eesmer/SambaAD-HelperScripts/blob/master/pages/SambaActiveDirectory-ADC-Joiner.md)
 ### Reporting
 - [Samba Active Directory Reporting](https://github.com/eesmer/SambaAD-HelperScripts/blob/master/pages/SambaActiveDirectory-Reporting.md)
