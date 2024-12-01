@@ -11,7 +11,7 @@ This script, it creates a report showing information
 
 ---
 
-[Samba-ActiveDirectory-Reporting.sh](https://raw.githubusercontent.com/eesmer/SambaAD-HelperScripts/master/scripts/samba-activedirectory-reporting-tool.sh)
+[Samba-ActiveDirectory-Reporting.sh](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/scripts/samba-activedirectory-reporting-tool.sh)
 
 ---
 
