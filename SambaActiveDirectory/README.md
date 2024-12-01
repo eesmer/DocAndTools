@@ -12,7 +12,7 @@ These repos contain collaborative work. <br>
 - [Samba Active Directory ADC Joiner](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/SambaActiveDirectory-ADC-Joiner.md)
 ### Reporting
 - [Samba Active Directory Reporting](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/SambaActiveDirectory-Reporting.md)
-- [Samba Active Directory Users Report](https://github.com/eesmer/SambaAD-HelperScripts/blob/master/pages/SambaActiveDirectory-Users-Report.md)
+- [Samba Active Directory Users Report](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/SambaActiveDirectory-Users-Report.md)
 
 ---
 
