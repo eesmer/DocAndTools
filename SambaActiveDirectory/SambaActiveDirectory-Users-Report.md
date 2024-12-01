@@ -12,7 +12,7 @@ etc.
 
 ---
 
-[Samba-ActiveDirectory-UserReport.sh](https://raw.githubusercontent.com/eesmer/SambaAD-HelperScripts/master/scripts/samba-activedirectory-users-report.sh)
+[Samba-ActiveDirectory-UserReport.sh](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/scripts/samba-activedirectory-users-report.sh)
 
 ---
 
