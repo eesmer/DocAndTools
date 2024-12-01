@@ -2,7 +2,7 @@
 
 ### About of Script
 
-This script, <br> adds an additional domain controller to a Samba AD environment set up with the [Samba Active Directory Installer](https://github.com/eesmer/SambaAD-HelperScripts/blob/master/pages/SambaActiveDirectory-Installer.md) script.
+This script, <br> adds an additional domain controller to a Samba AD environment set up with the [Samba Active Directory Installer](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/SambaActiveDirectory-Installer.md) script.
 
 You will need to know the password for the Administrator user account to complete the installation.
 
