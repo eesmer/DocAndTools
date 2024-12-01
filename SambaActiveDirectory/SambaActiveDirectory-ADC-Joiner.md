@@ -11,7 +11,7 @@ It becomes a 2nd DC machine that runs simultaneously in the domain environment a
 
 ---
 
-[Samba-ActiveDirectory-ADC-Joiner.sh](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/SambaActiveDirectory-ADC-Joiner.md)
+[Samba-ActiveDirectory-ADC-Joiner.sh](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/scripts/samba-activedirectory-additional-dc-joiner.sh)
 
 ---
 
