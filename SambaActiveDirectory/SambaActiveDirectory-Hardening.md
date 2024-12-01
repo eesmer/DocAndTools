@@ -8,7 +8,7 @@ Contains AD related and best practices. <br>
 
 ---
 
-[Samba-ActiveDirectory-Hardening.sh](https://raw.githubusercontent.com/eesmer/SambaAD-HelperScripts/master/scripts/samba-activedirectory-hardening.sh)
+[Samba-ActiveDirectory-Hardening.sh](https://github.com/eesmer/DocAndTools/blob/main/SambaActiveDirectory/scripts/samba-activedirectory-hardening.sh)
 
 ---
 
