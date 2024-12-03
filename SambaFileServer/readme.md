@@ -1,4 +1,4 @@
-### Samba File Server - HelperScripts
+# Samba File Server - HelperScripts
 ---
 
 ### Install and Configiuration
