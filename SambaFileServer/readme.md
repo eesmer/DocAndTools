@@ -7,6 +7,9 @@
 
 ---
 
+<br>
+<br>
+
 ### vfs recycle module configuration
 This configuration, uses a recycle area for the share with the vfs recycle module configuration.
 Deleted files in the share are stored in this area. <br>
