@@ -48,6 +48,7 @@ Deleted files in the share are stored in this area. <br>
 
 ### vfs full-audit module configuration
 ```
+[antivirus_share]
 path = /srv/samba/antivirus
 read only = no
 writable = yes
