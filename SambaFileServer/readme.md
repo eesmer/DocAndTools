@@ -45,3 +45,16 @@ Deleted files in the share are stored in this area. <br>
 **note**                   : recycle:repository = **.Trash/%U** - You can create a separate subfolder for each user using **%U**
 
 ---
+
+### vfs full-audit module configuration
+```
+path = /srv/samba/antivirus
+read only = no
+writable = yes
+browsable = yes
+valid users = user1
+vfs objects = full_audit
+full_audit:success = mkdir rmdir write pwrite rename unlink
+full_audit:failure = none
+full_audit:prefix = %u|%I|%S
+```
