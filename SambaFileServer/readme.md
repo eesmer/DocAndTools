@@ -4,7 +4,7 @@
 ### Install and Configiuration
 - [Samba FileServer Installer and Create Share Directory](https://github.com/eesmer/DocAndTools/blob/main/SambaFileServer/scripts/samba-fileserver-installer.sh)
 - [Recovering deleted files in a share with vfs recycle module](#vfs-recycle-module-configuration)
-- [Full Audit share with vfs full_audit module](#vfs-recycle-module-configuration)
+- [Full Audit share with vfs full_audit module](#vfs-full_audit-module-configuration)
 
 ---
 
